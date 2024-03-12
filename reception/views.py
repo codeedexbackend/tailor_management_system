@@ -1,5 +1,6 @@
-from datetime import date
 import random
+from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
@@ -9,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import get_template
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView, RetrieveUpdateAPIView, ListAPIView, \
+from rest_framework.generics import UpdateAPIView, ListAPIView, \
     get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,7 +18,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from xhtml2pdf import pisa
 
 from dashboard.models import AddTailors, Customer, Item, Add_order
-from .serializers import TailorLoginSerializer,  \
+from .serializers import TailorLoginSerializer, \
     CompletedOrderSerializer, ItemSerializer, InProgressToCompletedSerializer, InProgressOrderSerializer, \
     UpdateToInProgressSerializer, AddOrderSerializer
 
@@ -51,12 +52,17 @@ def search_mobile_recption(request):
     return render(request, 'search_reception.html', {'results': results, 'query': query})
 
 
+def customer_details_recption(request):
+    cus = Customer.objects.all()
+    return render(request, "Customer_details_reception.html", {"cus": cus})
+
+
 def createcustomer_reception(request):
     tailor = AddTailors.objects.all()
     tailor_works = []
     for tailor in tailor:
         assigned_works = Add_order.objects.filter(tailor=tailor, status='assigned').count()
-        pending_works = tailor.pending_works  # Assuming you have a pending_works field in AddTailors
+        pending_works = Add_order.objects.filter(tailor=tailor,status='in_progress').count()
         tailor_works.append({'tailor': tailor, 'assigned_works': assigned_works, 'pending_works': pending_works})
 
     context = {'tailor_works': tailor_works}
@@ -70,7 +76,7 @@ def check_tailor_works_recption(request):
 
         try:
             # Assuming you have a Customer model with a tailor field
-            works = Customer.objects.filter(tailor__id=tailor_id, delivery_date=delivery_date)
+            works = Add_order.objects.filter(tailor__id=tailor_id, delivery_date=delivery_date)
 
             # You may need to serialize the works data based on your requirements
             serialized_works = [{'name': work.name, 'other_field': work.other_field} for work in works]
@@ -127,11 +133,9 @@ def savecustomer_recption(request):
         mn = request.POST.get('mobile')
         ln = request.POST.get('length')
         sd = request.POST.get('shoulder')
-        sl = request.POST.get('sleeve')
-        sll = request.POST.get('sleeve_length')
+        sl = request.POST.get('sleeve_sada')
+        sll = request.POST.get('sleeve_cuff')
         nc = request.POST.get('neck')
-        wr = request.POST.get('wrist')
-        ncr = request.POST.get('neck_round')
         clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
@@ -139,13 +143,15 @@ def savecustomer_recption(request):
         cl = request.POST.get('cuff_length')
         ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
-        b2 = request.POST.get('bottom2')
+        b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
         dd = request.POST.get('delivery_date')
         bt = request.POST.get('button_type')
-        ds = request.POST.get('description')
+        ds = request.POST.get('other')
         tailor_id = request.POST.get('tailor')
         cloth = request.POST.get('Cloth')
+        cs = request.POST.get('collar_size')
+        sb = request.POST.get('sleeve_bottom')
 
         tailor_instance = AddTailors.objects.get(id=tailor_id)
 
@@ -163,34 +169,37 @@ def savecustomer_recption(request):
         tailor_instance.save()
 
         try:
+            # Generate a unique bill_number (you can customize this logic)
+            random_3_digits = random.randint(0, 999)
+            bill_number = f"{timezone.now().strftime('%Y%m%d')}{random_3_digits:03d}"
+
             obj = Customer(name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo, neck=nc, regal=rg, cuff_length=cl,
-                           cuff_type=ct, sleeve_type=sl, sleeve_length=sll, pocket=po, bottom1=b1, bottom2=b2,
-                           order_date=od, cloth=cloth,
-                           delivery_date=dd, tailor=tailor_instance, button_type=bt, neck_round=ncr, wrist=wr,
-                           collar=clr, description=ds)
+                           cuff_type=ct, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
+                           order_date=od, cloth=cloth, bill_number=bill_number,
+                           delivery_date=dd, tailor=tailor_instance, button_type=bt,
+                           collar=clr, description=ds,collar_size=cs,sleeve_bottom=sb)
             obj.save()
 
-            add_order_obj = Add_order(customer_id=obj, length=ln, shoulder=sd, cloth=cloth, sleeve_type=sl,
-                                      sleeve_length=sll, neck=nc, neck_round=ncr, collar=clr, regal=rg, loose=lo,
-                                      wrist=wr, pocket=po, cuff_length=cl, bottom1=b1, bottom2=b2, button_type=bt,
-                                      order_date=od, delivery_date=dd, tailor=tailor_instance, description=ds)
+            add_order_obj = Add_order(customer_id=obj, length=ln, shoulder=sd, cloth=cloth, sleeve_sada=sl,
+                                      sleeve_cuff=sll, neck=nc,  collar=clr, regal=rg, loose=lo,
+                                       pocket=po, cuff_length=cl, bottom1=b1, seat=b2, button_type=bt,
+                                      bill_number=bill_number,
+                                      order_date=od, delivery_date=dd, tailor=tailor_instance, description=ds,collar_size=cs,sleeve_bottom=sb)
             add_order_obj.save()
 
-            messages.success(request, "Successfully added customer")
+            messages.success(request, "Successfully added customer" , {obj.name})
             return redirect(createcustomer_reception)
+
         except IntegrityError as e:
             # Handle IntegrityError
             return JsonResponse({'error': f"IntegrityError: {str(e)}"}, status=500)
+
         except Exception as e:
             # Handle other exceptions
             return JsonResponse({'error': f"Error saving customer: {str(e)}"}, status=500)
 
-    return render(request, 'Create_customer_reception.html', context)
+    return redirect('customer_details_recption')
 
-
-def customer_details_recption(request):
-    cus = Customer.objects.all()
-    return render(request, "Customer_details_reception.html", {"cus": cus})
 
 def all_customers(request):
     customers = Customer.objects.all()
@@ -255,19 +264,21 @@ def save_items_recption(request):
 
         return redirect('customer_details_recption')
 
+
 def order_details_reception(request):
     cus = Add_order.objects.all()
     return render(request, "Order_Details_reception.html", {"cus": cus})
+
 
 def add_order_recption(request, dataid):
     add = Customer.objects.get(id=dataid)
     return render(request, "Add_order_reception.html", {"add": add})
 
 
-
 def edit_order_reception(request, dataid):
     add = Add_order.objects.get(id=dataid)
     return render(request, "edit_order_reception.html", {"add": add})
+
 
 def update_add_order_reception(request, dataid):
     if request.method == "POST":
@@ -277,11 +288,9 @@ def update_add_order_reception(request, dataid):
         mn = request.POST.get('mobile')
         ln = request.POST.get('length')
         sd = request.POST.get('shoulder')
-        sl = request.POST.get('sleeve')
-        sll = request.POST.get('sleeve_length')
+        sl = request.POST.get('sleeve_sada')
+        sll = request.POST.get('sleeve_cuff')
         nc = request.POST.get('neck')
-        wr = request.POST.get('wrist')
-        ncr = request.POST.get('neck_round')
         clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
@@ -289,13 +298,16 @@ def update_add_order_reception(request, dataid):
         cl = request.POST.get('cuff_length')
         ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
-        b2 = request.POST.get('bottom2')
+        b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
         dd = request.POST.get('delivery_date')
         bt = request.POST.get('button_type')
         tailor_id = request.POST.get('tailor')
         cloth = request.POST.get('cloth')
         other = request.POST.get('other')
+        cs = request.POST.get('collar_size')
+        sb = request.POST.get('sleeve_bottom')
+
         # Get the existing customer
         customer = Add_order.objects.get(id=dataid)
 
@@ -324,15 +336,15 @@ def update_add_order_reception(request, dataid):
             new_tailor.save()
 
         Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, neck=nc,
-                                                   regal=rg, cuff_length=cl, cuff_type=ct, sleeve_type=sl,
-                                                   sleeve_length=sll, pocket=po, bottom1=b1, bottom2=b2,
+                                                   regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
+                                                   sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                                    cloth=cloth,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
-                                                   button_type=bt,
-                                                   neck_round=ncr, wrist=wr, collar=clr, description=other)
+                                                   button_type=bt,collar_size=cs,sleeve_bottom=sb,
+                                                    collar=clr, description=other)
         messages.success(request, "Customer Details Updated Successfully...!")
+        return redirect(order_details_reception)
 
-    return redirect(order_details_reception)
 
 def save_add_order_recption(request):
     if request.method == "POST":
@@ -340,11 +352,9 @@ def save_add_order_recption(request):
         mn = request.POST.get('mobile')
         ln = request.POST.get('length')
         sd = request.POST.get('shoulder')
-        sl = request.POST.get('sleeve')
-        sll = request.POST.get('sleeve_length')
+        sl = request.POST.get('sleeve_sada')
+        sll = request.POST.get('sleeve_cuff')
         nc = request.POST.get('neck')
-        wr = request.POST.get('wrist')
-        ncr = request.POST.get('neck_round')
         clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
@@ -352,16 +362,19 @@ def save_add_order_recption(request):
         cl = request.POST.get('cuff_length')
         ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
-        b2 = request.POST.get('bottom2')
+        b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
         dd = request.POST.get('delivery_date')
         bt = request.POST.get('button_type')
         tailor_id = request.POST.get('tailor')
         cloth = request.POST.get('cloth')
+        other = request.POST.get('other')
+        cs = request.POST.get('collar_size')
+        sb = request.POST.get('sleeve_bottom')
 
         tailor_instance = AddTailors.objects.get(id=tailor_id)
 
-        works_on_delivery_date = Customer.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
+        works_on_delivery_date = Add_order.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
         if works_on_delivery_date >= 6:
             error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
@@ -369,52 +382,39 @@ def save_add_order_recption(request):
                 return JsonResponse({'error': error_message}, status=400)
             else:
                 messages.error(request, error_message)
-                return redirect('some_redirect_url')
+                return redirect(order_details_reception)
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
 
         # Get or create the tailor instance
         customer_instance = Customer.objects.get(id=id)
+        try:
+            # Generate a unique bill_number (you can customize this logic)
+            random_3_digits = random.randint(0, 999)
+            bill_number = f"{timezone.now().strftime('%Y%m%d')}{random_3_digits:03d}"
 
-        old_tailor = customer_instance.tailor
-        # Get or create the new tailor instance
-        new_tailor = AddTailors.objects.get(id=tailor_id)
+            # Create the customer instance
+            obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, neck=nc, regal=rg,
+                            cuff_length=cl, bill_number=bill_number,
+                            cuff_type=ct, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
+                            order_date=od, cloth=cloth,
+                            delivery_date=dd, tailor=tailor_instance, button_type=bt,
+                            description=other, collar=clr,collar_size=cs,sleeve_bottom=sb)
 
-        # Update assigned_works for the old tailor and new tailor
-        if old_tailor != new_tailor:
-            old_tailor.assigned_works -= 1
-            old_tailor.save()
-            new_tailor.assigned_works += 1
-            new_tailor.save()
+            obj.save()
 
-            try:
-                # Generate a unique bill_number (you can customize this logic)
-                random_3_digits = random.randint(0, 999)
-                bill_number = f"{timezone.now().strftime('%Y%m%d')}{random_3_digits:03d}"
+            messages.success(request, f"Successfully Added New Order {obj.customer_id.name}")
 
-                # Create the customer instance
-                obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, neck=nc, regal=rg,
-                                cuff_length=cl,bill_number=bill_number,
-                                cuff_type=ct, sleeve_type=sl, sleeve_length=sll, pocket=po, bottom1=b1, bottom2=b2,
-                                order_date=od, cloth=cloth,
-                                delivery_date=dd, tailor=new_tailor, button_type=bt, neck_round=ncr, wrist=wr, collar=clr)
+            return redirect('order_details_reception')
+        except IntegrityError as e:
+            # Handle IntegrityError
+            return JsonResponse({'error': f"IntegrityError: {str(e)}"}, status=500)
+        except Exception as e:
+            # Handle other exceptions
+            return JsonResponse({'error': f"Error saving customer: {str(e)}"}, status=500)
 
-                obj.save()
-
-                messages.success(request, f"Successfully added new order")
-
-                return redirect('customer_details_recption')
-            except IntegrityError as e:
-                # Handle IntegrityError
-                return JsonResponse({'error': f"IntegrityError: {str(e)}"}, status=500)
-            except Exception as e:
-                # Handle other exceptions
-                return JsonResponse({'error': f"Error saving customer: {str(e)}"}, status=500)
-
-
-
-        return redirect('customer_details_recption')
+    return redirect('order_details_reception')
 
 
 def edit_customer_recption(request, dataid):
@@ -429,11 +429,9 @@ def update_customer_recption(request, dataid):
         mn = request.POST.get('mobile')
         ln = request.POST.get('length')
         sd = request.POST.get('shoulder')
-        sl = request.POST.get('sleeve')
-        sll = request.POST.get('sleeve_length')
+        sl = request.POST.get('sleeve_sada')
+        sll = request.POST.get('sleeve_cuff')
         nc = request.POST.get('neck')
-        wr = request.POST.get('wrist')
-        ncr = request.POST.get('neck_round')
         clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
@@ -441,54 +439,25 @@ def update_customer_recption(request, dataid):
         cl = request.POST.get('cuff_length')
         ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
-        b2 = request.POST.get('bottom2')
+        b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
         cloth = request.POST.get('cloth')
         dd = request.POST.get('delivery_date')
         bt = request.POST.get('button_type')
         tailor_id = request.POST.get('tailor')
         other = request.POST.get('other')
+        cs = request.POST.get('collar_size')
+        sb = request.POST.get('sleeve_bottom')
 
         # Get the existing customer
         customer = Customer.objects.get(id=dataid)
 
-        # # Get the old tailor before updating
-        # old_tailor = customer.tailor
-        #
-        # tailor_instance = AddTailors.objects.get(id=tailor_id)
-        #
-        # works_on_delivery_date = Customer.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
-        #
-        # if works_on_delivery_date >= 6:
-        #     error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
-        #     if request.is_ajax():
-        #         return JsonResponse({'error': error_message}, status=400)
-        #     else:
-        #         messages.error(request, error_message)
-        #         return redirect('some_redirect_url')
-        #
-        # tailor_instance.assigned_works += 1
-        # tailor_instance.save()
-        #
-        # # Get the old tailor before updating
-        # old_tailor = customer.tailor
-        #
-        # # Get or create the new tailor instance
-        # new_tailor = AddTailors.objects.get(id=tailor_id)
-        #
-        # # Update assigned_works for the old tailor and new tailor
-        # if old_tailor != new_tailor:
-        #     old_tailor.assigned_works -= 1
-        #     old_tailor.save()
-        #     new_tailor.assigned_works += 1
-        #     new_tailor.save()
-
         # Update the customer instance
         Customer.objects.filter(id=dataid).update(
             name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo, neck=nc,
-            regal=rg, cuff_length=cl, cuff_type=ct, sleeve_type=sl,
-            sleeve_length=sll, pocket=po, bottom1=b1, bottom2=b2, cloth=cloth, button_type=bt,
-            neck_round=ncr, wrist=wr, collar=clr, description=other
+            regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
+            sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2, cloth=cloth, button_type=bt,
+             collar=clr, description=other,collar_size=cs,sleeve_bottom=sb
         )
         # Add_order.objects.filter(customer_id=dataid).update(length=ln, shoulder=sd, loose=lo, neck=nc,
         #                                                     regal=rg, cuff_length=cl, cuff_type=ct, sleeve_type=sl,
@@ -497,7 +466,7 @@ def update_customer_recption(request, dataid):
         #                                                     order_date=od, delivery_date=dd, tailor=new_tailor,
         #                                                     button_type=bt,
         #                                                     neck_round=ncr, wrist=wr, collar=clr, description=other)
-        messages.success(request, "Customer Details Updated Successfully...!")
+        messages.success(request, "Customer Details Updated Successfully...! ")
 
     return redirect('customer_details_recption')
 
@@ -507,15 +476,17 @@ def customerdlt_recption(request, dlt):
     delt.delete()
     return redirect(customer_details_recption)
 
+
 def orderdlt_reception(request, dlt):
     delt = Add_order.objects.filter(id=dlt)
-    id=Add_order.objects.get(id=dlt)
-    id_dlt=id.tailor.id
+    id = Add_order.objects.get(id=dlt)
+    id_dlt = id.tailor.id
     delt.delete()
     tailor_instance = AddTailors.objects.get(id=id_dlt)
-    tailor_instance.assigned_works-=1
+    tailor_instance.assigned_works -= 1
     tailor_instance.save()
     return redirect(order_details_reception)
+
 
 def tailor_work_details_recption(request):
     if request.method == 'POST':
@@ -566,10 +537,11 @@ def customer_bill_reception(request, customer_id):
     order = Add_order.objects.filter(id=customer_id)
     item = Item.objects.filter(order_id=customer_id)
 
-    return render(request, 'Print_measurements_r.html', {'order':order, 'item':item})
+    return render(request, 'Print_measurements_r.html', {'order': order, 'item': item})
+
 
 def print_measurement_reception(request, customer_id):
-    customer = Add_order.objects.get( id=customer_id)
+    customer = Add_order.objects.get(id=customer_id)
 
     context = {'customer': customer}
 
@@ -590,9 +562,6 @@ def print_measurement_reception(request, customer_id):
         return HttpResponse('Error generating PDF', content_type='text/plain')
 
     return response
-
-
-
 
 
 # API
@@ -645,6 +614,7 @@ class TailorAssignedWorksAPIView(ListAPIView):
         tailor_id = self.kwargs['tailor_id']
         return Add_order.objects.filter(tailor_id=tailor_id, status='assigned')
 
+
 class AssignedToInProgressAPIView(UpdateAPIView):
     serializer_class = UpdateToInProgressSerializer
     lookup_field = 'id'
@@ -682,12 +652,14 @@ class AssignedToInProgressAPIView(UpdateAPIView):
         serialized_data = UpdateToInProgressSerializer(add_order_instance).data
         return Response(serialized_data, status=status.HTTP_200_OK)
 
+
 class InProgressWorksAPIView(ListAPIView):
     serializer_class = InProgressOrderSerializer
 
     def get_queryset(self):
         tailor_id = self.kwargs['tailor_id']
         return Add_order.objects.filter(tailor_id=tailor_id, status='in_progress')
+
 
 class InProgressToCompletedAPIView(UpdateAPIView):
     serializer_class = InProgressToCompletedSerializer
@@ -726,12 +698,14 @@ class InProgressToCompletedAPIView(UpdateAPIView):
         serialized_data = InProgressToCompletedSerializer(add_order_instance).data
         return Response(serialized_data, status=status.HTTP_200_OK)
 
+
 class CompletedOrderListAPIView(ListAPIView):
     serializer_class = CompletedOrderSerializer
 
     def get_queryset(self):
         tailor_id = self.kwargs['tailor_id']
         return Add_order.objects.filter(tailor_id=tailor_id, status='completed')
+
 
 class ItemListAPIView(ListAPIView):
     serializer_class = ItemSerializer

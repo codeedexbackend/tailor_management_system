@@ -26,56 +26,37 @@ class Customer(models.Model):
     length = models.CharField(max_length=15)
     shoulder = models.CharField(max_length=15)
     cloth = models.CharField(max_length=20, null=True)
-    SLEEVE_CHOICES = [
-        ('half_sleeve', 'Half Sleeve'),
-        ('full_sleeve', 'Full Sleeve'),
-    ]
-    sleeve_type = models.CharField(
-        max_length=15,
-        choices=SLEEVE_CHOICES,
-        default='half_sleeve',
-    )
-
-    sleeve_length = models.CharField(max_length=15)
+    sleeve_sada = models.CharField(max_length=15, null=True)
+    sleeve_cuff = models.CharField(max_length=15, null=True)
     neck = models.CharField(max_length=15)
-    neck_round = models.CharField(max_length=15,null=True)
     collar = models.CharField(max_length=15,null=True)
+    collar_size = models.CharField(max_length=15,null=True)
+    sleeve_bottom = models.CharField(max_length=15,null=True)
     regal = models.CharField(max_length=15)
     loose = models.CharField(max_length=15)
-    wrist = models.CharField(max_length=15,null=True)
     pocket = models.CharField(max_length=15)
-
-    CUFF_CHOICES = [
-        ('cuff', 'Cuff'),
-        ('normal', 'Normal'),
-    ]
-    cuff_type = models.CharField(
-        max_length=10,
-        choices=CUFF_CHOICES,
-        default='normal',
-    )
-
-    cuff_length = models.CharField(max_length=15)
+    seat = models.CharField(max_length=15, null=True)
+    cuff_type = models.CharField(max_length=20, null=True)
+    cuff_length = models.CharField(max_length=15, null=True)
     bottom1 = models.CharField(max_length=50)
-    bottom2 = models.CharField(max_length=50)
-
     BUTTON_CHOICES = [
-        ('bayyin_mahfi', 'Bayyin Mahfi'),
-        ('zip_mahfi', 'Zip Mahfi'),
-        ('mahfi', 'Mahfi'),
+        ('makfi', 'Makfi'),
+        ('makfi_bayyin', 'Makfi Bayyin'),
         ('button_bayyin', 'Button Bayyin'),
+        ('makfi_op', 'Makfi OP'),
+        ('makfi_op_nice', 'Makfi OP Nice'),
+        ('makfi_nice', 'Makfi Nice'),
+        ('makfi_zip', 'Makfi Zip'),
+        ('dabble_zib', 'Dabble Zib'),
     ]
     button_type = models.CharField(
         max_length=15,
         choices=BUTTON_CHOICES,
     )
-
     order_date = models.DateField(auto_now_add=True)
     delivery_date = models.DateField()
     tailor = models.ForeignKey(AddTailors, on_delete=models.SET_NULL, null=True)
-       
     description = models.CharField(blank=True, null=True,max_length=100000)
-    history = models.TextField(blank=True, null=True)
     bill_number = models.CharField(max_length=15,null=True)
     STATUS_CHOICES = [
         ('assigned', 'Assigned'),
@@ -114,56 +95,37 @@ class Add_order(models.Model):
     length = models.CharField(max_length=15)
     shoulder = models.CharField(max_length=15)
     cloth = models.CharField(max_length=20, null=True)
-    SLEEVE_CHOICES = [
-        ('half_sleeve', 'Half Sleeve'),
-        ('full_sleeve', 'Full Sleeve'),
-    ]
-    sleeve_type = models.CharField(
-        max_length=15,
-        choices=SLEEVE_CHOICES,
-        default='half_sleeve',
-    )
-
-    sleeve_length = models.CharField(max_length=15)
+    sleeve_sada = models.CharField(max_length=15, null=True)
+    sleeve_cuff = models.CharField(max_length=15, null=True)
     neck = models.CharField(max_length=15)
-    neck_round = models.CharField(max_length=15, null=True)
     collar = models.CharField(max_length=15, null=True)
+    collar_size = models.CharField(max_length=15,null=True)
+    sleeve_bottom = models.CharField(max_length=15,null=True)
     regal = models.CharField(max_length=15)
     loose = models.CharField(max_length=15)
-    wrist = models.CharField(max_length=15, null=True)
     pocket = models.CharField(max_length=15)
-
-    CUFF_CHOICES = [
-        ('cuff', 'Cuff'),
-        ('normal', 'Normal'),
-    ]
-    cuff_type = models.CharField(
-        max_length=10,
-        choices=CUFF_CHOICES,
-        default='normal',
-    )
-
-    cuff_length = models.CharField(max_length=15)
+    seat = models.CharField(max_length=15, null=True)
+    cuff_type = models.CharField(max_length=20, null=True)
+    cuff_length = models.CharField(max_length=15, null=True)
     bottom1 = models.CharField(max_length=50)
-    bottom2 = models.CharField(max_length=50)
-
     BUTTON_CHOICES = [
-        ('bayyin_mahfi', 'Bayyin Mahfi'),
-        ('zip_mahfi', 'Zip Mahfi'),
-        ('mahfi', 'Mahfi'),
+        ('makfi', 'Makfi'),
+        ('makfi_bayyin', 'Makfi Bayyin'),
         ('button_bayyin', 'Button Bayyin'),
+        ('makfi_op', 'Makfi OP'),
+        ('makfi_op_nice', 'Makfi OP Nice'),
+        ('makfi_nice', 'Makfi Nice'),
+        ('makfi_zip', 'Makfi Zip'),
+        ('dabble_zib', 'Dabble Zib'),
     ]
     button_type = models.CharField(
         max_length=15,
         choices=BUTTON_CHOICES,
     )
-
     order_date = models.DateField(auto_now_add=True)
-    delivery_date = models.DateField(null=True, blank=True)
+    delivery_date = models.DateField()
     tailor = models.ForeignKey(AddTailors, on_delete=models.SET_NULL, null=True)
-
     description = models.CharField(blank=True, null=True, max_length=100000)
-    history = models.TextField(blank=True, null=True)
     bill_number = models.CharField(max_length=15, null=True)
     STATUS_CHOICES = [
         ('assigned', 'Assigned'),

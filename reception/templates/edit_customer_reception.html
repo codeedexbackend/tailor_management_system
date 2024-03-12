@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'reception_dashboard.html' %}
 {% block content %}
 
 <style>
@@ -56,104 +56,88 @@
                 </div>
                 <div class="form-group">
                     <b><label for="name">Length:</label></b>
-                    <input type="number" class="form-control" id="length" placeholder="" required min="0"
-                           name="length" value="{{cus.length}}">
+                    <input type="text" class="form-control" id="length" placeholder="" required min="0"
+                           name="length" step="any" value="{{cus.length}}">
                 </div>
                 <div class="form-group">
                     <b><label for="shoulder">Shoulder:</label></b>
-                    <input type="number" class="form-control" id="shoulder" min="0" placeholder="" required
-                           name="shoulder" value="{{cus.shoulder}}">
+                    <input type="text" class="form-control" id="shoulder" min="0" placeholder="" required
+                           name="shoulder" step="any" value="{{cus.shoulder}}">
                 </div>
                 <div class="form-group">
-                    <b><label>Sleeve:</label></b>
-                    <select class="form-control" style="border: 1px solid #ccc;" name="sleeve">
-                        <option>{{cus.sleeve_type}}</option>
-                        <option>Half Sleev</option>
-                        <option>Full Sleev</option>
-                    </select>
+                    <b><label>Sleeve Sada:</label></b>
+                    <input type="text" class="form-control" id="sleeve_sada" min="0" placeholder="" required
+                           name="sleeve_sada" step="any" value="{{cus.sleeve_sada}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="loose">Sleeve Length:</label></b>
-                    <input type="number" class="form-control" id="sleeve" min="0" placeholder="" required
-                           name="sleeve_length" value="{{cus.sleeve_length}}">
-                </div>
-
-                <div class="form-group">
-                    <b><label for="neck">Neck Round:</label></b>
-                    <input type="number" class="form-control" id="neck_round" placeholder="" required
-                           min="0" name="neck_round" value="{{cus.neck_round}}">
+                    <b><label for="loose">Sleeve Cuff:</label></b>
+                    <input type="text" class="form-control" id="sleeve_cuff" min="0" placeholder="" required
+                           name="sleeve_cuff" step="any" value="{{cus.sleeve_cuff}}">
                 </div>
                 <div class="form-group">
                     <b><label for="neck">Neck:</label></b>
-                    <input type="number" class="form-control" id="neck" placeholder=" " required min="0"
-                           name="neck" value="{{cus.neck}}">
+                    <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
+                           name="neck" step="any" value="{{cus.neck}}">
                 </div>
                 <div class="form-group">
                     <b><label for="collar">Collar:</label></b>
-                    <input type="number" class="form-control" id="collar" placeholder="" required min="0"
-                           name="collar" value="{{cus.collar}}">
+                    <input type="text" class="form-control" id="collar" placeholder="" required min="0"
+                           name="collar" step="any" value="{{cus.collar}}">
                 </div>
 
             </div>
             <div class="col-md-6">
                 <!-- Right Side -->
+                <div class="form-group">
+                    <b><label for="seat">Seat:</label></b>
+                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
+                           name="seat" step="any" value="{{cus.seat}}">
+                </div>
                  <div class="form-group">
                     <b><label for="regal">Regal:</label></b>
 
-                    <input type="number" class="form-control" id="regal" min="0" placeholder=" " required
-                           name="regal" value="{{cus.regal}}">
+                    <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
+                           name="regal" step="any" value="{{cus.regal}}">
                 </div>
-                <div class="form-group">
-                    <b><label for="wrist">Wrist:</label></b>
-                    <input type="number" class="form-control" id="wrist" placeholder="" required min="0"
-                           name="wrist" value="{{cus.wrist}}">
-                </div>
-
                 <div class="form-group">
                     <b> <label for="regal">Pocket Size:</label></b>
-                    <input type="number" class="form-control" id="pocket" min="0" placeholder=" " required
-                           name="pocket" value="{{cus.pocket}}">
+                    <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
+                           name="pocket" step="any" value="{{cus.pocket}}">
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Loose:</label></b>
-                    <input type="number" class="form-control" id="loose" min="0" placeholder="" required
-                           name="loose" value="{{cus.loose}}">
-                </div>
-                <div class="form-group">
-                    <b><label for="loose">Cuff Length:</label></b>
-                    <input type="number" class="form-control" id="cuff" min="0" placeholder=" " required
-                           name="cuff_length" value="{{cus.cuff_length}}">
+                    <input type="text" class="form-control" id="loose" min="0" placeholder="" required
+                           name="loose" step="any" value="{{cus.loose}}">
                 </div>
                 <div class="form-group">
                     <b><label>Cuff Type:</label></b>
-                    <select class="form-control" style="border: 1px solid #ccc;" name="cuff_type">
-                        <option>{{cus.cuff_type}}</option>
-                        <option>Cuff</option>
-                        <option>Normal</option>
-                    </select>
+                    <input type="text" class="form-control" id="cuff_type" placeholder="" required
+                           name="cuff_type" value="{{cus.cuff_type}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Cuff Length:</label></b>
+                    <input type="text" class="form-control" id="cuff" min="0" placeholder=" " required
+                           name="cuff_length" step="any" value="{{cus.cuff_length}}">
                 </div>
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
                         <option>{{cus.button_type}}</option>
                         <option>Makfi</option>
-                        <option> Bayyin Makfi</option>
-                        <option>Zip Makfi</option>
+                        <option>Makfi Bayyin</option>
                         <option>Button Bayyin</option>
+                        <option>Makfi OP</option>
+                        <option>Makfi OP Nice</option>
+                        <option>Makfi Nice</option>
+                        <option>Makfi Zip</option>
+                        <option>Dabble Zib</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Bottom :</label></b>
-                    <input type="number" class="form-control" id="bottom1" min="0" placeholder="" required
-                           name="bottom1" value="{{cus.bottom1}}">
+                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
+                           name="bottom1" step="any" value="{{cus.bottom1}}">
                 </div>
-                <div class="form-group">
-                    <b></b><label for="loose">
-                    <script type="text/nonexistent"> Bottom 2</script>&nbsp;</label></b>
-                    <input type="number" class="form-control" id="bottom2" min="0" placeholder=" " required
-                           name="bottom2" value="{{cus.bottom2}}">
-                </div>
-
                 <div class="form-group">
                     <b><label for="other">Other:</label></b>
                     <textarea id="other" class="form-control" style=" border: 1px solid #ccc;height:124px"

@@ -1,6 +1,6 @@
 from django.urls import path
 from dashboard import views
-from dashboard.views import TailorLoginView
+
 
 urlpatterns = [
     path('home/', views.dashboard, name='dashboard'),
@@ -49,15 +49,21 @@ urlpatterns = [
     path('delete_tailor/<int:dataid>/', views.delete_tailor, name='delete_tailor'),
     path('single_customer/<int:customer_id>/', views.single_customer, name='single_customer'),
 
-    path('tailor/<int:tailor_id>/customer/<int:id>/inprogress-to-completed/',
-         views.InProgressToCompletedAPIView.as_view(), name='inprogress_to_completed'),
-    path('tailor/<int:tailor_id>/inprogress-customers/', views.InProgressCustomerListAPIView.as_view(),
-         name='inprogress_customer_list'),
-    path('tailor/<int:tailor_id>/customer/<int:id>/inprogress/', views.InProgressCustomerUpdateAPIView.as_view(),
-         name='inprogress_customer_update'),
-    path('tailor/login/', TailorLoginView.as_view(), name='tailor-login'),
-    path('tailor/<int:tailor_id>/assigned_works/', views.CustomerListAPIView.as_view(), name='assigned-customer-list'),
-    path('tailor/<int:tailor_id>/completed/', views.CompletedCustomerListAPIView.as_view(),
-         name='completed-customer-list'),
+#API LINKS
+
+    path('tailor/<int:tailor_id>/order/<int:id>/inprogress-to-completed/', views.InProgressToCompletedAPIView.as_view(),
+         name='inprogress_to_completed'),
+
+    path('tailor/login/', views.TailorLoginView.as_view(), name='tailor-login'),
+    path('tailor/<int:tailor_id>/assigned_works/', views.TailorAssignedWorksAPIView.as_view(),
+         name='tailor-assigned-works'),
+    path('tailor/<int:tailor_id>/completed-works/', views.CompletedOrderListAPIView.as_view(),
+         name='completed_works_list'),
+
+    path('order/<int:order_id>/items/', views.ItemListAPIView.as_view(), name='item_list'),
+
+    path('tailor/<int:tailor_id>/inprogress-works/', views.InProgressWorksAPIView.as_view(), name='inprogress-works'),
+        path('tailor/<int:tailor_id>/order/<int:id>/inprogress/', views.AssignedToInProgressAPIView.as_view(),
+         name='assigned-to-inprogress'),
 
 ]
