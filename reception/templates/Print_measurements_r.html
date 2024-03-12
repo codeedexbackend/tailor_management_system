@@ -6,81 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Bill</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
+    /* Define your CSS styles here */
+    body {
+        font-family: Arial, sans-serif;
+        margin:0;
+        padding:0;
+    }
+     header {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
-
-        img {
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    .bill-info {
+        margin-bottom: 20px;
+        line-height:10px;
+    }
+    .bill-info b {
+        display: inline-block;
+        width: 200px;
+        font-weight: bold;
+    }
+         img {
             width: 150px;
         }
-
-        h3, h4, h5 {
+          h3, h4, h5 {
             text-align: center;
         }
 
-        .container {
-            margin: 20px;
-        }
 
-        .div1 {
-            border: 1px solid #000;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-
-        .div1 h4 {
-            margin: 5px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #000;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .tb1 {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .tb1, .tb1 th, .tb1 td {
-            border: 1px solid #000;
-        }
-
-        .tb1 th, .tb1 td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        .tb1 th {
-            background-color: #f2f2f2;
-        }
-
-        span {
-            font-size: 12px;
-        }
-    </style>
+</style>
 </head>
 
 <body>
@@ -89,72 +47,81 @@
     <h3>HAYY SOUQ, SHARURAH, SAUDI ARABIA</h3>
     <h4>PHONE NO: 00966507328132, EMAIL ID: <a href="mailto:amanathobe@gmail.com">amanathobe@gmail.com</a></h4>
     <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com </a> VAT NUMBER/TIM : 310601281900003</h4>
-    <h5>CUSTOMER BILL</h5>
 </header>
-
 <div class="container">
-
-    <div class="div1">
-        {% for customer in order %}
-        <h4>CUSTOMER NAME: {{ customer.customer_id.name }}</h4>
-        <h4>CUSTOMER NUMBER: {{ customer.customer_id.mobile }}</h4>
-        <div class="v1"></div>
-        <h4>BILL NUMBER: {{ customer.bill_number }}</h4>
-        <h4>ORDER DATE: {{ customer.order_date }}</h4>
-        <h4>DELIVERY DATE: {{ customer.delivery_date }}</h4>
-        {% endfor %}
+    {% for i in order %}
+    <div class="bill-info">
+        <b>CUSTOMER NAME:</b>{{ i.customer_id.name }}
+        <!-- Insert customer name here -->
     </div>
-
-    <table>
-
-
-        <tr>
-            <th>SI NO</th>
-            <th>ITEMS</th>
-            <th>QTY</th>
-            <th>UNIT PRICE</th>
-            <th>NET TOTAL</th>
-        </tr>
-        {% for customer in item %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{ customer.item_name}}</td>
-            <td>{{ customer.item_quantity }}</td>
-            <td>{{ customer.item_price }}</td>
-            <td>{{ customer.total_price }}</td>
-        </tr>
-
-{% endfor %}
-
-    </table>
-
-    <table class="tb1">
-        <tr>
-            <td>TOTAL : {{ customer.total }}</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-            <td>DISCOUNT : {{ customer.discount }}</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-            <td>ADVANCE : {{ customer.discount }}</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-            <td>GROSS TOTAL : {{ customer.gross_total }}</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-            <td>VAT TOTAL : <span>( 15% of Gross Total )</span> {{ customer.vat_total }}</td>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        <tr>
-            <td><b>NET TOTAL : </b><span> ( Gross Total + VAT )</span> {{ customer.net_total }}</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
-
+    <div class="bill-info">
+        <b>MOBILE NUMBER:</b> {{ i.customer_id.mobile }}
+        <!-- Insert mobile number here -->
+    </div>
+    <div class="bill-info">
+        <b>CLOTH:</b>{{ i.cloth }} <!-- Insert cloth type here -->
+    </div>
+    <div class="bill-info">
+        <b>LENGTH:</b>{{i.length}} <!-- Insert length here -->
+    </div>
+    <div class="bill-info">
+        <b>SHOULDER:</b> {{i.shoulder}}<!-- Insert shoulder measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SLEEVE SADA:</b>{{i.sleeve_sada}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SLEEVE CUFF:</b>{{i.sleeve_cuff}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>LOOSE:</b>{{i.loose}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SEAT:</b>{{i.seat}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>NECK:</b>{{i.neck}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>COLLAR :</b>{{i.collar}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>REGAL:</b>{{i.regal}} <!-- Insert sleeve measurement here -->
+    </div>
+     <div class="bill-info">
+        <b>SLEEVE BOTTOM:</b>{{i.sleeve_bottom}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>COLLAR SIZE:</b>{{i.collar_size}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>CUFF TYPE:</b>{{i.cuff_type}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>CUFF SIZE :</b>{{i.cuff_length}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>POCKET SIZE:</b>{{i.pocket}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>DESCRIPTION:</b>{{i.description}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>ORDER DATE:</b> {{i.order_date}}<!-- Insert date here -->
+    </div>
+    <div class="bill-info">
+        <b>DELIVERY DATE:</b> {{i.delivery_date}}<!-- Insert delivery date here -->
+    </div>
+    <div class="bill-info">
+        <b>TAILOR:</b> {{i.tailor}}<!-- Insert tailor name here -->
+    </div>
+    {% endfor %}
 </div>
 </body>
 

@@ -1,35 +1,48 @@
 from rest_framework import serializers
-from .models import AddTailors,Customer
+from dashboard.models import AddTailors, Add_order, Item
+
 
 class TailorLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
 
-class CustomerSerializer(serializers.ModelSerializer):
+class AddOrderSerializer(serializers.ModelSerializer):
+    customer = serializers.StringRelatedField(source='customer_id.name')
+    mobile = serializers.StringRelatedField(source='customer_id.mobile')
     class Meta:
-        model = Customer
+        model = Add_order
         fields = '__all__'
-        extra_kwargs = {
-            'name': {'required': False},
-            'mobile': {'required': False},
-            'length': {'required': False},
-            'shoulder': {'required': False},
-            'sleeve_length': {'required': False},
-            'neck': {'required': False},
-            'regal': {'required': False},
-            'loose': {'required': False},
-            'pocket': {'required': False},
-            'cuff_length': {'required': False},
-            'bottom1': {'required': False},
-            'bottom2': {'required': False},
-            'button_type': {'required': False},
-            'delivery_date': {'required': False},
-            'description': {'required': False},
-        }
 
 
-class CompletedCustomerSerializer(serializers.ModelSerializer):
+class UpdateToInProgressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Customer
+        model = Add_order
+        fields = ['id', 'status']
+
+
+class InProgressOrderSerializer(serializers.ModelSerializer):
+    customer = serializers.StringRelatedField(source='customer_id.name')
+    mobile = serializers.StringRelatedField(source='customer_id.mobile')
+
+    class Meta:
+        model = Add_order
+        fields = '__all__'
+
+
+class InProgressToCompletedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Add_order
+        fields = ['id']
+
+
+class CompletedOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Add_order
+        fields = '__all__'
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
         fields = '__all__'

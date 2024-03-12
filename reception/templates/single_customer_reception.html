@@ -75,8 +75,7 @@
                     <div class="text-right mb-4">
                         <button type="submit" class="btn btn-danger btn-sm " style="">Add Items</button>
                     </div>
-                </form>
-                <tr>
+                </form><tr>
                     <th>Order ID :</th>
                     <td>{{i.id}}</td>
                     <th>Customer ID :</th>
@@ -101,47 +100,58 @@
                     <td>{{i.regal}}</td>
                 </tr>
                 <tr>
-                    <th>Cuff Length :</th>
-                    <td>{{i.cuff_length}}</td>
                     <th>Cuff Type :</th>
                     <td>{{i.cuff_type}}</td>
+                    <th>Cuff Length :</th>
+                    <td>{{i.cuff_length}}</td>
                 </tr>
                 <tr>
-                    <th>Sleeve :</th>
-                    <td>{{i.sleeve_length}}</td>
-                    <th>Sleeve Type :</th>
-                    <td>{{i.sleeve_type}}</td>
+                    <th>Sleeve Sada:</th>
+                    <td>{{i.sleeve_sada}}</td>
+                    <th>Sleeve Cuff :</th>
+                    <td>{{i.sleeve_cuff}}</td>
+                </tr>
+                <tr>
+                    <th>Seat :</th>
+                    <td>{{i.seat}}</td>
+                    <th>Button Type :</th>
+                    <td>{{i.button_type}}</td>
+                </tr>
+                 <tr>
+                    <th>Sleeve Bottom:</th>
+                    <td>{{i.sleeve_bottom}}</td>
+                    <th>Collar Size:</th>
+                    <td>{{i.collar_size}}</td>
+                </tr>
+                <tr>
+
+                    <th>Bottom Measure :</th>
+                    <td>{{i.bottom1}}</td>
+                    <th >Collar :</th>
+                    <td>{{i.collar}}</td>
+                </tr>
+                <tr>
+
+                    <th>Order Date :</th>
+                    <td>{{i.order_date}}</td>
+                    <th>Delivery Date :</th>
+                    <td>{{i.delivery_date}}</td>
+
                 </tr>
                 <tr>
                     <th>Bill Number :</th>
                     <td>{{i.bill_number}}</td>
-                    <th>Order Date :</th>
-                    <td>{{i.order_date}}</td>
-                </tr>
-                <tr>
-                    <th>Delivery Date :</th>
-                    <td>{{i.delivery_date}}</td>
-                    <th>Bottom Measure 1 :</th>
-                    <td>{{i.bottom1}}</td>
-                </tr>
-                <tr>
-                    <th>Bottom Measure 2 :</th>
-                    <td>{{i.bottom2}}</td>
-                    <th>Button Type :</th>
-                    <td>{{i.button_type}}</td>
-
-                </tr>
-                <tr>
-                    <th style="color:red">Cloth Number :</th>
-                    <td>{{i.cloth}}</td>
                     <th>Tailor :</th>
                     <td>{{i.tailor}}</td>
                 </tr>
                 <tr>
+                    <th style="color:red">Cloth Number :</th>
+                    <td>{{i.cloth}}</td>
                     <th >Description :</th>
                     <td>{{i.description}}</td>
 
                 </tr>
+                
                 <tfoot>
                 <tr>
                     <td colspan="4" style="text-align: center;">
@@ -197,13 +207,13 @@
         </div>
         {% endfor %}
     </div>
-    <button style="margin-top:590px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
+    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="text-white">Previous</span>
     </button>
-    <button style="margin-top:590px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
+    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>

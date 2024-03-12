@@ -38,19 +38,24 @@
                                 <th>Cloth Number</th>
                                 <th>Length</th>
                                 <th>Shoulder</th>
+                                <th>Sleeve Sada</th>
+                                <th>Sleeve Cuff</th>
+                                <th>Sleeve Bottom</th>
                                 <th>Loose</th>
+                                <th>seat</th>
                                 <th>Neck</th>
                                 <th>Regal</th>
-                                <th>Cuff Length</th>
+                                <th>Collar</th>
+                                <th>Collar Size</th>
                                 <th>Cuff Type</th>
-                                <th>Sleeve Length</th>
-                                <th>Sleeve Type</th>
+                                <th>Cuff Size</th>
+                                <th>Pocket</th>
+                                <th>Button Type</th>
+                                <th>Bottom Measure</th>
                                 <th>Bill Number</th>
                                 <th>Order Date</th>
                                 <th>Delivery Date</th>
-                                <th>Bottom Measure 1</th>
-                                <th>Bottom Measure 2</th>
-                                <th>Button Type</th>
+                                <th>Description</th>
                                 <th>Tailor</th>
                                 <th>Action</th>
                             </tr>
@@ -66,20 +71,25 @@
                                 <td>{{ results.cloth }}</td>
                                 <td>{{ results.length }}</td>
                                 <td>{{ results.shoulder }}</td>
-                                <td>{{ results.loose }}</td>
-                                <td>{{ results.neck }}</td>
-                                <td>{{ results.regal }}</td>
-                                <td>{{ results.cuff_length }}</td>
-                                <td>{{ results.cuff_type }}</td>
-                                <td>{{ results.sleeve_length }}</td>
-                                <td>{{ results.sleeve_type }}</td>
-                                <td>{{ results.bill_number }}</td>
-                                <td>{{ results.order_date }}</td>
-                                <td>{{ results.delivery_date }}</td>
-                                <td>{{ results.bottom1 }}</td>
-                                <td>{{ results.bottom2 }}</td>
-                                <td>{{ results.button_type }}</td>
-                                <td>{{ results.tailor.tailor }}</td>
+                                <td>{{results.sleeve_sada}}</td>
+                                <td>{{results.sleeve_cuff}}</td>
+                                <td>{{results.sleeve_bottom}}</td>
+                                <td>{{results.loose}}</td>
+                                <td>{{results.seat}}</td>
+                                <td>{{results.neck}}</td>
+                                <td>{{results.regal}}</td>
+                                <td>{{results.collar}}</td>
+                                <td>{{results.collar_size}}</td>
+                                <td>{{results.cuff_type}}</td>
+                                <td>{{results.cuff_length}}</td>
+                                <td>{{results.pocket}}</td>
+                                <td>{{results.button_type}}</td>
+                                <td>{{results.bottom1}}</td>
+                                <td>{{results.bill_number}}</td>
+                                <td>{{results.order_date}}</td>
+                                <td>{{results.delivery_date}}</td>
+                                <td>{{results.description}}</td>
+                                <td>{{results.tailor}}</td>
                                 <td>
                                     <a href="{% url 'add_order_recption' dataid=results.id %}">
                                         <button type="submit" class="btn btn-secondary btn-sm">

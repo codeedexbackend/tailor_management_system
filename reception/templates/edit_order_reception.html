@@ -51,108 +51,105 @@
                            name="mobile" value="{{add.customer_id.mobile}}">
                 </div>
                 <div class="form-group">
-                    <label for="cloth"><b>Cloth Number:</b></label>
+                    <label for="cloth"><b>Cloth:</b></label>
                     <input type="text" class="form-control" id="cloth" placeholder=""
                            min="0" required
                            name="cloth" value="{{add.cloth}}">
                 </div>
                 <div class="form-group">
                     <b><label for="name">Length:</label></b>
-                    <input type="number" class="form-control" id="length" placeholder="" required min="0"
-                           name="length" value="{{add.length}}">
+                    <input type="text" class="form-control" id="length" placeholder="" required min="0"
+                           name="length" step="any" value="{{add.length}}">
                 </div>
                 <div class="form-group">
                     <b><label for="shoulder">Shoulder:</label></b>
-                    <input type="number" class="form-control" id="shoulder" min="0" placeholder="" required
-                           name="shoulder" value="{{add.shoulder}}">
+                    <input type="text" class="form-control" id="shoulder" min="0" placeholder="" required
+                           name="shoulder" step="any" value="{{add.shoulder}}">
                 </div>
                 <div class="form-group">
-                    <b><label>Sleeve:</label></b>
-                    <select class="form-control" style="border: 1px solid #ccc;" name="sleeve">
-                        <option>{{add.sleeve_type}}</option>
-                        <option>Half Sleev</option>
-                        <option>Full Sleev</option>
-                    </select>
+                    <b><label>Sleeve Sada:</label></b>
+                    <input type="text" class="form-control" id="sleeve_sada" min="0" placeholder="" required
+                           name="sleeve_sada" step="any" value="{{add.sleeve_sada}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="loose">Sleeve Length:</label></b>
-                    <input type="number" class="form-control" id="sleeve" min="0" placeholder="" required
-                           name="sleeve_length" value="{{add.sleeve_length}}">
+                    <b><label for="loose">Sleeve Cuff:</label></b>
+                    <input type="text" class="form-control" id="sleeve_cuff" min="0" placeholder="" required
+                           name="sleeve_cuff" step="any" value="{{add.sleeve_cuff}}">
                 </div>
 
                 <div class="form-group">
-                    <b><label for="neck">Neck Round:</label></b>
-                    <input type="number" class="form-control" id="neck_round" placeholder="" required
-                           min="0" name="neck_round" value="{{add.neck_round}}">
+                    <b><label for="collar">Sleeve Bottom:</label></b>
+                    <input type="text" class="form-control" id="sleeve_bottom" placeholder="" required min="0"
+                           name="sleeve_bottom" step="any" value="{{add.sleeve_bottom}}">
                 </div>
                 <div class="form-group">
                     <b><label for="neck">Neck:</label></b>
-                    <input type="number" class="form-control" id="neck" placeholder=" " required min="0"
-                           name="neck" value="{{add.neck}}">
+                    <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
+                           name="neck" step="any" value="{{add.neck}}">
                 </div>
                 <div class="form-group">
                     <b><label for="collar">Collar:</label></b>
-                    <input type="number" class="form-control" id="collar" placeholder="" required min="0"
-                           name="collar" value="{{add.collar}}">
+                    <input type="text" class="form-control" id="collar" placeholder="" required min="0"
+                           name="collar" step="any" value="{{add.collar}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="regal">Regal:</label></b>
+                    <b><label for="collar">Collar Size:</label></b>
+                    <input type="text" class="form-control" id="collar_size" placeholder="" required min="0"
+                           name="collar_size" step="any" value="{{add.collar_size}}">
+                </div>
 
-                    <input type="number" class="form-control" id="regal" min="0" placeholder=" " required
-                           name="regal" value="{{add.regal}}">
-                </div>
-                <div class="form-group">
-                    <b><label for="wrist">Wrist:</label></b>
-                    <input type="number" class="form-control" id="wrist" placeholder="" required min="0"
-                           name="wrist" value="{{add.wrist}}">
-                </div>
             </div>
             <div class="col-md-6">
                 <!-- Right Side -->
+                <div class="form-group">
+                    <b><label for="regal">Regal:</label></b>
 
+                    <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
+                           name="regal" step="any" value="{{add.regal}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="seat">Seat:</label></b>
+                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
+                           name="seat" step="any" value="{{add.seat}}">
+                </div>
                 <div class="form-group">
                     <b> <label for="regal">Pocket Size:</label></b>
-                    <input type="number" class="form-control" id="pocket" min="0" placeholder=" " required
-                           name="pocket" value="{{add.pocket}}">
+                    <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
+                           name="pocket" step="any" value="{{add.pocket}}">
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Loose:</label></b>
-                    <input type="number" class="form-control" id="loose" min="0" placeholder="" required
-                           name="loose" value="{{add.loose}}">
-                </div>
-                <div class="form-group">
-                    <b><label for="loose">Cuff Length:</label></b>
-                    <input type="number" class="form-control" id="cuff" min="0" placeholder=" " required
-                           name="cuff_length" value="{{add.cuff_length}}">
+                    <input type="text" class="form-control" id="loose" min="0" placeholder="" required
+                           name="loose" step="any" value="{{add.loose}}">
                 </div>
                 <div class="form-group">
                     <b><label>Cuff Type:</label></b>
-                    <select class="form-control" style="border: 1px solid #ccc;" name="cuff_type">
-                        <option>{{add.cuff_type}}</option>
-                        <option>Cuff</option>
-                        <option>Normal</option>
-                    </select>
+                    <input type="text" class="form-control" id="cuff_type" placeholder="" required
+                           name="cuff_type" value="{{add.cuff_type}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Cuff Length:</label></b>
+                    <input type="text" class="form-control" id="cuff" min="0" placeholder=" " required
+                           name="cuff_length" step="any" value="{{add.cuff_length}}">
                 </div>
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
                         <option>{{add.button_type}}</option>
                         <option>Makfi</option>
-                        <option> Bayyin Makfi</option>
-                        <option>Zip Makfi</option>
+                        <option>Makfi Bayyin</option>
                         <option>Button Bayyin</option>
+                        <option>Makfi OP</option>
+                        <option>Makfi OP Nice</option>
+                        <option>Makfi Nice</option>
+                        <option>Makfi Zip</option>
+                        <option>Dabble Zib</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Bottom :</label></b>
-                    <input type="number" class="form-control" id="bottom1" min="0" placeholder="" required
-                           name="bottom1" value="{{add.bottom1}}">
-                </div>
-                <div class="form-group">
-                    <b></b><label for="loose">
-                    <script type="text/nonexistent"> Bottom 2</script>&nbsp;</label></b>
-                    <input type="number" class="form-control" id="bottom2" min="0" placeholder=" " required
-                           name="bottom2" value="{{add.bottom2}}">
+                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
+                           name="bottom1" step="any" value="{{add.bottom1}}">
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Order Date:</label></b>
@@ -201,7 +198,7 @@
                 </div>
                 <div class="form-group">
                     <b><label for="other">Other:</label></b>
-                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;"
+                    <textarea id="other" name="other" class="form-control" style=" border: 1px solid #ccc;"
                               maxlength="10000">{{add.description}}</textarea>
                 </div>
                 <div class="form-group">
@@ -215,7 +212,7 @@
 
         <!-- ... (your existing form fields) -->
         <div class="button-container">
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             <button type="button" class="btn btn-secondary btn-cancel">Cancel</button>
         </div>
     </form>
@@ -251,33 +248,7 @@
             });
         });
 
-        // Update this part to handle form submission
-        $('form.container').on('submit', function (event) {
-            event.preventDefault();
-
-            // Serialize form data
-            var formData = $(this).serialize();
-
-            // Submit the form using AJAX
-            $.ajax({
-                url: '{% url "update_add_order_reception" dataid=add.id %}',
-                method: 'POST',
-                data: formData,
-                success: function (response) {
-                    console.log("Form submitted successfully:", response);
-
-                    // Reload the page after a successful submission
-                    location.reload();
-                },
-                error: function (error) {
-                    console.error('Error submitting form:', error);
-
-                    // You can handle the error response here, e.g., display an error message
-                    alert("Tailor has a limit . Please try again.");
-                }
-            });
-        });
-    });
+          });
 </script>
 
 

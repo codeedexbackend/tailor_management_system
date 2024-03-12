@@ -41,13 +41,13 @@
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>
-                            <a href="{% url 'single_customer' customer_id=i.customer_id.id %}" style="color:black;">{{i.customer_id.name }}</a>
+                            <a href="{% url 'single_customer' customer_id=i.id %}" style="color:black;">{{i.name }}</a>
                         </td>
-                        <td>{{ i.customer_id.mobile }}</td>
+                        <td>{{ i.mobile }}</td>
                         <td>{{i.order_date}}</td>
                         <td>{{ i.delivery_date }}</td>
                         <td>
-                            <form action="{% url 'add_order' dataid=i.customer_id.id  %}">
+                            <form action="{% url 'add_order' dataid=i.id  %}">
                                 <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
                                     add
                                 </button>
