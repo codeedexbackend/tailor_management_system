@@ -80,11 +80,6 @@
                            name="sleeve_bottom" step="any">
                 </div>
                 <div class="form-group">
-                    <b><label for="neck">Neck Round:</label></b>
-                    <input type="text" class="form-control" id="neck_round" placeholder="" required
-                           min="0" name="neck_round" step="any">
-                </div>
-                <div class="form-group">
                     <b><label for="neck">Neck:</label></b>
                     <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
                            name="neck" step="any">
@@ -99,16 +94,16 @@
                     <input type="text" class="form-control" id="collar_size" placeholder="" required min="0"
                            name="collar_size" step="any">
                 </div>
-
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
                 <div class="form-group">
                     <b><label for="regal">Regal:</label></b>
 
                     <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
                            name="regal" step="any">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+
 
                 <div class="form-group">
                     <b><label for="seat">Seat:</label></b>
@@ -187,8 +182,9 @@
                 <div class="form-group">
                     <b><label for="tailor">Tailors:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="tailor"
-                            id="tailor-dropdown">
-                        <option>Select Tailor</option>
+                            id="tailor-dropdown" required>
+                        <option>
+                        </option>
                         {% for entry in tailor_works %}
                         <option value="{{ entry.tailor.id }}">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -233,7 +229,7 @@
                     console.log("Received Data:", data);
 
                     var dropdown = $('#tailor-dropdown');
-                    dropdown.empty().append('<option>Select Tailor</option>');
+                    dropdown.empty().append('<option></option>');
 
                     // Populate options with fetched data
                     $.each(data.tailor_options, function (index, tailor) {

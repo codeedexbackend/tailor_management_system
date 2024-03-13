@@ -184,8 +184,8 @@
                 <div class="form-group">
                     <b><label for="tailor">Tailors:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="tailor"
-                            id="tailor-dropdown">
-                        <option>Select Tailor</option>
+                            id="tailor-dropdown" required>
+                        <option></option>
                         {% for entry in tailor_works %}
                         <option value="{{ entry.tailor.id }}">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -233,7 +233,7 @@
                     console.log("Received Data:", data);
 
                     var dropdown = $('#tailor-dropdown');
-                    dropdown.empty().append('<option>Select Tailor</option>');
+                    dropdown.empty().append('<option></option>');
 
                     // Populate options with fetched data
                     $.each(data.tailor_options, function (index, tailor) {

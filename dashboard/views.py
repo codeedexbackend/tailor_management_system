@@ -206,10 +206,19 @@ def save_tailor(request):
         un = request.POST.get('username')
         pwd = request.POST.get('password')
         mob = request.POST.get('mobile')
-        obj = AddTailors(tailor=tn, username=un, password=pwd, mobile_number=mob)
-        obj.save()
-        messages.success(request, "Tailor Added Successfully")
-    return redirect(addtailors)
+
+        # Check if a tailor with the given mobile number already exists
+        if AddTailors.objects.filter(mobile_number=mob).exists():
+            messages.error(request, "Mobile number already exists")
+        else:
+            try:
+                obj = AddTailors(tailor=tn, username=un, password=pwd, mobile_number=mob)
+                obj.save()
+                messages.success(request, "Tailor Added Successfully")
+            except IntegrityError:
+                messages.error(request, "An error occurred while saving the tailor")
+
+    return redirect('addtailors')
 
 
 # def view_tailors(request):
@@ -835,7 +844,7 @@ def tailor_appointments(request):
         # Filter customer orders for the tailor within the date range
         tailor_orders = Add_order.objects.filter(
             tailor=tailor,
-            order_date__gte=start_date,
+            # order_date__gte=start_date,
             delivery_date__lte=end_date,
         )
 
