@@ -1,6 +1,6 @@
 import random
 from datetime import date
-
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
@@ -157,13 +157,7 @@ def savecustomer_recption(request):
 
         works_on_delivery_date = Customer.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
-        if works_on_delivery_date >= 6:
-            error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
-            if request.is_ajax():
-                return JsonResponse({'error': error_message}, status=400)
-            else:
-                messages.error(request, error_message)
-                return redirect(createcustomer_reception)
+
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
@@ -318,14 +312,7 @@ def update_add_order_reception(request, dataid):
 
         works_on_delivery_date = Add_order.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
-        if works_on_delivery_date >= 6:
-            error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
-            if request.is_ajax():
-                return JsonResponse({'error': error_message}, status=400)
-            else:
-                messages.error(request, error_message)
-                return redirect('some_redirect_url')
-                # Get or create the new tailor instance
+
         new_tailor = AddTailors.objects.get(id=tailor_id)
 
         # Update assigned_works for the old tailor and new tailor
@@ -376,13 +363,7 @@ def save_add_order_recption(request):
 
         works_on_delivery_date = Add_order.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
-        if works_on_delivery_date >= 6:
-            error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
-            if request.is_ajax():
-                return JsonResponse({'error': error_message}, status=400)
-            else:
-                messages.error(request, error_message)
-                return redirect(order_details_reception)
+
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
@@ -489,42 +470,50 @@ def orderdlt_reception(request, dlt):
 
 
 def tailor_work_details_recption(request):
-    if request.method == 'POST':
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
+    # Retrieve start_date and end_date from the POST request
+    start_date_str = request.POST.get('start_date')
+    end_date_str = request.POST.get('end_date')
 
-        tailors = AddTailors.objects.all()
+    # Convert start_date_str and end_date_str to datetime objects
+    start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+    end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
 
-        tailor_data = []
-        for tailor in tailors:
-            assigned_works = Add_order.objects.filter(
-                tailor=tailor, status='assigned', order_date__range=[start_date, end_date]
-            ).count()
+    # Get all tailors
+    tailors = AddTailors.objects.all()
 
-            pending_works = Add_order.objects.filter(
-                tailor=tailor, status='in_progress', order_date__range=[start_date, end_date]
-            ).count()
+    # Initialize list to store tailor data
+    tailor_data = []
 
-            completed_works = Add_order.objects.filter(
-                tailor=tailor, status='completed', order_date__range=[start_date, end_date]
-            ).count()
+    # Iterate through each tailor
+    for tailor in tailors:
+        # Filter customer orders for the tailor within the date range
+        tailor_orders = Add_order.objects.filter(
+            tailor=tailor,
+            # order_date__gte=start_date,
+            delivery_date__lte=end_date,
+        )
 
-            tailor_info = {
-                'tailor': tailor,
-                'assigned_works': assigned_works,
-                'pending_works': pending_works,
-                'completed_works': completed_works
-            }
+        # Count the number of orders in each status for the tailor within the date range
+        assigned_works = tailor_orders.filter(status='assigned').count()
+        pending_works = tailor_orders.filter(status='in_progress').count()
+        completed_works = tailor_orders.filter(status='completed').count()
 
-            tailor_data.append(tailor_info)
+        # Append tailor data to the list
+        tailor_data.append({
+            'tailor': tailor,
+            'assigned_works': assigned_works,
+            'pending_works': pending_works,
+            'completed_works': completed_works,
+        })
 
-        context = {
-            'tailor_data': tailor_data,
-            'start_date': start_date,
-            'end_date': end_date,
-        }
+    # Pass the results to the template
+    context = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'tailor_data': tailor_data,
+    }
 
-        return render(request, 'tailor_details_reception.html', context)
+    return render(request, 'tailor_details_reception.html', context)
 
     return render(request, 'tailor_work_reception.html')
 
