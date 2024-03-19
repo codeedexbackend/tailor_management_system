@@ -71,11 +71,19 @@
                 <h5 style="text-align:center; margin-top:3px;" class="card-title"><b>Customer Name:
                     {{i.customer_id.name}}</b></h5>
                 <br>
-                <form action="{% url 'additem' dataid=i.id  %}">
-                    <div class="text-right mb-4">
-                        <button type="submit" class="btn btn-danger btn-sm " style="">Add Items</button>
+                <div class="text-right mb-4">
+                    <div style="float: left;margin-left:10px;">
+                        <form action="{% url 'customer_bill' customer_id=i.id %}">
+                            <button type="submit" class="btn btn-primary btn-sm">Print</button>
+                        </form>
                     </div>
-                </form>
+                    <div style="float: right;">
+                        <form action="{% url 'additem' dataid=i.id %}">
+                            <button type="submit" class="btn btn-danger btn-sm">Add Items</button>
+                        </form>
+                    </div>
+                    <div style="clear: both;"></div> <!-- Clear floats -->
+                </div>
                 <tr>
                     <th>Order ID :</th>
                     <td>{{i.id}}</td>

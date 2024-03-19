@@ -2,7 +2,7 @@
 import logging
 import random
 from datetime import date
-
+from django.views.decorators.cache import never_cache
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
@@ -381,13 +381,6 @@ def savecustomer(request):
 
         works_on_delivery_date = Add_order.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
-        if works_on_delivery_date >= 6:
-            error_message = f"Tailor {tailor_instance.tailor} already has 6 or more works on {dd}. Cannot assign new work."
-            if request.is_ajax():
-                return JsonResponse({'error': error_message}, status=400)
-            else:
-                messages.error(request, error_message)
-                return redirect(createcustomer)
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
@@ -603,8 +596,7 @@ def search_mobile(request):
     if 'q' in request.GET:
         query = request.GET['q']
 
-        results['customer'] = Customer.objects.filter(mobile__icontains=query).exclude(mobile__isnull=True).exclude(
-            mobile__exact='')
+        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='')
 
     return render(request, 'search.html', {'results': results, 'query': query})
 
@@ -903,16 +895,57 @@ def adminlogin(request):
             messages.warning(request, "Please Enter Valid username and password...")
             return redirect(login)
 
+@never_cache
+def LogoutAdmin(request):
+    if 'user_name' in request.session:
+        del request.session['user_name']
+    if 'password' in request.session:
+        del request.session['password']
+    messages.success(request, 'Logout successful...!')
+    response = redirect('login')
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
-def LogoutAdmin(req):
-    del req.session['user_name']
-    del req.session['password']
-    messages.success(req, 'Logout successful...!')
-    return redirect(login)
+@never_cache
+def LogoutReception(request):
+    if 'username' in request.session:
+        del request.session['username']
+    if 'password' in request.session:
+        del request.session['password']
+    messages.success(request, 'Logout successful...!')
+    response = redirect('login')
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
+
+from django.contrib.auth.decorators import login_required
+from django.utils.cache import add_never_cache_headers
 
 
-def LogoutReception(req):
-    del req.session['username']
-    del req.session['password']
-    messages.success(req, 'Logout successful...!')
-    return redirect(login)
+@login_required
+def some_protected_view(request):
+    # Your view logic goes here
+    # For example:
+    # Your view logic...
+
+    # Create the HTTP response
+    response = HttpResponse()
+
+    # Set cache-control headers to prevent caching
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+
+    return response
+class NoCacheMiddleware:
+
+    def _init_(self, get_response):
+        self.get_response = get_response
+
+    def _call_(self, request):
+        response = self.get_response(request)
+        add_never_cache_headers(response)
+        return response
