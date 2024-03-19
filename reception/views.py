@@ -46,8 +46,7 @@ def search_mobile_recption(request):
     if 'q' in request.GET:
         query = request.GET['q']
 
-        results['customer'] = Customer.objects.filter(mobile__icontains=query).exclude(mobile__isnull=True).exclude(
-            mobile__exact='')
+        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='')
 
     return render(request, 'search_reception.html', {'results': results, 'query': query})
 

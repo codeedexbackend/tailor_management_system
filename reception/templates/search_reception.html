@@ -64,10 +64,10 @@
                             {% for results in results.customer %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'single_customer_reception' customer_id=results.id %}"
-                                       style="color:black;">{{results.name}}</a>
+                                    <a href="{% url 'single_customer_reception' customer_id=results.customer_id.id %}"
+                                       style="color:black;">{{results.customer_id.name}}</a>
                                 </td>
-                                <td>{{ results.mobile }}</td>
+                                <td>{{ results.customer_id.mobile }}</td>
                                 <td>{{ results.cloth }}</td>
                                 <td>{{ results.length }}</td>
                                 <td>{{ results.shoulder }}</td>
@@ -91,11 +91,19 @@
                                 <td>{{results.description}}</td>
                                 <td>{{results.tailor}}</td>
                                 <td>
-                                    <a href="{% url 'add_order_recption' dataid=results.id %}">
+                                    <a href="{% url 'add_order_recption' dataid=results.customer_id.id %}">
                                         <button type="submit" class="btn btn-secondary btn-sm">
                                             Add
                                         </button>
                                     </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'customer_bill_reception' customer_id=results.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                            Print
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             {% endfor %}
