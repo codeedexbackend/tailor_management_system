@@ -372,8 +372,6 @@ def save_add_order_recption(request):
 
         works_on_delivery_date = Add_order.objects.filter(tailor=tailor_instance, delivery_date=dd).count()
 
-
-
         tailor_instance.assigned_works += 1
         tailor_instance.save()
 
