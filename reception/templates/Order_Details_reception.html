@@ -53,6 +53,9 @@
                         <th>Order Date</th>
                         <th>Delivery Date</th>
                         <th>Description</th>
+                        <th>Total Price</th>
+                        <th>Advance Payment</th>
+                        <th>Balance Payment</th>
                         <th>Tailor</th>
                         <th>Action</th>
                     </tr>
@@ -89,6 +92,9 @@
                         <td>{{i.order_date}}</td>
                         <td>{{i.delivery_date}}</td>
                         <td>{{i.description}}</td>
+                        <td>{{i.total_payment}}</td>
+                        <td>{{i.advance_payment}}</td>
+                        <td>{{i.balance_payment}}</td>
                         <td>{{i.tailor}}</td>
                         <td>
                             <form action="{% url 'edit_order_reception' dataid=i.id %}">

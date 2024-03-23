@@ -160,11 +160,22 @@
                     <td>{{i.description}}</td>
 
                 </tr>
+                <tr>
+                    <th >Total Price :</th>
+                    <td>{{i.total_payment}}</td>
+                    <th >Advance Payment :</th>
+                    <td>{{i.advance_payment}}</td>
+                </tr>
+                <tr>
+                    <th style="color:red">Balance Payment :</th>
+                    <td>{{i.balance_payment}}</td>
+                </tr>
                 <tfoot>
                 <tr>
                     <td colspan="4" style="text-align: center;">
-                        Page {{ forloop.counter }} of {{ view|length }}
+                        Order {{ forloop.counter }} of {{ view|length }}
                     </td>
+                </tr>
                 </tfoot>
             </table>
 
@@ -215,13 +226,13 @@
         </div>
         {% endfor %}
     </div>
-    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
+    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="text-white">Previous</span>
     </button>
-    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
+    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>

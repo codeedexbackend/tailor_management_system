@@ -376,6 +376,9 @@ def savecustomer(request):
         cloth = request.POST.get('Cloth')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
 
         tailor_instance = AddTailors.objects.get(id=tailor_id)
 
@@ -400,7 +403,7 @@ def savecustomer(request):
                                       cuff_length=cl,
                                       cuff_type=ct, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                       order_date=od, cloth=cloth, delivery_date=dd, tailor=tailor_instance,
-                                      button_type=bt,
+                                      button_type=bt,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                       collar=clr, description=ds, bill_number=bill_number,collar_size=cs,sleeve_bottom=sb)
             add_order_obj.save()
 
@@ -645,6 +648,9 @@ def update_add_order(request, dataid):
         other = request.POST.get('other')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
         # Get the existing customer
         customer = Add_order.objects.get(id=dataid)
 
@@ -675,7 +681,7 @@ def update_add_order(request, dataid):
         Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, neck=nc,
                                                    regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
                                                    sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                                                   cloth=cloth,
+                                                   cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
                                                    button_type=bt,
                                                     collar=clr, description=other,sleeve_bottom=sb,collar_size=cs)
@@ -711,6 +717,9 @@ def save_add_order(request):
         other = request.POST.get('other')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
 
         # Get or create the tailor instance
         tailor_instance = AddTailors.objects.get(id=tailor_id)
@@ -738,7 +747,7 @@ def save_add_order(request):
             obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, neck=nc, regal=rg,
                             cuff_length=cl, bill_number=bill_number,
                             cuff_type=ct, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                            order_date=od, cloth=cloth,
+                            order_date=od, cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
                             delivery_date=dd, tailor=tailor_instance, button_type=bt,
                             description=other, collar=clr,collar_size=cs,sleeve_bottom=sb)
 

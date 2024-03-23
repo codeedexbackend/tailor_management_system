@@ -151,6 +151,9 @@ def savecustomer_recption(request):
         cloth = request.POST.get('Cloth')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
 
         tailor_instance = AddTailors.objects.get(id=tailor_id)
 
@@ -176,7 +179,7 @@ def savecustomer_recption(request):
             add_order_obj = Add_order(customer_id=obj, length=ln, shoulder=sd, cloth=cloth, sleeve_sada=sl,
                                       sleeve_cuff=sll, neck=nc,  collar=clr, regal=rg, loose=lo,
                                        pocket=po, cuff_length=cl, bottom1=b1, seat=b2, button_type=bt,
-                                      bill_number=bill_number,
+                                      bill_number=bill_number,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                       order_date=od, delivery_date=dd, tailor=tailor_instance, description=ds,collar_size=cs,sleeve_bottom=sb)
             add_order_obj.save()
 
@@ -300,6 +303,9 @@ def update_add_order_reception(request, dataid):
         other = request.POST.get('other')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
 
         # Get the existing customer
         customer = Add_order.objects.get(id=dataid)
@@ -324,7 +330,7 @@ def update_add_order_reception(request, dataid):
         Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, neck=nc,
                                                    regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
                                                    sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                                                   cloth=cloth,
+                                                   cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
                                                    button_type=bt,collar_size=cs,sleeve_bottom=sb,
                                                     collar=clr, description=other)
@@ -357,6 +363,10 @@ def save_add_order_recption(request):
         other = request.POST.get('other')
         cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        tp = request.POST.get('total')
+        ap = request.POST.get('advance')
+        bp = request.POST.get('balance')
+
 
         tailor_instance = AddTailors.objects.get(id=tailor_id)
 
@@ -378,7 +388,7 @@ def save_add_order_recption(request):
             obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, neck=nc, regal=rg,
                             cuff_length=cl, bill_number=bill_number,
                             cuff_type=ct, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                            order_date=od, cloth=cloth,
+                            order_date=od, cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
                             delivery_date=dd, tailor=tailor_instance, button_type=bt,
                             description=other, collar=clr,collar_size=cs,sleeve_bottom=sb)
 
