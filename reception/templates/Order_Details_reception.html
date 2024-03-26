@@ -15,14 +15,41 @@
       height: 700px;
       overflow-y: auto;
     }
-
-
 </style>
+<script>
+    function validateDateInputs() {
+      var fromDate = document.getElementById('textfield').value;
+      var toDate = document.getElementById('textfield2').value;
+  
+      // Perform validation based on your requirements
+      if (fromDate.trim() === '' || toDate.trim() === '') {
+        alert('Please select both "From" and "To" dates.');
+        return false; // Prevent form submission
+      }
+  
+      // Additional validation logic can be added here
+  
+      // If all validation passes, allow form submission
+      return true;
+    }
+</script>
 
 <div class="container form-container" style="margin-top:1px;">
     <div class="">
         <div class="card-body">
             <h5 style="text-align:center; margin-top:3px;" class="card-title">Order Details</h5>
+            <form action="" method="post" onsubmit="return validateDateInputs()">
+            {% csrf_token %}
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td>From</td>
+                    <td><input type="date" name="textfield" id="textfield" class="form-control" /></td>
+                    <td>To</td>
+                    <td><input type="date" name="textfield2" id="textfield2" class="form-control" /></td>
+                    <td><input type="submit" name="textfield3" id="textfield3" value="search" class="btn btn-success"/></td>
+                </tr>
+            </table>
+            </form>
             <div class="table-responsive">
                 <table class="table">
                     <thead>

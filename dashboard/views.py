@@ -282,7 +282,20 @@ def customer_details(request):
 
 
 def order_details(request):
-    cus = Add_order.objects.all().order_by('-order_date')
+    cus = Add_order.objects.all().order_by('-id')
+    if request.method == "POST":
+        from_date_str = request.POST.get('textfield')
+        to_date_str = request.POST.get('textfield2')
+
+        if from_date_str and to_date_str:
+            from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
+            to_date = datetime.strptime(to_date_str, '%Y-%m-%d').date()
+
+            data = Add_order.objects.filter(delivery_date__range=[from_date, to_date]).order_by('-id')
+        else:
+            data = Add_order.objects.all().order_by('-id')
+
+        return render(request, "Order_Details.html", {'cus': data})
     return render(request, "Order_Details.html", {"cus": cus})
 
 def deliver_order(request, order_id):
