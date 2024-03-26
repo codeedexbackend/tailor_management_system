@@ -75,6 +75,20 @@
                             <button type="submit" class="btn btn-primary btn-sm">Print</button>
                         </form>
                     </div>
+                    <div style="float: left;margin-left:10px;">
+                        <form action="{% url 'deliver_order' order_id=i.id %}" method="post">
+                            {% csrf_token %}
+                            {% if i.pending_or_delivered == 'pending' %}
+                                <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                    Pending
+                                </button>
+                            {% elif i.pending_or_delivered == 'delivered' %}
+                                <button class="btn btn-success btn-icon-text btn-sm">
+                                    Delivered
+                                </button>
+                            {% endif %}
+                        </form>
+                    </div>
                     <div style="float: right;">
                         <form action="{% url 'additem' dataid=i.id %}">
                             <button type="submit" class="btn btn-danger btn-sm">Add Items</button>

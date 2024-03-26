@@ -120,9 +120,19 @@
                                 </button>
                             </form>
                         </td>
-                        </form>
-                        </td>
-
+                        <td>
+                            <form action="{% url 'deliver_order' order_id=i.id %}" method="post">
+                                {% csrf_token %}
+                                {% if i.pending_or_delivered == 'pending' %}
+                                    <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                        Pending
+                                    </button>
+                                {% elif i.pending_or_delivered == 'delivered' %}
+                                    <button class="btn btn-success btn-icon-text btn-sm">
+                                        Delivered
+                                    </button>
+                                {% endif %}
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}

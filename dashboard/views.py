@@ -282,8 +282,15 @@ def customer_details(request):
 
 
 def order_details(request):
-    cus = Add_order.objects.all()
+    cus = Add_order.objects.all().order_by('-order_date')
     return render(request, "Order_Details.html", {"cus": cus})
+
+def deliver_order(request, order_id):
+    if request.method == 'POST':
+        order = Add_order.objects.get(pk=order_id)
+        order.pending_or_delivered = 'delivered'
+        order.save()
+        return redirect('order_details')
 
 
 def upcoming_deliveries(request):

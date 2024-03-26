@@ -262,9 +262,16 @@ def save_items_recption(request):
 
 
 def order_details_reception(request):
-    cus = Add_order.objects.all()
+    cus = Add_order.objects.all().order_by('-order_date')
     return render(request, "Order_Details_reception.html", {"cus": cus})
 
+
+def deliver_order_reception(request, order_id):
+    if request.method == 'POST':
+        order = Add_order.objects.get(pk=order_id)
+        order.pending_or_delivered = 'delivered'
+        order.save()
+        return redirect('reception_indexpage')
 
 def add_order_recption(request, dataid):
     add = Customer.objects.get(id=dataid)

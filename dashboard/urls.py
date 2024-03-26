@@ -21,6 +21,7 @@ urlpatterns = [
     path("save_items/", views.save_items, name="save_items"),
     path("customer_details/", views.customer_details, name="customer_details"),
     path("order_details/", views.order_details, name="order_details"),
+    path('deliver_order/<int:order_id>/', views.deliver_order, name='deliver_order'),
     path("edit_customer/<int:dataid>/", views.edit_customer, name="edit_customer"),
     path("update_customer/<int:dataid>/", views.update_customer, name="update_customer"),
     path("search_mobile/", views.search_mobile, name="search_mobile"),

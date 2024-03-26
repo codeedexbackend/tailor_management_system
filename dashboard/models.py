@@ -141,6 +141,11 @@ class Add_order(models.Model):
         choices=STATUS_CHOICES,
         default='assigned',
     )
+    pending_or_delivered = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Pending'), ('delivered', 'Delivered')],
+        default='pending'  # Set default value here
+    )
 
 
 class Item(models.Model):

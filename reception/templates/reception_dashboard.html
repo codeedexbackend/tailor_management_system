@@ -251,6 +251,7 @@
                                             <th>Order Date</th>
                                             <th>Delivery Date</th>
                                             <th>Tailor</th>
+                                            <th>Delivery Status</th>
                                             <!--                                            <th>Action</th>-->
                                         </tr>
                                         </thead>
@@ -263,6 +264,20 @@
                                             <td>{{ i.order_date }}</td>
                                             <td>{{ i.delivery_date }}</td>
                                             <td>{{ i.tailor.tailor }}</td>
+                                            <td>
+                                                <form action="{% url 'deliver_order_reception' order_id=i.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    {% if i.pending_or_delivered == 'pending' %}
+                                                        <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                                            Pending
+                                                        </button>
+                                                    {% elif i.pending_or_delivered == 'delivered' %}
+                                                        <button class="btn btn-success btn-icon-text btn-sm">
+                                                            Delivered
+                                                        </button>
+                                                    {% endif %}
+                                                </form>
+                                            </td>
 
                                         </tr>
                                         {% endfor %}
