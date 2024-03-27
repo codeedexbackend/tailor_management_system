@@ -77,6 +77,20 @@
                             <button type="submit" class="btn btn-primary btn-sm">Print</button>
                         </form>
                     </div>
+                    <div style="float: left;margin-left:10px;">
+                        <form action="{% url 'deliver_order_reception' order_id=i.id %}" method="post">
+                            {% csrf_token %}
+                            {% if i.pending_or_delivered == 'pending' %}
+                                <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                    Pending
+                                </button>
+                            {% elif i.pending_or_delivered == 'delivered' %}
+                                <button class="btn btn-success btn-icon-text btn-sm">
+                                    Delivered
+                                </button>
+                            {% endif %}
+                        </form>
+                    </div>
                     <div style="float: right;">
                         <form action="{% url 'order_add_item' dataid=i.id %}">
                             <button type="submit" class="btn btn-danger btn-sm">Add Items</button>
@@ -160,12 +174,22 @@
                     <td>{{i.description}}</td>
 
                 </tr>
-                
+                <tr>
+                    <th >Total Price :</th>
+                    <td>{{i.total_payment}}</td>
+                    <th >Advance Payment :</th>
+                    <td>{{i.advance_payment}}</td>
+                </tr>
+                <tr>
+                    <th style="color:red">Balance Payment :</th>
+                    <td>{{i.balance_payment}}</td>
+                </tr>
                 <tfoot>
                 <tr>
                     <td colspan="4" style="text-align: center;">
-                        Page {{ forloop.counter }} of {{ view|length }}
+                        Order {{ forloop.counter }} of {{ view|length }}
                     </td>
+                </tr>
                 </tfoot>
             </table>
 
@@ -216,13 +240,13 @@
         </div>
         {% endfor %}
     </div>
-    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
+    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="text-white">Previous</span>
     </button>
-    <button style="margin-top:620px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
+    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>

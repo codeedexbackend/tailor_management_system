@@ -107,6 +107,9 @@ class Add_order(models.Model):
     seat = models.CharField(max_length=15, null=True)
     cuff_type = models.CharField(max_length=20, null=True)
     cuff_length = models.CharField(max_length=15, null=True)
+    total_payment = models.CharField(max_length=15, null=True)
+    advance_payment = models.CharField(max_length=15, null=True)
+    balance_payment = models.CharField(max_length=15, null=True)
     bottom1 = models.CharField(max_length=50)
     BUTTON_CHOICES = [
         ('makfi', 'Makfi'),
@@ -137,6 +140,11 @@ class Add_order(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default='assigned',
+    )
+    pending_or_delivered = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Pending'), ('delivered', 'Delivered')],
+        default='pending'  # Set default value here
     )
 
 

@@ -251,6 +251,7 @@
                                             <th>Order Date</th>
                                             <th>Delivery Date</th>
                                             <th>Tailor</th>
+                                            <th>Delivery Status</th>
                                             <!--                                            <th>Action</th>-->
                                         </tr>
                                         </thead>
@@ -263,6 +264,20 @@
                                             <td>{{ i.order_date }}</td>
                                             <td>{{ i.delivery_date }}</td>
                                             <td>{{ i.tailor.tailor }}</td>
+                                            <td>
+                                                <form action="{% url 'deliver_order_reception' order_id=i.id %}" method="post">
+                                                    {% csrf_token %}
+                                                    {% if i.pending_or_delivered == 'pending' %}
+                                                        <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                                            Pending
+                                                        </button>
+                                                    {% elif i.pending_or_delivered == 'delivered' %}
+                                                        <button class="btn btn-success btn-icon-text btn-sm">
+                                                            Delivered
+                                                        </button>
+                                                    {% endif %}
+                                                </form>
+                                            </td>
 
                                         </tr>
                                         {% endfor %}
@@ -390,7 +405,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Codeedex Technologies <a
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Amanathobe <a
                                 href="#" class="text-muted" target="_blank"></a></span>
                     <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center text-muted"></span>
                 </div>

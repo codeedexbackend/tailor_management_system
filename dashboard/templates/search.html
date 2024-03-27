@@ -36,6 +36,9 @@
                                 <th>Order Date</th>
                                 <th>Delivery Date</th>
                                 <th>Description</th>
+                                <th>Total Price</th>
+                                <th>Advance Payment</th>
+                                <th>Balance Payment</th>
                                 <th>Tailor</th>
                                 <th>Action</th>
                             </tr>
@@ -69,6 +72,9 @@
                                 <td>{{results.order_date}}</td>
                                 <td>{{results.delivery_date}}</td>
                                 <td>{{results.description}}</td>
+                                <td>{{results.total_payment}}</td>
+                                <td>{{results.advance_payment}}</td>
+                                <td>{{results.balance_payment}}</td>
                                 <td>{{results.tailor}}</td>
                                 <td>
                                     <a href="{% url 'add_order' dataid=results.customer_id.id %}">
@@ -78,11 +84,42 @@
                                     </a>
                                 </td>
                                 <td>
+                                    <form action="{% url 'edit_order' dataid=results.id %}">
+                                        <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            Edit
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'orderdlt' dlt=results.id %}" method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this order?');">
+                                        {% csrf_token %}
+        
+                                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
                                     <form action="{% url 'customer_bill' customer_id=results.id %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
                                             Print
                                         </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'deliver_order' order_id=results.id %}" method="post">
+                                        {% csrf_token %}
+                                        {% if results.pending_or_delivered == 'pending' %}
+                                            <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                                Pending
+                                            </button>
+                                        {% elif results.pending_or_delivered == 'delivered' %}
+                                            <button class="btn btn-success btn-icon-text btn-sm">
+                                                Delivered
+                                            </button>
+                                        {% endif %}
                                     </form>
                                 </td>
                             </tr>

@@ -102,16 +102,17 @@
                     <input type="number" class="form-control" id="regal" min="0" placeholder=" " required
                            name="regal" step="any" value="{{add.regal}}">
                 </div>
-
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
-
                 <div class="form-group">
                     <b><label for="seat">Seat:</label></b>
                     <input type="text" class="form-control" id="seat" placeholder="" required min="0"
                            name="seat" step="any" value="{{add.seat}}">
                 </div>
+
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+
+                
 
                 <div class="form-group">
                     <b> <label for="regal">Pocket Size:</label></b>
@@ -191,9 +192,25 @@
                 </div>
                 <div class="form-group">
                     <b><label for="other">Other:</label></b>
-                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;"
+                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc; height:38px;"
                               maxlength="10000" name="other">{{add.description}}</textarea>
                 </div>
+                <div class="form-group">
+                    <b><label>Total Price</label></b>
+                    <input type="text" class="form-control" id="total" placeholder=""  min="0"
+                           name="total" step="any">
+                </div>
+                <div class="form-group">
+                    <b><label>Advance Payment</label></b>
+                    <input type="text" class="form-control" id="advance" placeholder=""  min="0"
+                           name="advance" step="any">
+                </div>
+                <div class="form-group">
+                    <b><label>Balance Payment</label></b>
+                    <input type="text" class="form-control" id="balance" placeholder=""  min="0"
+                           name="balance" step="any" >
+                </div>
+                
                 <div class="form-group">
                     <label></label>
                     <input type="hidden" id="billnum" name="">
@@ -210,6 +227,31 @@
         </div>
     </form>
 </div>
+<script>
+    // Get references to the input fields
+    var totalInput = document.getElementById('total');
+    var advanceInput = document.getElementById('advance');
+    var balanceInput = document.getElementById('balance');
+
+    // Function to calculate and display balance payment
+    function calculateBalance() {
+        var total = parseFloat(totalInput.value);
+        var advance = parseFloat(advanceInput.value);
+        
+        // Calculate balance payment
+        var balance = total - advance;
+        
+        // Update the balance input field with the calculated value
+        balanceInput.value = balance.toFixed(2); // You can adjust the decimal places as needed
+    }
+
+    // Add event listeners to trigger the balance calculation whenever total or advance inputs change
+    totalInput.addEventListener('input', calculateBalance);
+    advanceInput.addEventListener('input', calculateBalance);
+
+    // Calculate balance on page load
+    calculateBalance();
+</script>
 <script>
     $(document).ready(function () {
         $('#dldate').on('change', function () {
