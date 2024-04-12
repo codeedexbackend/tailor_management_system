@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Bill</title>
+    <style>
+    /* Define your CSS styles here */
+    body {
+        font-family: Arial, sans-serif;
+        margin:0;
+        padding:0;
+    }
+     header {
+            text-align: center;
+            margin-top: 10px;
+        }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    .bill-info {
+        margin-bottom: 20px;
+        line-height:10px;
+    }
+    .bill-info b {
+        display: inline-block;
+        width: 200px;
+        font-weight: bold;
+    }
+         img {
+            width: 150px;
+        }
+          h3, h4, h5 {
+            text-align: center;
+        }
+
+
+</style>
+</head>
+
+<body>
+<header>
+    <img src="https://i.postimg.cc/hvSB6N1c/amana-logo.png" alt="">
+    <h3>HAYY SOUQ, SHARURAH, SAUDI ARABIA</h3>
+    <h4>PHONE NO: 00966507328132, EMAIL ID: <a href="mailto:amanathobe@gmail.com">amanathobe@gmail.com</a></h4>
+    <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com </a> VAT NUMBER/TIM : 310601281900003</h4>
+</header>
+<div class="container">
+    {% for i in order %}
+    <div class="bill-info">
+        <b>CUSTOMER NAME:</b>{{ i.customer_id.name }}
+        <!-- Insert customer name here -->
+    </div>
+    <div class="bill-info">
+        <b>MOBILE NUMBER:</b> {{ i.customer_id.mobile }}
+        <!-- Insert mobile number here -->
+    </div>
+    <div class="bill-info">
+        <b>CLOTH:</b>{{ i.cloth }} <!-- Insert cloth type here -->
+    </div>
+    <div class="bill-info">
+        <b>LENGTH:</b>{{i.length}} <!-- Insert length here -->
+    </div>
+    <div class="bill-info">
+        <b>SHOULDER:</b> {{i.shoulder}}<!-- Insert shoulder measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SLEEVE SADA:</b>{{i.sleeve_sada}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SLEEVE CUFF:</b>{{i.sleeve_cuff}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>LOOSE:</b>{{i.loose}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>SEAT:</b>{{i.seat}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>NECK:</b>{{i.neck}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>COLLAR :</b>{{i.collar}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>REGAL:</b>{{i.regal}} <!-- Insert sleeve measurement here -->
+    </div>
+     <div class="bill-info">
+        <b>SLEEVE BOTTOM:</b>{{i.sleeve_bottom}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>COLLAR SIZE:</b>{{i.collar_size}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>CUFF TYPE:</b>{{i.cuff_type}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>CUFF SIZE :</b>{{i.cuff_length}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>POCKET SIZE:</b>{{i.pocket}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>DESCRIPTION:</b>{{i.description}} <!-- Insert sleeve measurement here -->
+    </div>
+    <div class="bill-info">
+        <b>ORDER DATE:</b> {{i.order_date}}<!-- Insert date here -->
+    </div>
+    <div class="bill-info">
+        <b>DELIVERY DATE:</b> {{i.delivery_date}}<!-- Insert delivery date here -->
+    </div>
+    <div class="bill-info">
+        <b>TAILOR:</b> {{i.tailor}}<!-- Insert tailor name here -->
+    </div>
+    {% endfor %}
+</div>
+</body>
+
+</html>

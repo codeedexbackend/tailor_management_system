@@ -1,0 +1,311 @@
+{% extends 'reception_dashboard.html' %}
+{% block content %}
+
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 100%;
+      margin: 35px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+<!--      margin-bottom: 100px;-->
+<!--      height: 1200px;-->
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Center items horizontally */
+        margin-top: 20px;
+    }
+
+    .button-container button {
+        margin: 0 10px; /* Add spacing between buttons */
+    }
+</style>
+<div class="container form-container" style="margin-top:1px;">
+    <form class="container" method="post" action="{% url 'save_add_order_recption' %}">
+        {% csrf_token %}
+        <h6 class="text-center"><u>Add User Details & Measurements</u></h6>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Left Side -->
+
+                <input type="hidden" class="form-control" id="id" placeholder="Enter your name" required
+                       name="id" value="{{add.id}}">
+                <div class="form-group">
+                    <b><label for="name">Name:</label></b>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name" required
+                           name="name" value="{{add.name}}">
+                </div>
+                <div class="form-group">
+                    <label for="number"><b>Mobile:</b></label>
+                    <input type="number" class="form-control" id="number" placeholder="Enter your mobile"
+                           min="0" required
+                           name="mobile" value="{{add.mobile}}">
+                </div>
+                <div class="form-group">
+                    <label for="cloth"><b>Cloth:</b></label>
+                    <input type="text" class="form-control" id="cloth" placeholder=""
+                           min="0" required
+                           name="cloth" value="{{add.cloth}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="name">Length:</label></b>
+                    <input type="text" class="form-control" id="length" placeholder="" required min="0"
+                           name="length" step="any" value="{{add.length}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="shoulder">Shoulder:</label></b>
+                    <input type="text" class="form-control" id="shoulder" min="0" placeholder="" required
+                           name="shoulder" step="any" value="{{add.shoulder}}">
+                </div>
+                <div class="form-group">
+                    <b><label>Sleeve Sada:</label></b>
+                    <input type="text" class="form-control" id="sleeve_sada" min="0" placeholder="" required
+                           name="sleeve_sada" step="any" value="{{add.sleeve_sada}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Sleeve Cuff:</label></b>
+                    <input type="text" class="form-control" id="sleeve_cuff" min="0" placeholder="" required
+                           name="sleeve_cuff" step="any" value="{{add.sleeve_cuff}}">
+                </div>
+
+                <div class="form-group">
+                    <b><label for="collar">Sleeve Bottom:</label></b>
+                    <input type="text" class="form-control" id="sleeve_bottom" placeholder="" required min="0"
+                           name="sleeve_bottom" step="any" value="{{add.sleeve_bottom}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="neck">Neck:</label></b>
+                    <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
+                           name="neck" step="any" value="{{add.neck}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="collar">Collar:</label></b>
+                    <input type="text" class="form-control" id="collar" placeholder="" required min="0"
+                           name="collar" step="any" value="{{add.collar}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="collar">Collar Size:</label></b>
+                    <input type="text" class="form-control" id="collar_size" placeholder="" required min="0"
+                           name="collar_size" step="any" value="{{add.collar_size}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="regal">Regal:</label></b>
+
+                    <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
+                           name="regal" step="any" value="{{add.regal}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="seat">Seat:</label></b>
+                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
+                           name="seat" step="any" value="{{add.seat}}">
+                </div>
+                
+
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+                <div class="form-group">
+                    <b> <label for="regal">Pocket Size:</label></b>
+                    <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
+                           name="pocket" step="any" value="{{add.pocket}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Loose:</label></b>
+                    <input type="text" class="form-control" id="loose" min="0" placeholder="" required
+                           name="loose" step="any" value="{{add.loose}}">
+                </div>
+                <div class="form-group">
+                    <b><label>Cuff Type:</label></b>
+                    <input type="text" class="form-control" id="cuff_type" placeholder="" required
+                           name="cuff_type" value="{{add.cuff_type}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Cuff Length:</label></b>
+                    <input type="text" class="form-control" id="cuff" min="0" placeholder=" " required
+                           name="cuff_length" step="any" value="{{add.cuff_length}}">
+                </div>
+                <div class="form-group">
+                    <b><label>Button Type:</label></b>
+                    <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
+                        <option>{{add.button_type}}</option>
+                        <option>Makfi</option>
+                        <option>Makfi Bayyin</option>
+                        <option>Button Bayyin</option>
+                        <option>Makfi OP</option>
+                        <option>Makfi OP Nice</option>
+                        <option>Makfi Nice</option>
+                        <option>Makfi Zip</option>
+                        <option>Dabble Zib</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Bottom :</label></b>
+                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
+                           name="bottom1" step="any" value="{{add.bottom1}}">
+                </div>
+
+                <div class="form-group">
+                    <b><label for="loose">Order Date:</label></b>
+                    <input type="text" class="form-control" id="oddate" placeholder="" required
+                           name="order_date" value="{{add.order_date}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Delivery Date:</label></b>
+                    <input type="date" class="form-control" id="dldate" min="0" placeholder=" " required
+                           name="delivery_date" value="{{add.delivery_date}}">
+                </div>
+                <script>
+                    // Get the current date
+                    var today = new Date();
+
+                    // Format the date as dd-mm-yyyy
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                    var yyyy = today.getFullYear();
+
+                    // Set the value of the input field to the formatted date
+                    document.getElementById('oddate').value = yyyy + '-' + mm + '-' + dd;
+                </script>
+
+                <div class="form-group">
+                    <b><label for="tailor">Tailors:</label></b>
+                    <select class="form-control" style="border: 1px solid #ccc;" name="tailor" id="tailor-dropdown" required>
+                        <option></option>
+                        {% for entry in tailor_works %}
+                        <option value="{{ entry.tailor.id }}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: bold;"><b>{{ entry.tailor.tailor }}-</b></span>
+                                <span>Assigned: {{ entry.assigned_works }}, Pending: {{ entry.pending_works }}</span>
+                            </div>
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <b><label for="other">Other:</label></b>
+                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc; height:38px;"
+                              maxlength="10000" name="other">{{add.description}}</textarea>
+                </div>
+                <div class="form-group">
+                    <b><label>Total Price</label></b>
+                    <input type="text" class="form-control" id="total" placeholder=""  min="0"
+                           name="total" step="any">
+                </div>
+                <div class="form-group">
+                    <b><label>Advance Payment</label></b>
+                    <input type="text" class="form-control" id="advance" placeholder=""  min="0"
+                           name="advance" step="any">
+                </div>
+                <div class="form-group">
+                    <b><label>Balance Payment</label></b>
+                    <input type="text" class="form-control" id="balance" placeholder=""  min="0"
+                           name="balance" step="any" >
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ... (your existing form fields) -->
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-secondary btn-cancel">Cancel</button>
+        </div>
+    </form>
+</div>
+<script>
+    // Get references to the input fields
+    var totalInput = document.getElementById('total');
+    var advanceInput = document.getElementById('advance');
+    var balanceInput = document.getElementById('balance');
+
+    // Function to calculate and display balance payment
+    function calculateBalance() {
+        var total = parseFloat(totalInput.value);
+        var advance = parseFloat(advanceInput.value);
+        
+        // Calculate balance payment
+        var balance = total - advance;
+        
+        // Update the balance input field with the calculated value
+        balanceInput.value = balance.toFixed(2); // You can adjust the decimal places as needed
+    }
+
+    // Add event listeners to trigger the balance calculation whenever total or advance inputs change
+    totalInput.addEventListener('input', calculateBalance);
+    advanceInput.addEventListener('input', calculateBalance);
+
+    // Calculate balance on page load
+    calculateBalance();
+</script>
+<script>
+    $(document).ready(function () {
+        $('#dldate').on('change', function () {
+            var selectedDate = $(this).val();
+
+            // Fetch tailor data based on selected date using AJAX
+            $.ajax({
+                url: '{% url "fetch_tailor_options_recption" %}',
+                method: 'GET',
+                data: { delivery_date: selectedDate },
+                success: function (data) {
+                    console.log("Received Data:", data);
+
+                    var dropdown = $('#tailor-dropdown');
+                    dropdown.empty().append('<option></option>');
+
+                    // Populate options with fetched data
+                    $.each(data.tailor_options, function (index, tailor) {
+                        // Construct the option text including assigned and pending works
+                        var optionText = `${tailor.name} (Assigned: ${tailor.assigned_works}, Pending: ${tailor.pending_works})`;
+                        dropdown.append(`<option value="${tailor.id}">${optionText}</option>`);
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching tailor data:', error);
+                }
+            });
+        });
+    });
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+{% if messages %}
+{% for i in messages %}
+{% if i.tags == 'warning' %}
+<script>
+    swal('{{i}}','','warning');
+</script>
+{% elif i.tags == 'error' %}
+<script>
+    swal('{{i}}','','error');
+</script>
+{% elif i.tags == 'success' %}
+<script>
+    swal('{{i}}','','success');
+</script>
+{% else %}
+<script>
+    swal('{{i}}','','info');
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}

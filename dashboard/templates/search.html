@@ -1,0 +1,158 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<div class="container form-container" style="margin-top:1px;">
+    <div class="">
+        <div class="card-body">
+            <h5 style="text-align:center; margin-top:3px;" class="card-title">Order Details</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <div>
+                        <h4 style="text-align:center; color:blue;">Search Results for '{{ query }}'</h4>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Cloth</th>
+                                <th>Length</th>
+                                <th>Shoulder</th>
+                                <th>Sleeve Sada</th>
+                                <th>Sleeve Cuff</th>
+                                <th>Sleeve Bottom</th>
+                                <th>Loose</th>
+                                <th>seat</th>
+                                <th>Neck</th>
+                                <th>Regal</th>
+                                <th>Collar</th>
+                                <th>Collar Size</th>
+                                <th>Cuff Type</th>
+                                <th>Cuff Size</th>
+                                <th>Pocket</th>
+                                <th>Button Type</th>
+                                <th>Bottom Measure</th>
+                                <th>Bill Number</th>
+                                <th>Order Date</th>
+                                <th>Delivery Date</th>
+                                <th>Description</th>
+                                <th>Total Price</th>
+                                <th>Advance Payment</th>
+                                <th>Balance Payment</th>
+                                <th>Tailor</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for results in results.customer %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'single_customer' customer_id=results.customer_id.id %}"
+                                       style="color:black;">{{results.customer_id.name}}</a>
+                                </td>
+                               <td>{{ results.customer_id.mobile }}</td>
+                                <td>{{ results.cloth }}</td>
+                                <td>{{ results.length }}</td>
+                                <td>{{ results.shoulder }}</td>
+                                <td>{{results.sleeve_sada}}</td>
+                                <td>{{results.sleeve_cuff}}</td>
+                                <td>{{results.sleeve_bottom}}</td>
+                                <td>{{results.loose}}</td>
+                                <td>{{results.seat}}</td>
+                                <td>{{results.neck}}</td>
+                                <td>{{results.regal}}</td>
+                                <td>{{results.collar}}</td>
+                                <td>{{results.collar_size}}</td>
+                                <td>{{results.cuff_type}}</td>
+                                <td>{{results.cuff_length}}</td>
+                                <td>{{results.pocket}}</td>
+                                <td>{{results.button_type}}</td>
+                                <td>{{results.bottom1}}</td>
+                                <td>{{results.bill_number}}</td>
+                                <td>{{results.order_date}}</td>
+                                <td>{{results.delivery_date}}</td>
+                                <td>{{results.description}}</td>
+                                <td>{{results.total_payment}}</td>
+                                <td>{{results.advance_payment}}</td>
+                                <td>{{results.balance_payment}}</td>
+                                <td>{{results.tailor}}</td>
+                                <td>
+                                    <a href="{% url 'add_order' dataid=results.customer_id.id %}">
+                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                            Add
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'edit_order' dataid=results.id %}">
+                                        <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            Edit
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'orderdlt' dlt=results.id %}" method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this order?');">
+                                        {% csrf_token %}
+        
+                                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'customer_bill' customer_id=results.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                            Print
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="{% url 'deliver_order' order_id=results.id %}" method="post">
+                                        {% csrf_token %}
+                                        {% if results.pending_or_delivered == 'pending' %}
+                                            <button type="submit" class="btn btn-warning btn-icon-text btn-sm" >
+                                                Pending
+                                            </button>
+                                        {% elif results.pending_or_delivered == 'delivered' %}
+                                            <button class="btn btn-success btn-icon-text btn-sm">
+                                                Delivered
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <br><br>
+
+                        {% if not results.customer %}
+                        <style>
+                            @keyframes blink {
+                                0% {
+                                    opacity: 1;
+                                }
+                                50% {
+                                    opacity: 0;
+                                }
+                                100% {
+                                    opacity: 1;
+                                }
+                            }
+
+                            .blink {
+                                animation: blink 1s infinite;
+                            }
+                        </style>
+                        <h4 style="color:red; text-align:center;" class="blink">No results found.</h4>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- main-panel ends -->
+{% endblock %}
