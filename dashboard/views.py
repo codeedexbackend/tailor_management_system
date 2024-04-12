@@ -849,7 +849,6 @@ def save_add_order(request):
             bill_number = f"{next_chars}{next_digits:03d}"  # Format the next bill number
 
 
-tailor_management_system
 
 
 
