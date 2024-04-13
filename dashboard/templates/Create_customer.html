@@ -35,7 +35,7 @@
 
     <form class="container " method="post" action="{% url 'savecustomer' %}">
         {% csrf_token %}
-        <h6 class="text-center"><u>Add User Details & Measurements</u></h6>
+        <h6 class="text-center"><u>Add Custom Details & Measurements</u></h6>
         <div class="row">
             <div class="col-md-6">
                 <!-- Left Side -->
@@ -54,6 +54,11 @@
                     <b><label for="Cloth">Cloth:</label></b>
                     <input type="text" class="form-control" id="Cloth" placeholder="" required
                            name="Cloth">
+                </div>
+                <div class="form-group">
+                    <b><label for="other">Model Details:</label></b>
+                    <textarea id="model_details" class="form-control" style=" border: 1px solid #ccc;height: 124px;"
+                              maxlength="10000" name="model_details"></textarea>
                 </div>
                 <div class="form-group">
                     <b><label for="name">Length:</label></b>
@@ -111,6 +116,9 @@
                     <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
                            name="pocket" step="any">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
@@ -125,9 +133,6 @@
                         <option>Dabble Zib</option>
                     </select>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
 
                 <div class="form-group">
                     <label for="collar-type"><b>Collar Type:</b></label><br>

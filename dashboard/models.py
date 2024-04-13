@@ -59,6 +59,7 @@ class Customer(models.Model):
     delivery_date = models.DateField()
     tailor = models.ForeignKey(AddTailors, on_delete=models.SET_NULL, null=True)
     description = models.CharField(blank=True, null=True,max_length=100000)
+    model_details = models.CharField(blank=True, null=True, max_length=100000)
     bill_number = models.CharField(max_length=15,null=True)
     STATUS_CHOICES = [
         ('assigned', 'Assigned'),
@@ -133,6 +134,7 @@ class Add_order(models.Model):
     delivery_date = models.DateField()
     tailor = models.ForeignKey(AddTailors, on_delete=models.SET_NULL, null=True)
     description = models.CharField(blank=True, null=True, max_length=100000)
+    model_details = models.CharField(blank=True, null=True, max_length=100000)
     bill_number = models.CharField(max_length=15, null=True)
     STATUS_CHOICES = [
         ('assigned', 'Assigned'),

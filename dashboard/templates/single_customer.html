@@ -1,4 +1,5 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 {% block content %}
 <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
 <!--      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
@@ -19,7 +20,11 @@
 <!--      display: flex;-->
 <!--      flex-wrap: wrap;-->
     }
-
+    .table td img {
+        width: 50px;
+        height: 50px;
+        border-radius: 0%;
+    }
 
 </style>
 
@@ -99,32 +104,26 @@
                 <tr>
                     <th>Order ID :</th>
                     <td>{{i.id}}</td>
+                    <th>Bill Number :</th>
+                    <td>{{i.bill_number}}</td>
+                </tr>
+                <tr>
                     <th>Customer ID :</th>
                     <td>{{i.customer_id.id}}</td>
-                </tr>
-                <tr>
                     <th>Contact Number :</th>
                     <td>{{i.customer_id.mobile}}</td>
+                </tr>
+                <tr>
+                    <th style="color:red">Cloth Number :</th>
+                    <td>{{i.cloth}}</td>
+                    <th>Model Details: :</th>
+                    <td>{{i.model_details}}</td>
+                </tr>
+                <tr>
                     <th>Length :</th>
                     <td>{{i.length}}</td>
-                </tr>
-                <tr>
                     <th>Shoulder :</th>
                     <td>{{i.shoulder}}</td>
-                    <th>Loose :</th>
-                    <td>{{i.loose}}</td>
-                </tr>
-                <tr>
-                    <th>Neck :</th>
-                    <td>{{i.neck}}</td>
-                    <th>Regal :</th>
-                    <td>{{i.regal}}</td>
-                </tr>
-                <tr>
-                    <th>Cuff Type :</th>
-                    <td>{{i.cuff_type}}</td>
-                    <th>Cuff Length :</th>
-                    <td>{{i.cuff_length}}</td>
                 </tr>
                 <tr>
                     <th>Sleeve Sada:</th>
@@ -132,24 +131,42 @@
                     <th>Sleeve Cuff :</th>
                     <td>{{i.sleeve_cuff}}</td>
                 </tr>
-                 <tr>
+                <tr>
+                    <th>Center Sleeve :</th>
+                    <td>{{i.center_sleeve}}</td>
                     <th>Sleeve Bottom:</th>
                     <td>{{i.sleeve_bottom}}</td>
-                    <th>Collar Size :</th>
-                    <td>{{i.collar_size}}</td>
                 </tr>
                 <tr>
+                    <th>Loose :</th>
+                    <td>{{i.loose}}</td>
                     <th>Seat :</th>
                     <td>{{i.seat}}</td>
+                </tr>
+                <tr>
+                    <th>Regal :</th>
+                    <td>{{i.regal}}</td>
                     <th>Button Type :</th>
                     <td>{{i.button_type}}</td>
                 </tr>
                 <tr>
+                    <th>Collar Type :</th>
+                    <td><img src="{% static i.collar_type_image_url %}" height="100" width="50"/></td>
+                    <th>Cuff Type :</th>
+                    <td><img src="{% static i.cuff_type_image_url %}" height="100" width="50"/></td>
+                </tr>
+                <tr>
 
+                    <th>Collor Measurement :</th>
+                    <td>{{i.collar_measurements}}</td>
+                    <th >Cuff Measurement :</th>
+                    <td>{{i.cuff_measurements}}</td>
+                </tr>
+                <tr>
+                    <th>Pocket :</th>
+                    <td>{{i.bottom1}}</td>
                     <th>Bottom Measure :</th>
                     <td>{{i.bottom1}}</td>
-                    <th >Collar :</th>
-                    <td>{{i.collar}}</td>
                 </tr>
                 <tr>
 
@@ -160,17 +177,11 @@
 
                 </tr>
                 <tr>
-                    <th>Bill Number :</th>
-                    <td>{{i.bill_number}}</td>
-                    <th>Tailor :</th>
-                    <td>{{i.tailor}}</td>
-                </tr>
-                <tr>
-                    <th style="color:red">Cloth Number :</th>
-                    <td>{{i.cloth}}</td>
                     <th >Description :</th>
                     <td>{{i.description}}</td>
-
+                    <th >Tailor :</th>
+                    <td>{{i.tailor}}</td>
+                    
                 </tr>
                 <tr>
                     <th >Total Price :</th>
@@ -238,13 +249,13 @@
         </div>
         {% endfor %}
     </div>
-    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-prev btn-success btn-sm"
+    <button style="margin-top:400px;height:40px;width:100px;opacity:30%" class="carousel-control-prev btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="text-white">Previous</span>
     </button>
-    <button style="margin-top:700px;height:40px;width:100px" class="carousel-control-next btn-success btn-sm"
+    <button style="margin-top:400px;height:40px;width:100px;opacity:30%" class="carousel-control-next btn-success btn-sm"
             type="button"
             data-bs-target="#carouselExampleDark" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
