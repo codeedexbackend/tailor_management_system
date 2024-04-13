@@ -907,7 +907,17 @@ def save_add_order(request):
                 else:
                     bill_number = f"{last_bill_chars}{last_bill_digits + 1:03d}"  # Increment digits
             else:
+<<<<<<< HEAD
                 bill_number = "A001"
+=======
+                next_chars = last_bill_chars
+                next_digits = last_bill_digits + 1
+
+            bill_number = f"{next_chars}{next_digits:03d}"  # Format the next bill number
+
+
+
+>>>>>>> origin/main
 
 
             # Create the customer instance
