@@ -33,7 +33,7 @@
 <div class="container form-container" style="margin-top:1px;">
     <form class="container" method="post" action="{% url 'save_add_order' %}">
         {% csrf_token %}
-        <h6 class="text-center"><u>Add User Details & Measurements</u></h6>
+        <h6 class="text-center"><u>Add Customer Details & Measurements</u></h6>
         <div class="row">
             <div class="col-md-6">
                 <!-- Left Side -->
@@ -56,6 +56,11 @@
                     <input type="text" class="form-control" id="cloth" placeholder=""
                            min="0" required
                            name="cloth" value="{{add.cloth}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="other">Model Details:</label></b>
+                    <textarea id="model_details" class="form-control" style=" border: 1px solid #ccc;height: 124px;"
+                              maxlength="10000" name="model_details">{{add.model_details}}</textarea>
                 </div>
                 <div class="form-group">
                     <b><label for="name">Length:</label></b>
@@ -113,6 +118,10 @@
                     <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
                            name="bottom1" step="any" value="{{add.bottom1}}">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+                
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
@@ -127,10 +136,6 @@
                         <option>Dabble Zib</option>
                     </select>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
-
                 <div class="form-group">
                     <label for="collar-type"><b>Collar Type:</b></label><br>
                     <input type="radio" id="collar1" name="collar-type" value="collar1" {% if add.collar_type == 'collar1' %}checked{% endif %}>

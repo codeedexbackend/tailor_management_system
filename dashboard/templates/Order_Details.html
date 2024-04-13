@@ -3,18 +3,28 @@
 {% block content %}
 <style>
     body {
-      background-color: #f8f9fa;
+        background-color: #f8f9fa;
+      }
+  
+      .form-container {
+        max-width: 100%;
+        margin: 35px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 100px;
+        height: 700px;
+        overflow-y: auto;
+      }
+    .table td img {
+        width: 50px;
+        height: 50px;
+        border-radius: 0%;
     }
-
-    .form-container {
-      max-width: 1200px;
-      margin: 35px auto;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 100px;
-      height: 619px;
-      overflow-y: auto;
+    .table td.custom-model-details {
+        max-width: 200px;
+        word-wrap: break-word;
+        white-space: normal;
     }
 
 
@@ -63,6 +73,7 @@
                         <th>Name</th>
                         <th>Contact Number</th>
                         <th>Cloth Number</th>
+                        <th>Model Details</th>
                         <th>Length</th>
                         <th>Shoulder</th>
                         <th>Sleeve Sada</th>
@@ -102,6 +113,7 @@
                         </td>
                         <td>{{i.customer_id.mobile}}</td>
                         <td>{{i.cloth}}</td>
+                        <td class="custom-model-details">{{i.model_details}}</td>
                         <td>{{i.length}}</td>
                         <td>{{i.shoulder}}</td>
                         <td>{{i.sleeve_sada}}</td>
@@ -122,7 +134,7 @@
                         <td>{{i.bill_number}}</td>
                         <td>{{i.order_date}}</td>
                         <td>{{i.delivery_date}}</td>
-                        <td>{{i.description}}</td>
+                        <td class="custom-model-details">{{i.description}}</td>
                         <td>{{i.total_payment}}</td>
                         <td>{{i.advance_payment}}</td>
                         <td>{{i.balance_payment}}</td>

@@ -1,4 +1,5 @@
 {% extends 'reception_dashboard.html' %}
+{% load static %}
 {% block content %}
 
 <style>
@@ -32,7 +33,7 @@
 <div class="container form-container" style="margin-top:1px;">
     <form class="container" method="post" action="{% url 'update_customer_recption' dataid=cus.id %}">
         {% csrf_token %}
-        <h6 class="text-center"><u>Edit User Details & Measurements</u></h6>
+        <h6 class="text-center"><u>Edit Customer Details & Measurements</u></h6>
         <div class="row">
             <div class="col-md-6">
                 <!-- Left Side -->
@@ -55,6 +56,11 @@
                            name="cloth" value="{{cus.cloth}}">
                 </div>
                 <div class="form-group">
+                    <b><label for="other">Model Details:</label></b>
+                    <textarea id="model_details" class="form-control" style=" border: 1px solid #ccc;height: 124px;"
+                              maxlength="10000" name="model_details">{{cus.model_details}}</textarea>
+                </div>
+                <div class="form-group">
                     <b><label for="name">Length:</label></b>
                     <input type="text" class="form-control" id="length" placeholder="" required min="0"
                            name="length" step="any" value="{{cus.length}}">
@@ -75,34 +81,14 @@
                            name="sleeve_cuff" step="any" value="{{cus.sleeve_cuff}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="neck">Neck:</label></b>
-                    <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
-                           name="neck" step="any" value="{{cus.neck}}">
+                    <b><label for="center_sleeve">Center Sleeve:</label></b>
+                    <input type="text" class="form-control" id="center_sleeve" min="0" placeholder="" required
+                           name="center_sleeve" step="any" value="{{cus.center_sleeve}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="collar">Collar:</label></b>
-                    <input type="text" class="form-control" id="collar" placeholder="" required min="0"
-                           name="collar" step="any" value="{{cus.collar}}">
-                </div>
-
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
-                <div class="form-group">
-                    <b><label for="seat">Seat:</label></b>
-                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
-                           name="seat" step="any" value="{{cus.seat}}">
-                </div>
-                 <div class="form-group">
-                    <b><label for="regal">Regal:</label></b>
-
-                    <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
-                           name="regal" step="any" value="{{cus.regal}}">
-                </div>
-                <div class="form-group">
-                    <b> <label for="regal">Pocket Size:</label></b>
-                    <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
-                           name="pocket" step="any" value="{{cus.pocket}}">
+                    <b><label for="collar">Sleeve Bottom:</label></b>
+                    <input type="text" class="form-control" id="sleeve_bottom" placeholder="" required min="0"
+                           name="sleeve_bottom" step="any" value="{{cus.sleeve_bottom}}">
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Loose:</label></b>
@@ -110,14 +96,29 @@
                            name="loose" step="any" value="{{cus.loose}}">
                 </div>
                 <div class="form-group">
-                    <b><label>Cuff Type:</label></b>
-                    <input type="text" class="form-control" id="cuff_type" placeholder="" required
-                           name="cuff_type" value="{{cus.cuff_type}}">
+                    <b><label for="seat">Seat:</label></b>
+                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
+                           name="seat" step="any" value="{{cus.seat}}">
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+                <div class="form-group">
+                    <b><label for="regal">Regal:</label></b>
+
+                    <input type="text" class="form-control" id="regal" min="0" placeholder=" " required
+                           name="regal" step="any" value="{{cus.regal}}">
                 </div>
                 <div class="form-group">
-                    <b><label for="loose">Cuff Length:</label></b>
-                    <input type="text" class="form-control" id="cuff" min="0" placeholder=" " required
-                           name="cuff_length" step="any" value="{{cus.cuff_length}}">
+                    <b><label for="loose">Bottom :</label></b>
+                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
+                           name="bottom1" step="any" value="{{cus.bottom1}}">
+                </div>
+                <div class="form-group">
+                    <b> <label for="regal">Pocket Size:</label></b>
+                    <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
+                           name="pocket" step="any" value="{{cus.pocket}}">
                 </div>
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
@@ -134,14 +135,53 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <b><label for="loose">Bottom :</label></b>
-                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
-                           name="bottom1" step="any" value="{{cus.bottom1}}">
+                    <label for="collar-type"><b>Collar Type:</b></label><br>
+                    <input type="radio" id="collar1" name="collar-type" value="collar1" {% if cus.collar_type == 'collar1' %}checked{% endif %}>
+                    <label for="collar1"><img src="{% static 'images/collarcuff/collor 1.png' %}" alt="Collar Type 1" width="100"></label>
+                    
+                    <input type="radio" id="collar2" name="collar-type" value="collar2" {% if cus.collar_type == 'collar2' %}checked{% endif %}>
+                    <label for="collar2"><img src="{% static 'images/collarcuff/collor 2.png' %}" alt="Collar Type 2" width="100"></label>
+                    
+                    <input type="radio" id="collar3" name="collar-type" value="collar3" {% if cus.collar_type == 'collar3' %}checked{% endif %}>
+                    <label for="collar3"><img src="{% static 'images/collarcuff/collor 3.png' %}" alt="Collar Type 3" width="100"></label>
+                    
+                    <input type="radio" id="collar4" name="collar-type" value="collar4" {% if cus.collar_type == 'collar4' %}checked{% endif %}>
+                    <label for="collar4"><img src="{% static 'images/collarcuff/collor 4.png' %}" alt="Collar Type 4" width="100"></label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="collar-measurements"><b>Collar Measurements:</b></label>
+                    <input type="text" class="form-control" id="collar-measurements" min="0" placeholder="" required
+                           name="collar-measurements" step="any" value="{{cus.collar_measurements}}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cuff-type"><b>Cuff Type:</b></label><br>
+                    <input type="radio" id="cuff1" name="cuff-type" value="cuff1" {% if cus.cuff_type == 'cuff1' %}checked{% endif %}>
+                    <label for="cuff1"><img src="{% static 'images/collarcuff/cuff 1.png' %}" alt="Cuff Type 1" width="100"></label>
+                    
+                    <input type="radio" id="cuff2" name="cuff-type" value="cuff2" {% if cus.cuff_type == 'cuff2' %}checked{% endif %}>
+                    <label for="cuff2"><img src="{% static 'images/collarcuff/cuff 2.png' %}" alt="Cuff Type 2" width="100"></label>
+                    
+                    <input type="radio" id="cuff3" name="cuff-type" value="cuff3" {% if cus.cuff_type == 'cuff3' %}checked{% endif %}>
+                    <label for="cuff3"><img src="{% static 'images/collarcuff/cuff 3.png' %}" alt="Cuff Type 3" width="100"></label>
+                    
+                    <input type="radio" id="cuff4" name="cuff-type" value="cuff4" {% if cus.cuff_type == 'cuff4' %}checked{% endif %}>
+                    <label for="cuff4"><img src="{% static 'images/collarcuff/cuff 4.png' %}" alt="Cuff Type 4" width="100"></label>
+                    <br>
+                    <input type="radio" id="cuff5" name="cuff-type" value="cuff5" {% if cus.cuff_type == 'cuff5' %}checked{% endif %}>
+                    <label for="cuff5"><img src="{% static 'images/collarcuff/cuff 5.png' %}" alt="Cuff Type 5" width="100"></label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cuff-measurements"><b>Cuff Measurements:</b></label>
+                    <input type="text" class="form-control" id="cuff-measurements" min="0" placeholder="" required
+                           name="cuff-measurements" step="any" value="{{cus.cuff_measurements}}">
                 </div>
                 <div class="form-group">
                     <b><label for="other">Other:</label></b>
-                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;height:124px"
-                             name="other" maxlength="10000">{{cus.description}}</textarea>
+                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;height:128px"
+                              name="other" maxlength="10000">{{cus.description}}</textarea>
                 </div>
                 <div class="form-group">
                     <label></label>

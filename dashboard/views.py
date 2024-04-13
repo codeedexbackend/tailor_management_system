@@ -400,6 +400,7 @@ def savecustomer(request):
         cuff_type = request.POST.get('cuff-type')
         cuff_measurment = request.POST.get('cuff-measurements')
         collar_measurment = request.POST.get('collar-measurements')
+        model_details = request.POST.get('model_details')
         
 
         if collar_type == 'collar1':
@@ -459,7 +460,7 @@ def savecustomer(request):
                            cuff_type_image_url=cuff_image_url, sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                            order_date=od, cloth=cloth, delivery_date=dd, tailor=tailor_instance, button_type=bt,collar_type=collar_type,
                            cuff_type=cuff_type,collar_type_image_url=collar_image_url, description=ds, bill_number=bill_number,
-                           cuff_measurements=cuff_measurment,sleeve_bottom=sb,center_sleeve=center_sleeve)
+                           cuff_measurements=cuff_measurment,sleeve_bottom=sb,center_sleeve=center_sleeve,model_details=model_details)
             obj.save()
 
             add_order_obj = Add_order(customer_id=obj, length=ln, shoulder=sd, loose=lo,regal=rg,
@@ -469,7 +470,7 @@ def savecustomer(request):
                                       sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                       order_date=od, cloth=cloth, delivery_date=dd, tailor=tailor_instance,
                                       button_type=bt,total_payment=tp,advance_payment=ap,balance_payment=bp,
-                                      description=ds, bill_number=bill_number,sleeve_bottom=sb)
+                                      description=ds, bill_number=bill_number,sleeve_bottom=sb,model_details=model_details)
             add_order_obj.save()
 
             messages.success(request, "Successfully added customer")
@@ -624,13 +625,9 @@ def update_customer(request, dataid):
         sd = request.POST.get('shoulder')
         sl = request.POST.get('sleeve_sada')
         sll = request.POST.get('sleeve_cuff')
-        nc = request.POST.get('neck')
-        clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
         po = request.POST.get('pocket')
-        cl = request.POST.get('cuff_length')
-        ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
         b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
@@ -639,18 +636,51 @@ def update_customer(request, dataid):
         bt = request.POST.get('button_type')
         tailor_id = request.POST.get('tailor')
         other = request.POST.get('other')
-        cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
+        center_sleeve = request.POST.get('center_sleeve')
+        collar_type = request.POST.get('collar-type')
+        cuff_type = request.POST.get('cuff-type')
+        cuff_measurment = request.POST.get('cuff-measurements')
+        collar_measurment = request.POST.get('collar-measurements')
+        model_details = request.POST.get('model_details')
+
+        if collar_type == 'collar1':
+            collar_image_url = 'images/collarcuff/collor 1.png'
+        elif collar_type == 'collar2':
+            collar_image_url = 'images/collarcuff/collor 2.png'
+        elif collar_type == 'collar3':
+            collar_image_url = 'images/collarcuff/collor 3.png'
+        elif collar_type == 'collar4':
+            collar_image_url = 'images/collarcuff/collor 4.png'
+        else:
+            collar_image_url = None 
+
+        if cuff_type == 'cuff1':
+            cuff_image_url = 'images/collarcuff/cuff 1.png'
+        elif cuff_type == 'cuff2':
+            cuff_image_url = 'images/collarcuff/cuff 2.png'
+        elif cuff_type == 'cuff3':
+            cuff_image_url = 'images/collarcuff/cuff 3.png'
+        elif cuff_type == 'cuff4':
+            cuff_image_url = 'images/collarcuff/cuff 4.png'
+        elif cuff_type == 'cuff5':
+            cuff_image_url = 'images/collarcuff/cuff 5.png'
+        else:
+            cuff_image_url = None 
+
 
         # Get the existing customer
         customer = Customer.objects.get(id=dataid)
 
         # Update the customer instance
         Customer.objects.filter(id=dataid).update(
-            name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo, neck=nc,
-            regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
+            name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo,
+            regal=rg, sleeve_sada=sl,
             sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2, cloth=cloth, button_type=bt,
-             collar=clr, description=other,collar_size=cs,sleeve_bottom=sb
+            description=other,sleeve_bottom=sb,model_details=model_details,
+            cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
+            cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
+            collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve
         )
         messages.success(request, "Customer Details Updated Successfully...!")
 
@@ -696,13 +726,9 @@ def update_add_order(request, dataid):
         sd = request.POST.get('shoulder')
         sl = request.POST.get('sleeve_sada')
         sll = request.POST.get('sleeve_cuff')
-        nc = request.POST.get('neck')
-        clr = request.POST.get('collar')
         rg = request.POST.get('regal')
         lo = request.POST.get('loose')
         po = request.POST.get('pocket')
-        cl = request.POST.get('cuff_length')
-        ct = request.POST.get('cuff_type')
         b1 = request.POST.get('bottom1')
         b2 = request.POST.get('seat')
         od = request.POST.get('order_date')
@@ -711,11 +737,41 @@ def update_add_order(request, dataid):
         tailor_id = request.POST.get('tailor')
         cloth = request.POST.get('cloth')
         other = request.POST.get('other')
-        cs = request.POST.get('collar_size')
         sb = request.POST.get('sleeve_bottom')
         tp = request.POST.get('total')
         ap = request.POST.get('advance')
         bp = request.POST.get('balance')
+        center_sleeve = request.POST.get('center_sleeve')
+        collar_type = request.POST.get('collar-type')
+        cuff_type = request.POST.get('cuff-type')
+        cuff_measurment = request.POST.get('cuff-measurements')
+        collar_measurment = request.POST.get('collar-measurements')
+        model_details = request.POST.get('model_details')
+
+
+        if collar_type == 'collar1':
+            collar_image_url = 'images/collarcuff/collor 1.png'
+        elif collar_type == 'collar2':
+            collar_image_url = 'images/collarcuff/collor 2.png'
+        elif collar_type == 'collar3':
+            collar_image_url = 'images/collarcuff/collor 3.png'
+        elif collar_type == 'collar4':
+            collar_image_url = 'images/collarcuff/collor 4.png'
+        else:
+            collar_image_url = None 
+
+        if cuff_type == 'cuff1':
+            cuff_image_url = 'images/collarcuff/cuff 1.png'
+        elif cuff_type == 'cuff2':
+            cuff_image_url = 'images/collarcuff/cuff 2.png'
+        elif cuff_type == 'cuff3':
+            cuff_image_url = 'images/collarcuff/cuff 3.png'
+        elif cuff_type == 'cuff4':
+            cuff_image_url = 'images/collarcuff/cuff 4.png'
+        elif cuff_type == 'cuff5':
+            cuff_image_url = 'images/collarcuff/cuff 5.png'
+        else:
+            cuff_image_url = None
         # Get the existing customer
         customer = Add_order.objects.get(id=dataid)
 
@@ -743,13 +799,16 @@ def update_add_order(request, dataid):
             new_tailor.assigned_works += 1
             new_tailor.save()
 
-        Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, neck=nc,
-                                                   regal=rg, cuff_length=cl, cuff_type=ct, sleeve_sada=sl,
+        Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, 
+                                                   regal=rg, sleeve_sada=sl,
                                                    sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                                    cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
-                                                   button_type=bt,
-                                                    collar=clr, description=other,sleeve_bottom=sb,collar_size=cs)
+                                                   button_type=bt,model_details=model_details,
+                                                    cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
+                                                    cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
+                                                    collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,
+                                                    description=other,sleeve_bottom=sb,)
 
     messages.success(request, "Customer Details Updated Successfully...!")
     return redirect(order_details)
@@ -785,6 +844,7 @@ def save_add_order(request):
         cuff_type = request.POST.get('cuff-type')
         cuff_measurment = request.POST.get('cuff-measurements')
         collar_measurment = request.POST.get('collar-measurements')
+        model_details = request.POST.get('model_details')
         
 
         if collar_type == 'collar1':
@@ -830,19 +890,26 @@ def save_add_order(request):
         # Get or create the tailor instance
         customer_instance = Customer.objects.get(id=id)
         try:
-            # Get the last bill number from the database
+            # Generate a unique bill_number sequentially
             last_bill_number = Add_order.objects.order_by('-bill_number').first()
-            # Generate the next bill number
-            last_bill_chars = last_bill_number[:1]  # Extract the first character
-            last_bill_digits = int(last_bill_number[-3:])  # Extract the digits
-            print(last_bill_digits)
-            if last_bill_chars == 'Z' and last_bill_digits == 999:
-                next_chars = 'AA'  # Reset to 'AA'
-                next_digits = '001'  # Reset to "001"
-            elif last_bill_digits == 999:
-                next_chars = chr(ord(last_bill_chars) + 1)  # Increment the character
-                next_digits = '001'  # Reset to "001"
+
+            if last_bill_number:
+                last_bill_chars = last_bill_number.bill_number[:1]  # Extract the first character
+                last_bill_digits = int(last_bill_number.bill_number[1:])  # Extract the digits
+
+                if last_bill_chars == 'Z' and last_bill_digits == 999:
+                    raise ValueError("Cannot generate more bills")
+                elif last_bill_digits == 999:
+                    next_chars = chr(ord(last_bill_chars) + 1)  # Increment the character
+                    if next_chars > 'Z':  # Check if the next character exceeds 'Z'
+                        raise ValueError("Cannot generate more bills")
+                    bill_number = f"{next_chars}001"  # Reset digits to "001"
+                else:
+                    bill_number = f"{last_bill_chars}{last_bill_digits + 1:03d}"  # Increment digits
             else:
+<<<<<<< HEAD
+                bill_number = "A001"
+=======
                 next_chars = last_bill_chars
                 next_digits = last_bill_digits + 1
 
@@ -850,11 +917,12 @@ def save_add_order(request):
 
 
 
+>>>>>>> origin/main
 
 
             # Create the customer instance
             obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, regal=rg,
-                            bill_number=bill_number,
+                            bill_number=bill_number,model_details=model_details,
                             cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
                             cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
                             collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,

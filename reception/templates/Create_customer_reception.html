@@ -1,4 +1,5 @@
 {% extends 'reception_dashboard.html' %}
+{% load static %}
 {% block content %}
 
 <style>
@@ -33,7 +34,7 @@
 
     <form class="container " method="post" action="{% url 'savecustomer_recption' %}">
         {% csrf_token %}
-        <h6 class="text-center"><u>Add User Details & Measurements</u></h6>
+        <h6 class="text-center"><u>Add Customer Details & Measurements</u></h6>
         <div class="row">
             <div class="col-md-6">
                 <!-- Left Side -->
@@ -52,6 +53,11 @@
                     <b><label for="Cloth">Cloth:</label></b>
                     <input type="text" class="form-control" id="Cloth" placeholder="" required
                            name="Cloth">
+                </div>
+                <div class="form-group">
+                    <b><label for="other">Model Details:</label></b>
+                    <textarea id="model_details" class="form-control" style=" border: 1px solid #ccc;height: 124px;"
+                              maxlength="10000" name="model_details"></textarea>
                 </div>
                 <div class="form-group">
                     <b><label for="name">Length:</label></b>
@@ -73,26 +79,25 @@
                     <input type="text" class="form-control" id="sleeve_cuff" min="0" placeholder="" required
                            name="sleeve_cuff" step="any">
                 </div>
-
+                <div class="form-group">
+                    <b><label for="center_sleeve">Center Sleeve:</label></b>
+                    <input type="text" class="form-control" id="center_sleeve" min="0" placeholder="" required
+                           name="center_sleeve" step="any">
+                </div>
                 <div class="form-group">
                     <b><label for="collar">Sleeve Bottom:</label></b>
                     <input type="text" class="form-control" id="sleeve_bottom" placeholder="" required min="0"
                            name="sleeve_bottom" step="any">
                 </div>
                 <div class="form-group">
-                    <b><label for="neck">Neck:</label></b>
-                    <input type="text" class="form-control" id="neck" placeholder=" " required min="0"
-                           name="neck" step="any">
+                    <b><label for="loose">Loose:</label></b>
+                    <input type="text" class="form-control" id="loose" min="0" placeholder="" required
+                           name="loose" step="any">
                 </div>
                 <div class="form-group">
-                    <b><label for="collar">Collar:</label></b>
-                    <input type="text" class="form-control" id="collar" placeholder="" required min="0"
-                           name="collar" step="any">
-                </div>
-                <div class="form-group">
-                    <b><label for="collar">Collar Size:</label></b>
-                    <input type="text" class="form-control" id="collar_size" placeholder="" required min="0"
-                           name="collar_size" step="any">
+                    <b><label for="seat">Seat:</label></b>
+                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
+                           name="seat" step="any">
                 </div>
                 <div class="form-group">
                     <b><label for="regal">Regal:</label></b>
@@ -101,9 +106,9 @@
                            name="regal" step="any">
                 </div>
                 <div class="form-group">
-                    <b><label for="seat">Seat:</label></b>
-                    <input type="text" class="form-control" id="seat" placeholder="" required min="0"
-                           name="seat" step="any">
+                    <b><label for="loose">Bottom :</label></b>
+                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
+                           name="bottom1" step="any">
                 </div>
 
                 <div class="form-group">
@@ -115,21 +120,6 @@
             <div class="col-md-6">
                 <!-- Right Side -->
                 
-                <div class="form-group">
-                    <b><label for="loose">Loose:</label></b>
-                    <input type="text" class="form-control" id="loose" min="0" placeholder="" required
-                           name="loose" step="any">
-                </div>
-                <div class="form-group">
-                    <b><label>Cuff Type:</label></b>
-                    <input type="text" class="form-control" id="cuff_type" placeholder="" required
-                           name="cuff_type">
-                </div>
-                <div class="form-group">
-                    <b><label for="loose">Cuff Length:</label></b>
-                    <input type="text" class="form-control" id="cuff" min="0" placeholder=" " required
-                           name="cuff_length" step="any">
-                </div>
                 <div class="form-group">
                     <b><label>Button Type:</label></b>
                     <select class="form-control" style="border: 1px solid #ccc;" name="button_type">
@@ -145,9 +135,51 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <b><label for="loose">Bottom :</label></b>
-                    <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
-                           name="bottom1" step="any">
+                    <label for="collar-type"><b>Collar Type:</b></label><br>
+                    <input type="radio" id="collar1" name="collar-type" value="collar1">
+                    <label for="collar1"><img src="{% static 'images/collarcuff/collor 1.png' %}" alt="Collar Type 1" width="100"></label>
+                    
+                    <input type="radio" id="collar2" name="collar-type" value="collar2">
+                    <label for="collar2"><img src="{% static 'images/collarcuff/collor 2.png' %}" alt="Collar Type 2" width="100"></label>
+                    
+                    <input type="radio" id="collar3" name="collar-type" value="collar3">
+                    <label for="collar3"><img src="{% static 'images/collarcuff/collor 3.png' %}" alt="Collar Type 3" width="100"></label>
+                    
+                    <input type="radio" id="collar4" name="collar-type" value="collar4">
+                    <label for="collar4"><img src="{% static 'images/collarcuff/collor 4.png' %}" alt="Collar Type 4" width="100"></label>
+                </div>
+                <div class="form-group">
+                    <label for="collar-measurements"><b>Collar Measurements:</b></label>
+                    <input type="text" class="form-control" id="collar-measurements" min="0" placeholder="" required
+                           name="collar-measurements" step="any">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cuff-type"><b>Cuff Type:</b></label><br>
+                    <input type="radio" id="cuff1" name="cuff-type" value="cuff1">
+                    <label for="cuff1"><img src="{% static 'images/collarcuff/cuff 1.png' %}" alt="Cuff Type 1" width="100"></label>
+                
+                    <input type="radio" id="cuff2" name="cuff-type" value="cuff2">
+                    <label for="cuff2"><img src="{% static 'images/collarcuff/cuff 2.png' %}" alt="Cuff Type 2" width="100"></label>
+                
+                    <input type="radio" id="cuff3" name="cuff-type" value="cuff3">
+                    <label for="cuff3"><img src="{% static 'images/collarcuff/cuff 3.png' %}" alt="Cuff Type 3" width="100"></label>
+                
+                    <input type="radio" id="cuff4" name="cuff-type" value="cuff4">
+                    <label for="cuff4"><img src="{% static 'images/collarcuff/cuff 4.png' %}" alt="Cuff Type 4" width="100"></label>
+                    <br>
+                    <input type="radio" id="cuff5" name="cuff-type" value="cuff5">
+                    <label for="cuff5"><img src="{% static 'images/collarcuff/cuff 5.png' %}" alt="Cuff Type 5" width="100"></label>
+                </div>
+                <div class="form-group">
+                    <label for="cuff-measurements"><b>Cuff Measurements:</b></label>
+                    <input type="text" class="form-control" id="cuff-measurements" min="0" placeholder="" required
+                           name="cuff-measurements" step="any">
+                </div>
+                <div class="form-group">
+                    <b><label for="other">Other:</label></b>
+                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;height: 127px;"
+                              maxlength="10000" name="other"></textarea>
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Order Date:</label></b>
@@ -193,11 +225,6 @@
                         </option>
                         {% endfor %}
                     </select>
-                </div>
-                <div class="form-group">
-                    <b><label for="other">Other:</label></b>
-                    <textarea id="other" class="form-control" style=" border: 1px solid #ccc;height:208px"
-                              maxlength="10000" name="other"></textarea>
                 </div>
                 <div class="form-group">
                     <b><label>Total Price</label></b>

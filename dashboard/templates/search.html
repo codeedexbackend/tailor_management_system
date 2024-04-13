@@ -1,5 +1,34 @@
 {% extends 'dashboard.html' %}
+{% load static %}
 {% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+      }
+  
+      .form-container {
+        max-width: 100%;
+        margin: 35px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 100px;
+  <!--      height: 619px;-->
+        overflow-y: auto;
+  <!--      display: flex;-->
+  <!--      flex-wrap: wrap;-->
+      }
+.table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 0%;
+}
+.table td.custom-model-details {
+    max-width: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+</style>
 <div class="container form-container" style="margin-top:1px;">
     <div class="">
         <div class="card-body">
@@ -13,22 +42,24 @@
                         <table class="table">
                             <thead>
                             <tr>
+                                <th>Sl.No</th>
                                 <th>Name</th>
-                                <th>Mobile</th>
-                                <th>Cloth</th>
+                                <th>Contact Number</th>
+                                <th>Cloth Number</th>
+                                <th>Model Details</th>
                                 <th>Length</th>
                                 <th>Shoulder</th>
                                 <th>Sleeve Sada</th>
                                 <th>Sleeve Cuff</th>
+                                <th>Center Sleeve</th>
                                 <th>Sleeve Bottom</th>
                                 <th>Loose</th>
                                 <th>seat</th>
-                                <th>Neck</th>
                                 <th>Regal</th>
-                                <th>Collar</th>
-                                <th>Collar Size</th>
+                                <th>Collar Type</th>
+                                <th>Collar Measurement</th>
                                 <th>Cuff Type</th>
-                                <th>Cuff Size</th>
+                                <th>Cuff Measurments</th>
                                 <th>Pocket</th>
                                 <th>Button Type</th>
                                 <th>Bottom Measure</th>
@@ -46,32 +77,34 @@
                             <tbody>
                             {% for results in results.customer %}
                             <tr>
+                                <td>{{ forloop.counter }}</td>
                                 <td>
                                     <a href="{% url 'single_customer' customer_id=results.customer_id.id %}"
                                        style="color:black;">{{results.customer_id.name}}</a>
                                 </td>
                                <td>{{ results.customer_id.mobile }}</td>
                                 <td>{{ results.cloth }}</td>
+                                <td class="custom-model-details">{{results.model_details}}</td>
                                 <td>{{ results.length }}</td>
                                 <td>{{ results.shoulder }}</td>
                                 <td>{{results.sleeve_sada}}</td>
                                 <td>{{results.sleeve_cuff}}</td>
+                                <td>{{results.center_sleeve}}</td>
                                 <td>{{results.sleeve_bottom}}</td>
                                 <td>{{results.loose}}</td>
                                 <td>{{results.seat}}</td>
-                                <td>{{results.neck}}</td>
                                 <td>{{results.regal}}</td>
-                                <td>{{results.collar}}</td>
-                                <td>{{results.collar_size}}</td>
-                                <td>{{results.cuff_type}}</td>
-                                <td>{{results.cuff_length}}</td>
+                                <td><img src="{% static results.collar_type_image_url %}" /></td>
+                                <td>{{results.collar_measurements}}</td>
+                                <td><img src="{% static results.cuff_type_image_url %}"/></td>
+                                <td>{{results.cuff_measurements}}</td>
                                 <td>{{results.pocket}}</td>
                                 <td>{{results.button_type}}</td>
                                 <td>{{results.bottom1}}</td>
                                 <td>{{results.bill_number}}</td>
                                 <td>{{results.order_date}}</td>
                                 <td>{{results.delivery_date}}</td>
-                                <td>{{results.description}}</td>
+                                <td class="custom-model-details">{{results.description}}</td>
                                 <td>{{results.total_payment}}</td>
                                 <td>{{results.advance_payment}}</td>
                                 <td>{{results.balance_payment}}</td>

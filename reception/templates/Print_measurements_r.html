@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -20,6 +21,8 @@
         max-width: 800px;
         margin: 0 auto;
         padding: 10px;
+        display: flex;
+        justify-content: space-between;
     }
     .bill-info {
         margin-bottom: 20px;
@@ -30,13 +33,39 @@
         width: 200px;
         font-weight: bold;
     }
-         img {
-            width: 150px;
-        }
-          h3, h4, h5 {
-            text-align: center;
-        }
-
+    img {
+        width: 150px;
+    }
+        h3, h4, h5 {
+        text-align: center;
+    }
+    .left-column {
+        width: calc(50% - 5px); /* Adjust the width as needed */
+        padding-right: 5px; /* Add spacing between columns */
+    }
+    
+    .right-column {
+        width: calc(50% - 5px); /* Adjust the width as needed */
+        padding-left: 5px; /* Add spacing between columns */
+    }
+    @media print {
+        .not-for-print { display: none; }
+        @page { size: portrait; }
+      }
+      .bill-number-header {
+        margin-left: 100px;
+        margin-bottom: 5px; /* Adjust spacing as needed */
+    }
+    
+    .bill-number-header h5 {
+        margin: 0;
+        padding: 5px 0;
+        width: 100px;
+        margin: 0 auto; /* Center the header */
+    }
+    .down{
+        margin-top:150px;
+    }
 
 </style>
 </head>
@@ -47,82 +76,97 @@
     <h3>HAYY SOUQ, SHARURAH, SAUDI ARABIA</h3>
     <h4>PHONE NO: 00966507328132, EMAIL ID: <a href="mailto:amanathobe@gmail.com">amanathobe@gmail.com</a></h4>
     <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com </a> VAT NUMBER/TIM : 310601281900003</h4>
+    <h5>Bill Customer</h5>
 </header>
 <div class="container">
     {% for i in order %}
-    <div class="bill-info">
-        <b>CUSTOMER NAME:</b>{{ i.customer_id.name }}
-        <!-- Insert customer name here -->
+    <div class="left-column">
+        
+        <div class="bill-info">
+            <b>CUSTOMER NAME:</b>{{ i.customer_id.name }}
+            <!-- Insert customer name here -->
+        </div>
+        <div class="bill-info">
+            <b>MOBILE NUMBER:</b> {{ i.customer_id.mobile }}
+            <!-- Insert mobile number here -->
+        </div>
+        <div class="bill-info">
+            <b>CLOTH:</b>{{ i.cloth }} <!-- Insert cloth type here -->
+        </div>
+        <div class="bill-info">
+            <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.5;width: 250px;margin-left: 200px;margin-top: -18px;">{{ i.model_details }} </span><!-- Insert cloth type here -->
+        </div>
+        <div class="bill-info">
+            <b>LENGTH:</b>{{i.length}} <!-- Insert length here -->
+        </div>
+        <div class="bill-info">
+            <b>SHOULDER:</b> {{i.shoulder}}<!-- Insert shoulder measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE SADA:</b>{{i.sleeve_sada}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE CUFF:</b>{{i.sleeve_cuff}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>CENTER SLEEVE:</b>{{i.center_sleeve}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE BOTTOM:</b>{{i.sleeve_bottom}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>LOOSE:</b>{{i.loose}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SEAT:</b>{{i.seat}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>REGAL:</b>{{i.regal}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>POCKET SIZE:</b>{{i.pocket}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>DESCCRIPTION:</b><span style="display: inline-block;line-height: 1.5;width: 250px;margin-left: 200px;margin-top: -18px;">{{i.description}}</span> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>ORDER DATE:</b> {{i.order_date}}<!-- Insert date here -->
+        </div>
+        <div class="bill-info">
+            <b>DELIVERY DATE:</b> {{i.delivery_date}}<!-- Insert delivery date here -->
+        </div>
+        <div class="bill-info">
+            <b>TAILOR:</b> {{i.tailor}}<!-- Insert tailor name here -->
+        </div>
+        
     </div>
-    <div class="bill-info">
-        <b>MOBILE NUMBER:</b> {{ i.customer_id.mobile }}
-        <!-- Insert mobile number here -->
+
+    <div class="right-column">
+        <!-- Content for the right column -->
+        <div class="bill-number-header">
+            <h5>Bill Number</h5>
+        </div>
+        <div class="bill-info" style="text-align: center;">
+            <input type="text" style="border: 1px solid #00FF00;width: 100px;height: 40px;text-align: center;margin-left: 100px;" value="{{ i.bill_number }}">
+        </div>
+
+        <div class="bill-info down" style="text-align: center;">
+            <p>Collar Type:<br><br><img src="{% static i.collar_type_image_url %}" height="100" width="50"/></p>
+            <b>Measurement:</b>{{i.collar_measurements}}
+        </div>
+        <div class="bill-info" style="text-align: center;">
+            <p>Cuff Type:<br><br><img src="{% static i.cuff_type_image_url %}" height="100" width="50"/></p>
+            <b>Measurement:</b>{{i.cuff_measurements}}
+        </div>
     </div>
-    <div class="bill-info">
-        <b>CLOTH:</b>{{ i.cloth }} <!-- Insert cloth type here -->
-    </div>
-    <div class="bill-info">
-        <b>LENGTH:</b>{{i.length}} <!-- Insert length here -->
-    </div>
-    <div class="bill-info">
-        <b>SHOULDER:</b> {{i.shoulder}}<!-- Insert shoulder measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>SLEEVE SADA:</b>{{i.sleeve_sada}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>SLEEVE CUFF:</b>{{i.sleeve_cuff}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>LOOSE:</b>{{i.loose}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>SEAT:</b>{{i.seat}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>NECK:</b>{{i.neck}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>COLLAR :</b>{{i.collar}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>REGAL:</b>{{i.regal}} <!-- Insert sleeve measurement here -->
-    </div>
-     <div class="bill-info">
-        <b>SLEEVE BOTTOM:</b>{{i.sleeve_bottom}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>COLLAR SIZE:</b>{{i.collar_size}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>CUFF TYPE:</b>{{i.cuff_type}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>CUFF SIZE :</b>{{i.cuff_length}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>POCKET SIZE:</b>{{i.pocket}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>DESCRIPTION:</b>{{i.description}} <!-- Insert sleeve measurement here -->
-    </div>
-    <div class="bill-info">
-        <b>ORDER DATE:</b> {{i.order_date}}<!-- Insert date here -->
-    </div>
-    <div class="bill-info">
-        <b>DELIVERY DATE:</b> {{i.delivery_date}}<!-- Insert delivery date here -->
-    </div>
-    <div class="bill-info">
-        <b>TAILOR:</b> {{i.tailor}}<!-- Insert tailor name here -->
-    </div>
-    {% endfor %}
 </div>
+    {% endfor %}
 </body>
 
 </html>
