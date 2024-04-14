@@ -912,14 +912,14 @@ def save_add_order(request):
 
             # Create the customer instance
             obj = Add_order(customer_id=customer_instance, length=ln, shoulder=sd, loose=lo, regal=rg,
-                            bill_number=bill_number,model_details=model_details,
-                            cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
-                            cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
-                            collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,
-                            sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                            order_date=od, cloth=cloth,total_payment=tp,advance_payment=ap,balance_payment=bp,
-                            delivery_date=dd, tailor=tailor_instance, button_type=bt,
-                            description=other,sleeve_bottom=sb)
+                bill_number=bill_number, model_details=model_details,
+                cuff_measurements=cuff_measurment, collar_type_image_url=collar_image_url,
+                cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
+                collar_type=collar_type, cuff_type=cuff_type, center_sleeve=center_sleeve,
+                sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
+                order_date=od, cloth=cloth, total_payment=tp, advance_payment=ap, balance_payment=bp,
+                delivery_date=dd, tailor=tailor_instance, button_type=bt,
+                description=other, sleeve_bottom=sb)
 
             obj.save()
 
