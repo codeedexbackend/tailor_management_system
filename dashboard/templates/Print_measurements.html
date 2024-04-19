@@ -91,7 +91,7 @@
             <!-- Insert mobile number here -->
         </div>
         <div class="bill-info">
-            <b>CLOTH:</b>{{ i.cloth }} <!-- Insert cloth type here -->
+            <b>CLOTH:</b><span style="display: inline-block;line-height: 1.5;width: 250px;margin-left: 200px;margin-top: -18px;">{{ i.cloth }} </span><!-- Insert cloth type here -->
         </div>
         <div class="bill-info">
             <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.5;width: 250px;margin-left: 200px;margin-top: -18px;">{{ i.model_details }} </span><!-- Insert cloth type here -->
@@ -127,7 +127,7 @@
             <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
-            <b>POCKET SIZE:</b>{{i.pocket}} <!-- Insert sleeve measurement here -->
+            <b>POCKET SIZE:</b><span style="display: inline-block;line-height: 1.5;width: 250px;margin-left: 200px;margin-top: -18px;">{{i.pocket}}</span> <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
             <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
@@ -156,17 +156,18 @@
             <input type="text" style="border: 1px solid #00FF00;width: 100px;height: 40px;text-align: center;margin-left: 100px;" value="{{ i.bill_number }}">
         </div>
 
-        <div class="bill-info down" style="text-align: center;">
+        <div class="bill-info down" style="text-align: center;margin-left: -25px;">
             <p>Collar Type:<br><br><img src="{% static i.collar_type_image_url %}" height="100" width="50"/></p>
-            <b>Measurement:</b>{{i.collar_measurements}}
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{i.collar_measurements}}</span>
         </div>
-        <div class="bill-info" style="text-align: center;">
+        <div class="bill-info" style="text-align: center;margin-left: -25px;">
             <p>Cuff Type:<br><br><img src="{% static i.cuff_type_image_url %}" height="100" width="50"/></p>
-            <b>Measurement:</b>{{i.cuff_measurements}}
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{i.cuff_measurements}}</span>
         </div>
     </div>
 </div>
     {% endfor %}
+    
 </body>
 
 </html>
