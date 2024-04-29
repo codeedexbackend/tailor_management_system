@@ -19,10 +19,12 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
+from dashboard import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tailors/', include('tailors.urls')),
+    path("accounts/login/", views.login, name="login"),
     path('dashboard/', include('dashboard.urls')),
     path('reception/', include('reception.urls')),
     path('', include('website.urls')),

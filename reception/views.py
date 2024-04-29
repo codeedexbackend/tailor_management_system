@@ -21,22 +21,27 @@ from dashboard.models import AddTailors, Customer, Item, Add_order
 from .serializers import TailorLoginSerializer, \
     CompletedOrderSerializer, ItemSerializer, InProgressToCompletedSerializer, InProgressOrderSerializer, \
     UpdateToInProgressSerializer, AddOrderSerializer
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
+@login_required
 def reception_indexpage(request):
     total_customers = Customer.objects.count()
     total_order = Add_order.objects.count()  # Assuming you have an Order model
-
     total_completed_works = AddTailors.objects.aggregate(Sum('completed_works'))['completed_works__sum']
-
     cus = Add_order.objects.filter(delivery_date__gte=date.today()).order_by('delivery_date')
 
-    context = {'total_customers': total_customers, 'total_orders': total_order,
-               'cus': cus,
-               'total_completed_works': total_completed_works}
+    context = {
+        'total_customers': total_customers,
+        'total_orders': total_order,
+        'cus': cus,
+        'total_completed_works': total_completed_works
+    }
+    
+    return render(request, 'reception_dashboard.html', context)# Render the default dashboard if admin is logged in
 
-    return render(request, "reception_dashboard.html", context)
 
 
 def search_mobile_recption(request):
