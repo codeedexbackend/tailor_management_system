@@ -60,7 +60,7 @@
 
     <div class="form-container">
         <h2>Login Here...!</h2>
-        <form action="{% url 'adminlogin' %}" method="post">
+        <form method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">User Name:</label>

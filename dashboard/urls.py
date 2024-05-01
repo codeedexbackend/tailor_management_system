@@ -25,7 +25,7 @@ urlpatterns = [
     path("edit_customer/<int:dataid>/", views.edit_customer, name="edit_customer"),
     path("update_customer/<int:dataid>/", views.update_customer, name="update_customer"),
     path("search_mobile/", views.search_mobile, name="search_mobile"),
-    path("login/", views.login, name="login"),
+    
     # path("login_auth/",views.login_auth,name="login_auth"),
     path("adminlogin/", views.adminlogin, name='adminlogin'),
     path("savelogin/", views.savelogin, name='savelogin'),

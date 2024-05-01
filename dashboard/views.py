@@ -21,6 +21,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from xhtml2pdf import pisa
+from django.contrib.auth.decorators import login_required
 
 from reception.views import reception_indexpage
 from .models import AddTailors
@@ -524,7 +525,16 @@ def orderdlt(request, dlt):
     tailor_instance.save()
     return redirect(order_details)
 
+from django.shortcuts import redirect
 
+def login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')  # Redirect to login page if user is not authenticated
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+@login_required
 def dashboard(request):
     total_customers = Customer.objects.count()
     total_order = Add_order.objects.count()  # Assuming you have an Order model
@@ -540,7 +550,7 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
-logger = logging.getLogger(__name__)
+
 
 
 def customer_bill(request, customer_id):
@@ -1040,12 +1050,91 @@ def tailor_appointments(request):
     }
 
     return render(request, 'tailor_details.html', context)
-
+from django.conf import settings
+from django.db.models import Sum
+from datetime import date
 
 def login(request):
-    return render(request, "login.html")
+    if request.method == "POST":
+        un = request.POST.get('user_name')
+        pwd = request.POST.get('password')
+        
+        # Check if the user is an admin
+        if admin_login.objects.filter(username=un, password=pwd).exists():
+            request.session['user_name'] = un
+            request.session['password'] = pwd
+            messages.success(request, "Login Successful")
+            # Calculating data for the dashboard
+            total_customers = Customer.objects.count()
+            total_order = Add_order.objects.count()
+            total_completed_works = AddTailors.objects.aggregate(Sum('completed_works'))['completed_works__sum']
+            cus = Add_order.objects.filter(delivery_date__gte=date.today()).order_by('delivery_date')
+
+            context = {
+                'total_customers': total_customers,
+                'total_orders': total_order,
+                'cus': cus,
+                'total_completed_works': total_completed_works  
+            }
+
+            return render(request, 'dashboard.html', context=context)
+        
+        # Check if the user is a receptionist
+        elif reception_login.objects.filter(user_name=un, password=pwd).exists():
+            request.session['username'] = un
+            request.session['password'] = pwd
+            messages.success(request, "Login Successful")
+            total_customers = Customer.objects.count()
+            total_order = Add_order.objects.count()  # Assuming you have an Order model
+            total_completed_works = AddTailors.objects.aggregate(Sum('completed_works'))['completed_works__sum']
+            cus = Add_order.objects.filter(delivery_date__gte=date.today()).order_by('delivery_date')
+
+            context = {
+                'total_customers': total_customers,
+                'total_orders': total_order,
+                'cus': cus,
+                'total_completed_works': total_completed_works
+            }
+            return render(request, 'reception_dashboard.html',context=context)  # Render the receptionist dashboard template
+        
+        else:
+            messages.warning(request, "Please Enter Valid username and password...")
+            print("Login failed")
+            return render(request, 'login.html')  # Render the login page again with a warning message
+    else:
+        # Check if user is already logged in
+        if 'user_name' in request.session:
+            total_customers = Customer.objects.count()
+            total_order = Add_order.objects.count()
+            total_completed_works = AddTailors.objects.aggregate(Sum('completed_works'))['completed_works__sum']
+            cus = Add_order.objects.filter(delivery_date__gte=date.today()).order_by('delivery_date')
+
+            context = {
+                'total_customers': total_customers,
+                'total_orders': total_order,
+                'cus': cus,
+                'total_completed_works': total_completed_works
+            }
+            return render(request, 'dashboard.html',context=context)  # Render the admin dashboard if already logged in
+        elif 'username' in request.session:
+            total_customers = Customer.objects.count()
+            total_order = Add_order.objects.count()  # Assuming you have an Order model
+            total_completed_works = AddTailors.objects.aggregate(Sum('completed_works'))['completed_works__sum']
+            cus = Add_order.objects.filter(delivery_date__gte=date.today()).order_by('delivery_date')
+
+            context = {
+                'total_customers': total_customers,
+                'total_orders': total_order,
+                'cus': cus,
+                'total_completed_works': total_completed_works
+            }
+            return render(request, 'reception_dashboard.html',context)  # Render the receptionist dashboard if already logged in
+        else:
+            print(settings.TEMPLATES[0]['DIRS'])  # Debugging: Print template directories
+            return render(request, 'login.html')  # Render the login page  # Render the login page
 
 
+    
 def savelogin(request):
     if request.method == "POST":
         un = request.POST.get('user_name')
@@ -1056,23 +1145,7 @@ def savelogin(request):
 
 
 def adminlogin(request):
-    if request.method == "POST":
-        un = request.POST.get('user_name')
-        pwd = request.POST.get('password')
-        if admin_login.objects.filter(username=un, password=pwd).exists():
-            request.session['user_name'] = un
-            request.session['password'] = pwd
-            messages.success(request, " Login Successful")
-            return redirect(dashboard)
-        elif reception_login.objects.filter(user_name=un, password=pwd).exists():
-            reception = reception_login.objects.get(user_name=un, password=pwd)
-            request.session['username'] = un
-            request.session['password'] = pwd
-            messages.success(request, " Login Successful")
-            return redirect(reception_indexpage)
-        else:
-            messages.warning(request, "Please Enter Valid username and password...")
-            return redirect(login)
+    pass
 
 @never_cache
 def LogoutAdmin(request):
