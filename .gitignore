@@ -1,4 +1,3 @@
 __pycache__
 __pycache__/
-__db.sqlite3__
-__db.sqlite3__/
+db.sqlite3
