@@ -104,7 +104,7 @@
                 <tr>
                     <th>Order ID :</th>
                     <td>{{i.id}}</td>
-                    <th>Bill Number :</th>
+                    <th style="color:red">Bill Number :</th>
                     <td>{{i.bill_number}}</td>
                 </tr>
                 <tr>
@@ -114,7 +114,7 @@
                     <td>{{i.customer_id.mobile}}</td>
                 </tr>
                 <tr>
-                    <th style="color:red">Cloth Number :</th>
+                    <th >Cloth Number :</th>
                     <td>{{i.cloth}}</td>
                     <th>Model Details: :</th>
                     <td>{{i.model_details}}</td>
@@ -150,6 +150,12 @@
                     <td>{{i.button_type}}</td>
                 </tr>
                 <tr>
+                    <th>Cloth Type :</th>
+                    <td>{{i.clothdetails.name}}</td>
+                    <th>Cloth Length :</th>
+                    <td>{{i.ordered_length}}</td>
+                </tr>
+                <tr>
                     <th>Collar Type :</th>
                     <td><img src="{% static i.collar_type_image_url %}" height="100" width="50"/></td>
                     <th>Cuff Type :</th>
@@ -163,33 +169,38 @@
                     <td>{{i.cuff_measurements}}</td>
                 </tr>
                 <tr>
+                    <th>Pocket Type :</th>
+                    <td><img src="{% static i.pocket_image_url %}" height="100" width="50"/></td>
                     <th>Pocket :</th>
-                    <td>{{i.bottom1}}</td>
-                    <th>Bottom Measure :</th>
-                    <td>{{i.bottom1}}</td>
-                </tr>
-                <tr>
-
-                    <th>Order Date :</th>
-                    <td>{{i.order_date}}</td>
-                    <th>Delivery Date :</th>
-                    <td>{{i.delivery_date}}</td>
-
-                </tr>
-                <tr>
-                    <th >Description :</th>
-                    <td>{{i.description}}</td>
-                    <th >Tailor :</th>
-                    <td>{{i.tailor}}</td>
+                    <td>{{i.pocket}}</td>
                     
                 </tr>
                 <tr>
-                    <th >Total Price :</th>
-                    <td>{{i.total_payment}}</td>
-                    <th >Advance Payment :</th>
-                    <td>{{i.advance_payment}}</td>
+                    <th>Bottom Measure :</th>
+                    <td>{{i.bottom1}}</td>
+                    <th>Order Date :</th>
+                    <td>{{i.order_date}}</td>
+                    
+
                 </tr>
                 <tr>
+                    <th>Delivery Date :</th>
+                    <td>{{i.delivery_date}}</td>
+                    <th >Description :</th>
+                    <td>{{i.description}}</td>
+                    
+                    
+                </tr>
+                <tr>
+                    <th >Tailor :</th>
+                    <td>{{i.tailor}}</td>
+                    <th >Total Price :</th>
+                    <td>{{i.total_payment}}</td>
+                    
+                </tr>
+                <tr>
+                    <th >Advance Payment :</th>
+                    <td>{{i.advance_payment}}</td>
                     <th style="color:red">Balance Payment :</th>
                     <td>{{i.balance_payment}}</td>
                 </tr>

@@ -25,6 +25,7 @@ urlpatterns = [
     # path("additems_reception/<int:dataid>/", views.additems_reception, name="additems_reception"),
     path("order_add_item/<int:dataid>/", views.order_add_item, name="order_add_item"),
     path("order_details_reception/", views.order_details_reception, name="order_details_reception"),
+    path("Cloth_details_reception/", views.Cloth_details_reception, name="Cloth_details_reception"),
     path('deliver_order_reception/<int:order_id>/', views.deliver_order_reception, name='deliver_order_reception'),
     path("save_items_recption/", views.save_items_recption, name="save_items_recption"),
     path("savecustomer_recption/", views.savecustomer_recption, name="savecustomer_recption"),

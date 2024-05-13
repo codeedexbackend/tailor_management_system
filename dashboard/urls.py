@@ -5,6 +5,8 @@ from dashboard import views
 urlpatterns = [
     path('home/', views.dashboard, name='dashboard'),
     path("createcustomer/", views.createcustomer, name="createcustomer"),
+    path("add_cloth/", views.add_cloth, name="add_cloth"),
+    path('add_stock/<int:cloth_id>/', views.add_stock, name='add_stock'),
     path("add_order/<int:dataid>/", views.add_order, name="add_order"),
     path("edit_order/<int:dataid>/", views.edit_order, name="edit_order"),
     path("update_add_order/<int:dataid>/", views.update_add_order, name="update_add_order"),
@@ -16,6 +18,7 @@ urlpatterns = [
     path('tailor_appointments/', views.tailor_appointments, name='tailor_appointments'),
     path('search_tailor/', views.search_tailor, name='search_tailor'),
     path("view_tailors/", views.tailor_details, name="view_tailors"),
+    path("Cloth_details_admin/", views.Cloth_details_admin, name="Cloth_details_admin"),
     path("additems/", views.additems, name="additems"),
     path("additem/<int:dataid>/", views.additem, name="additem"),
     path("save_items/", views.save_items, name="save_items"),

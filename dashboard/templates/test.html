@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combined Measurement</title>
+</head>
+<body>
+
+<table>
+  <tr>
+    <td><input type="text" id="integerPart"></td>
+    <td><button id="halfButton">½</button></td>
+    <td><button id="thirdButton">⅓</button></td>
+    <td><button id="quarterButton">¼</button></td>
+  </tr>
+</table>
+
+<script>
+// Get the integer part input field
+var integerInput = document.getElementById("integerPart");
+
+// Get the fraction buttons
+var halfButton = document.getElementById("halfButton");
+var thirdButton = document.getElementById("thirdButton");
+var quarterButton = document.getElementById("quarterButton");
+
+// Add click event listeners to fraction buttons
+halfButton.addEventListener("click", function() {
+  addFraction("½");
+});
+
+thirdButton.addEventListener("click", function() {
+  addFraction("⅓");
+});
+
+quarterButton.addEventListener("click", function() {
+  addFraction("¼");
+});
+
+// Function to add fraction to the integer part
+function addFraction(fraction) {
+  var integerPart = integerInput.value;
+  var combinedMeasurement = integerPart + " " + fraction;
+  // Set the combined measurement as the value of the integer input field
+  integerInput.value = combinedMeasurement;
+}
+</script>
+
+</body>
+</html>

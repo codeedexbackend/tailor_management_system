@@ -57,11 +57,14 @@
                                     <th>Loose</th>
                                     <th>seat</th>
                                     <th>Regal</th>
+                                    <th>Cloth Name</th>
+                                    <th>Cloth Length</th>
                                     <th>Collar Type</th>
                                     <th>Collar Measurement</th>
                                     <th>Cuff Type</th>
                                     <th>Cuff Measurments</th>
-                                    <th>Pocket</th>
+                                    <th>Pocket Type</th>
+                                    <th>Pocket measure</th>
                                     <th>Button Type</th>
                                     <th>Bottom Measure</th>
                                     <th>Bill Number</th>
@@ -95,11 +98,14 @@
                                 <td>{{results.loose}}</td>
                                 <td>{{results.seat}}</td>
                                 <td>{{results.regal}}</td>
+                                <td>{{results.clothdetails.name}}</td>
+                                <td>{{results.ordered_length}}</td>
                                 <td><img src="{% static results.collar_type_image_url %}" /></td>
                                 <td>{{results.collar_measurements}}</td>
                                 <td><img src="{% static results.cuff_type_image_url %}"/></td>
                                 <td>{{results.cuff_measurements}}</td>
-                                <td>{{results.pocket}}</td>
+                                <td><img src="{% static results.pocket_image_url %}" width="100"/></td>
+                                <td class="custom-model-details">{{results.pocket}}</td>
                                 <td>{{results.button_type}}</td>
                                 <td>{{results.bottom1}}</td>
                                 <td>{{results.bill_number}}</td>
