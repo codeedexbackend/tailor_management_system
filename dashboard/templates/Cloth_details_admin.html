@@ -1,0 +1,76 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<style>
+    .content-wrapper {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    h3 {
+        color: #007bff;
+    }
+
+    p {
+        color: #555;
+        margin-top: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid #ced4da;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+</style>
+<div class="content-wrapper">
+    <body>
+    <h3>Cloth Details</h3>
+    <p>Available cloths in stock</p>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Cloth Name</th>
+            <th> Available cloth Length (Meter)</th>
+            <th> Add stock</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for i in cloth %}
+            <tr>
+                <td>{{ i.name }}</td>
+                <td>{{ i.stock_length }}  meter</td>
+                <td><form action="{% url 'add_stock' cloth_id=i.id %}">
+                    <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                        Add
+                    </button>
+                </form></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </body>
+</div>
+</div>
+</div>
+<!-- main-panel ends -->
+{% endblock %}

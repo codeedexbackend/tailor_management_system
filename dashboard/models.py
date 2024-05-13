@@ -19,8 +19,16 @@ class AddTailors(AbstractUser):
         return str(self.tailor)
   # Convert to string before returning
 
+
+class Cloth(models.Model):
+    name = models.CharField(max_length=100)
+    length = models.DecimalField(max_digits=10, decimal_places=2)
+    stock_length = models.DecimalField(max_digits=10, decimal_places=2)
+
 class Customer(models.Model):
     objects = None
+    clothdetails = models.ForeignKey(Cloth, on_delete=models.CASCADE,null=True)
+    ordered_length = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=15, unique=False)
     length = models.CharField(max_length=15)
@@ -30,10 +38,12 @@ class Customer(models.Model):
     sleeve_cuff = models.CharField(max_length=15, null=True)
     center_sleeve = models.CharField(max_length=15, null=True)
     collar_type_image_url = models.CharField(max_length=255, null=True)
+    pocket_image_url = models.CharField(max_length=255, null=True)
     collar_measurements = models.CharField(max_length=15,null=True)
     cuff_type_image_url = models.CharField(max_length=255, null=True)
     cuff_measurements = models.CharField(max_length=15,null=True)
     collar_type= models.CharField(max_length=15,null=True)
+    pocket_type= models.CharField(max_length=15,null=True)
     cuff_type=models.CharField(max_length=15,null=True)
     sleeve_bottom = models.CharField(max_length=15,null=True)
     regal = models.CharField(max_length=15)
@@ -95,6 +105,8 @@ class admin_login(models.Model):
 
 class Add_order(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE,null=True)
+    clothdetails = models.ForeignKey(Cloth,on_delete=models.CASCADE,null=True)
+    ordered_length = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     length = models.CharField(max_length=15)
     shoulder = models.CharField(max_length=15)
     cloth = models.CharField(max_length=20, null=True)
@@ -102,6 +114,8 @@ class Add_order(models.Model):
     sleeve_cuff = models.CharField(max_length=15, null=True)
     center_sleeve = models.CharField(max_length=15, null=True)
     collar_type_image_url = models.CharField(max_length=255, null=True)
+    pocket_image_url = models.CharField(max_length=255, null=True)
+    pocket_type= models.CharField(max_length=15,null=True)
     collar_measurements = models.CharField(max_length=15,null=True)
     cuff_type_image_url = models.CharField(max_length=255, null=True)
     cuff_measurements = models.CharField(max_length=15,null=True)

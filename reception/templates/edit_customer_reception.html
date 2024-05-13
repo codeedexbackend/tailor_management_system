@@ -100,10 +100,6 @@
                     <input type="text" class="form-control" id="seat" placeholder="" required min="0"
                            name="seat" step="any" value="{{cus.seat}}">
                 </div>
-
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
                 <div class="form-group">
                     <b><label for="regal">Regal:</label></b>
 
@@ -115,10 +111,39 @@
                     <input type="text" class="form-control" id="bottom1" min="0" placeholder="" required
                            name="bottom1" step="any" value="{{cus.bottom1}}">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+                
+                <div class="form-group">
+                    <label for="pocket-type"><b>Pocket Type:</b></label><br>
+                    <input type="radio" id="pocket1" name="pocket-type" value="pocket1" {% if cus.pocket_type == 'pocket1' %}checked{% endif %}>
+                    <label for="pocket1"><img src="{% static 'images/collarcuff/pocket1.png' %}" alt="Pocket Type 1" width="100"></label>
+                    
+                    <input type="radio" id="pocket2" name="pocket-type" value="pocket2" {% if cus.pocket_type == 'pocket2' %}checked{% endif %}>
+                    <label for="pocket2"><img src="{% static 'images/collarcuff/pocket2.png' %}" alt="Pocket Type 2" width="100"></label>
+                    
+                    <input type="radio" id="pocket3" name="pocket-type" value="pocket3" {% if cus.pocket_type == 'pocket3' %}checked{% endif %}>
+                    <label for="pocket3"><img src="{% static 'images/collarcuff/pocket3.png' %}" alt="Pocket Type 3" width="100"></label>
+                </div>
                 <div class="form-group">
                     <b> <label for="regal">Pocket Size:</label></b>
                     <input type="text" class="form-control" id="pocket" min="0" placeholder=" " required
                            name="pocket" step="any" value="{{cus.pocket}}">
+                </div>
+                <div class="form-group">
+                    <b><label for="cloth">Choose a Cloth:</label></b>
+                    <select class="form-control" style="border: 1px solid #ccc;" name="cloth_id">
+                        <option value="{{ cus.clothdetails.id }}" >{{cus.clothdetails.name}}</option>
+                        {% for cloth in cloths %}
+                            <option value="{{ cloth.id }}">{{ cloth.name }} - Available: {{ cloth.stock_length }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <b><label for="loose">Cloth Length :</label></b>
+                    <input type="number" class="form-control" id="ordered_length" value="{{cus.ordered_length}}" min="0" placeholder="Length in Meter" required
+                            name="ordered_length" step="any">
                 </div>
                 <div class="form-group">
                     <b><label>Button Type:</label></b>

@@ -1,0 +1,36 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+<style>
+
+</style>
+<div class="container form-container">
+    <h5>Add Cloth Details</h5>
+    <form  method="post">
+        {% csrf_token %}
+        <br>
+        <div class="form-row align-items-center item-row">
+            <div class="col-sm-3">
+                <label class="sr-only">Cloth Name</label>
+                <input type="text" class="form-control mb-4" id="clothname" placeholder="Cloth Name" required
+                           name="clothname">
+            </div>
+            <div class="col-sm-3">
+                <label class="sr-only">Length of Cloth (meter)</label>
+                <input type="number" step="0.01" class="form-control mb-4" name="length" placeholder="Length of Cloth (meter)" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+    </form>
+</div>
+<script>
+
+    function resetForm() {
+      var itemInputs = document.querySelectorAll('.item-row input');
+      itemInputs.forEach(function (input) {
+        input.value = '';
+      });
+
+    }
+</script>
+{% endblock %}
