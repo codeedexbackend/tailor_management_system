@@ -70,7 +70,8 @@
                             <th>Customer ID</th>
                             <th>Name</th>
                             <th>Contact Number</th>
-                            <th>Cloth Number</th>
+                            <th>Cloth Name</th>
+                            <th>Cloth Length</th>
                             <th>Model Details</th>
                             <th>Length</th>
                             <th>Shoulder</th>
@@ -81,8 +82,6 @@
                             <th>Loose</th>
                             <th>seat</th>
                             <th>Regal</th>
-                            <th>Cloth Name</th>
-                            <th>Cloth Length</th>
                             <th>Collar Type</th>
                             <th>Collar Measurement</th>
                             <th>Cuff Type</th>
@@ -113,7 +112,8 @@
                                href="{% url 'single_customer_reception' customer_id=i.customer_id.id %}">{{i.customer_id.name}}</a>
                         </td>
                         <td>{{i.customer_id.mobile}}</td>
-                        <td>{{i.cloth}}</td>
+                        <td>{{i.clothdetails.name}}</td>
+                        <td>{{i.ordered_length}}</td>
                         <td class="custom-model-details">{{i.model_details}}</td>
                         <td>{{i.length}}</td>
                         <td>{{i.shoulder}}</td>
@@ -124,8 +124,6 @@
                         <td>{{i.loose}}</td>
                         <td>{{i.seat}}</td>
                         <td>{{i.regal}}</td>
-                        <td>{{i.clothdetails.name}}</td>
-                        <td>{{i.ordered_length}}</td>
                         <td><img src="{% static i.collar_type_image_url %}" /></td>
                         <td class="custom-model-details">{{i.collar_measurements}}</td>
                         <td><img src="{% static i.cuff_type_image_url %}"/></td>

@@ -91,7 +91,10 @@
             <!-- Insert mobile number here -->
         </div>
         <div class="bill-info">
-            <b>CLOTH:</b><span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{ i.cloth }} </span><!-- Insert cloth type here -->
+            <b>CLOTH TYPE:</b>{{i.clothdetails.name}} <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>CLOTH LENGTH:</b>{{i.ordered_length}} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
             <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{ i.model_details }} </span><!-- Insert cloth type here -->
@@ -125,12 +128,6 @@
         </div>
         <div class="bill-info">
             <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
-        </div>
-        <div class="bill-info">
-            <b>CLOTH TYPE:</b>{{i.clothdetails.name}} <!-- Insert sleeve measurement here -->
-        </div>
-        <div class="bill-info">
-            <b>CLOTH LENGTH:</b>{{i.ordered_length}} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
             <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
