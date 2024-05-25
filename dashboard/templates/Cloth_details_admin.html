@@ -40,37 +40,55 @@
     tr:nth-child(even) {
         background-color: #f8f9fa;
     }
+
+    .search-form {
+        margin-bottom: 20px;
+    }
 </style>
 <div class="content-wrapper">
-    <body>
     <h3>Cloth Details</h3>
     <p>Available cloths in stock</p>
+
+    <form method="GET" action="{% url 'Cloth_details_admin' %}" class="search-form">
+        <input type="text" name="q" placeholder="Search by name" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-outline-info btn-sm">Search</button>
+    </form>
+    <div class="download-button">
+        <a href="{% url 'generate_pdf_cloth_details' %}" class="btn btn-outline-info btn-sm">Download as PDF</a>
+    </div>
 
     <table border="1">
         <thead>
         <tr>
             <th>Cloth Name</th>
-            <th> Available cloth Length (Meter)</th>
-            <th> Add stock</th>
+            <th>Available Cloth Length (Meter)</th>
+            <th>Add Stock</th>
+            <th>Edit Stock</th>
         </tr>
         </thead>
         <tbody>
             {% for i in cloth %}
             <tr>
                 <td>{{ i.name }}</td>
-                <td>{{ i.stock_length }}  meter</td>
-                <td><form action="{% url 'add_stock' cloth_id=i.id %}">
-                    <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
-                        Add
-                    </button>
-                </form></td>
+                <td>{{ i.stock_length }} meter</td>
+                <td style="text-align: center;">
+                    <form action="{% url 'add_stock' cloth_id=i.id %}">
+                        <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                            Add
+                        </button>
+                    </form>
+                </td>
+                <td style="text-align: center;">
+                    <form action="{% url 'update_stock' cloth_id=i.id %}">
+                        <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                            Edit
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    </body>
+    
 </div>
-</div>
-</div>
-<!-- main-panel ends -->
 {% endblock %}

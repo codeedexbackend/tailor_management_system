@@ -46,7 +46,8 @@
                                     <th>Sl.No</th>
                                     <th>Name</th>
                                     <th>Contact Number</th>
-                                    <th>Cloth Number</th>
+                                    <th>Cloth Name</th>
+                                    <th>Cloth Length</th>
                                     <th>Model Details</th>
                                     <th>Length</th>
                                     <th>Shoulder</th>
@@ -57,8 +58,6 @@
                                     <th>Loose</th>
                                     <th>seat</th>
                                     <th>Regal</th>
-                                    <th>Cloth Name</th>
-                                    <th>Cloth Length</th>
                                     <th>Collar Type</th>
                                     <th>Collar Measurement</th>
                                     <th>Cuff Type</th>
@@ -87,7 +86,8 @@
                                        style="color:black;">{{results.customer_id.name}}</a>
                                 </td>
                                 <td>{{ results.customer_id.mobile }}</td>
-                                <td>{{ results.cloth }}</td>
+                                <td>{{results.clothdetails.name}}</td>
+                                <td>{{results.ordered_length}}</td>
                                 <td class="custom-model-details">{{results.model_details}}</td>
                                 <td>{{ results.length }}</td>
                                 <td>{{ results.shoulder }}</td>
@@ -98,8 +98,6 @@
                                 <td>{{results.loose}}</td>
                                 <td>{{results.seat}}</td>
                                 <td>{{results.regal}}</td>
-                                <td>{{results.clothdetails.name}}</td>
-                                <td>{{results.ordered_length}}</td>
                                 <td><img src="{% static results.collar_type_image_url %}" /></td>
                                 <td>{{results.collar_measurements}}</td>
                                 <td><img src="{% static results.cuff_type_image_url %}"/></td>

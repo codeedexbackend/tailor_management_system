@@ -4,48 +4,223 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Combined Measurement</title>
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .form-container {
+      max-width: 100%;
+      margin: 35px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Center items horizontally */
+        margin-top: 20px;
+    }
+
+    .button-container button {
+        margin: 0 10px; /* Add spacing between buttons */
+    }
+
+    .input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding-right: 100px; /* Adjust based on the dropdown width */
+    }
+
+    
+
+    .dropdown {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 10px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      right: 0;
+      top: 100%;
+    }
+
+    .dropdown-content button {
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      display: block;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .dropdown-content button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .fraction-icons {
+      display: flex;
+      align-items: center;
+      margin-left: 5px; /* Adjust as needed */
+  }
+  
+  .fraction-icon {
+      cursor: pointer;
+      margin-right: 5px; /* Adjust as needed */
+  }
+  
+</style>
 </head>
 <body>
 
-<table>
-  <tr>
-    <td><input type="text" id="integerPart"></td>
-    <td><button id="halfButton">½</button></td>
-    <td><button id="thirdButton">⅓</button></td>
-    <td><button id="quarterButton">¼</button></td>
-  </tr>
-</table>
+{% extends 'dashboard.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container form-container" style="margin-top:1px;">
+
+    <form class="container" method="post" action="{% url 'savecustomer' %}">
+        {% csrf_token %}
+        <h6 class="text-center"><u>Add Customer Details & Measurements</u></h6>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Left Side -->
+                <div class="form-group">
+                    <b><label for="name">Name:</label></b>
+                    <input type="text" class="form-control" id="name" placeholder="" required name="name">
+                </div>
+                <div class="form-group">
+                    <label for="number"><b>Mobile:</b></label>
+                    <input type="number" class="form-control" id="number" placeholder="" min="0" required name="mobile">
+                </div>
+                <div class="form-group">
+                    <b><label for="cloth">Choose a Cloth:</label></b>
+                    <select class="form-control" style="border: 1px solid #ccc;" name="cloth_id">
+                        <option value="" selected disabled>Select Cloth</option>
+                        {% for cloth in cloths %}
+                            <option value="{{ cloth.id }}">{{ cloth.name }} - Available: {{ cloth.stock_length }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="hidden" id="ordered_length" name="ordered_length" value="3.5">
+                <div class="form-group">
+                    <b><label for="other">Model Details:</label></b>
+                    <textarea id="model_details" class="form-control" style="border: 1px solid #ccc; height: 124px;" maxlength="10000" name="model_details"></textarea>
+                </div>
+                <div class="form-group input-group">
+                  <b><label for="length">Length:</label></b>
+                  <input type="text" class="form-control" id="length" placeholder="" required min="0" name="length" step="any">
+                  <div class="fraction-icons">
+                      <span class="fraction-icon" onclick="addFraction('length', '½')">½</span>
+                      <span class="fraction-icon" onclick="addFraction('length', '⅓')">⅓</span>
+                      <span class="fraction-icon" onclick="addFraction('length', '¼')">¼</span>
+                      <!-- Add more fraction icons as needed -->
+                  </div>
+              </div>
+              
+              
+                <div class="form-group input-group">
+                    <b><label for="shoulder">Shoulder:</label></b>
+                    <input type="text" class="form-control" id="shoulder" placeholder="" required min="0" name="shoulder" step="any">
+                    <div class="dropdown">
+                        <button>&#9662;</button>
+                        <div class="dropdown-content">
+                            <button onclick="addFraction('shoulder', '½')">½</button>
+                            <button onclick="addFraction('shoulder', '⅓')">⅓</button>
+                            <button onclick="addFraction('shoulder', '¼')">¼</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group input-group">
+                    <b><label for="sleeve_sada">Sleeve Sada:</label></b>
+                    <input type="text" class="form-control" id="sleeve_sada" placeholder="" required min="0" name="sleeve_sada" step="any">
+                    <div class="dropdown">
+                        <button>&#9662;</button>
+                        <div class="dropdown-content">
+                            <button onclick="addFraction('sleeve_sada', '½')">½</button>
+                            <button onclick="addFraction('sleeve_sada', '⅓')">⅓</button>
+                            <button onclick="addFraction('sleeve_sada', '¼')">¼</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group input-group">
+                    <b><label for="sleeve_cuff">Sleeve Cuff:</label></b>
+                    <input type="text" class="form-control" id="sleeve_cuff" placeholder="" required min="0" name="sleeve_cuff" step="any">
+                    <div class="dropdown">
+                        <button>&#9662;</button>
+                        <div class="dropdown-content">
+                            <button onclick="addFraction('sleeve_cuff', '½')">½</button>
+                            <button onclick="addFraction('sleeve_cuff', '⅓')">⅓</button>
+                            <button onclick="addFraction('sleeve_cuff', '¼')">¼</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group input-group">
+                    <b><label for="center_sleeve">Center Sleeve:</label></b>
+                    <input type="text" class="form-control" id="center_sleeve" placeholder="" required min="0" name="center_sleeve" step="any">
+                    <div class="dropdown">
+                        <button>&#9662;</button>
+                        <div class="dropdown-content">
+                            <button onclick="addFraction('center_sleeve', '½')">½</button>
+                            <button onclick="addFraction('center_sleeve', '⅓')">⅓</button>
+                            <button onclick="addFraction('center_sleeve', '¼')">¼</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add other form fields as needed -->
+            </div>
+            <div class="col-md-6">
+                <!-- Right Side -->
+                <!-- Add right side form fields as needed -->
+            </div>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary btn-cancel">Cancel</button>
+        </div>
+    </form>
+</div>
 
 <script>
-// Get the integer part input field
-var integerInput = document.getElementById("integerPart");
-
-// Get the fraction buttons
-var halfButton = document.getElementById("halfButton");
-var thirdButton = document.getElementById("thirdButton");
-var quarterButton = document.getElementById("quarterButton");
-
-// Add click event listeners to fraction buttons
-halfButton.addEventListener("click", function() {
-  addFraction("½");
-});
-
-thirdButton.addEventListener("click", function() {
-  addFraction("⅓");
-});
-
-quarterButton.addEventListener("click", function() {
-  addFraction("¼");
-});
-
-// Function to add fraction to the integer part
-function addFraction(fraction) {
-  var integerPart = integerInput.value;
-  var combinedMeasurement = integerPart + " " + fraction;
-  // Set the combined measurement as the value of the integer input field
-  integerInput.value = combinedMeasurement;
-}
+    // Function to add fraction to the integer part
+    function addFraction(inputId, fraction) {
+        var inputField = document.getElementById(inputId);
+        var integerPart = inputField.value.trim();
+        var combinedMeasurement = integerPart + " " + fraction;
+        // Set the combined measurement as the value of the input field
+        inputField.value = combinedMeasurement;
+    }
 </script>
 
+{% endblock %}
 </body>
 </html>

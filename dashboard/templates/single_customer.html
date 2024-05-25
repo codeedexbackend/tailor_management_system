@@ -114,93 +114,85 @@
                     <td>{{i.customer_id.mobile}}</td>
                 </tr>
                 <tr>
-                    <th >Cloth Number :</th>
-                    <td>{{i.cloth}}</td>
-                    <th>Model Details: :</th>
-                    <td>{{i.model_details}}</td>
-                </tr>
-                <tr>
-                    <th>Length :</th>
-                    <td>{{i.length}}</td>
-                    <th>Shoulder :</th>
-                    <td>{{i.shoulder}}</td>
-                </tr>
-                <tr>
-                    <th>Sleeve Sada:</th>
-                    <td>{{i.sleeve_sada}}</td>
-                    <th>Sleeve Cuff :</th>
-                    <td>{{i.sleeve_cuff}}</td>
-                </tr>
-                <tr>
-                    <th>Center Sleeve :</th>
-                    <td>{{i.center_sleeve}}</td>
-                    <th>Sleeve Bottom:</th>
-                    <td>{{i.sleeve_bottom}}</td>
-                </tr>
-                <tr>
-                    <th>Loose :</th>
-                    <td>{{i.loose}}</td>
-                    <th>Seat :</th>
-                    <td>{{i.seat}}</td>
-                </tr>
-                <tr>
-                    <th>Regal :</th>
-                    <td>{{i.regal}}</td>
-                    <th>Button Type :</th>
-                    <td>{{i.button_type}}</td>
-                </tr>
-                <tr>
                     <th>Cloth Type :</th>
                     <td>{{i.clothdetails.name}}</td>
                     <th>Cloth Length :</th>
                     <td>{{i.ordered_length}}</td>
+                    
+                </tr>
+                <tr>
+                    <th>Model Details: :</th>
+                    <td>{{i.model_details}}</td>
+                    <th>Length :</th>
+                    <td>{{i.length}}</td>
+                </tr>
+                <tr>
+                    <th>Shoulder :</th>
+                    <td>{{i.shoulder}}</td>
+                    <th>Sleeve Sada:</th>
+                    <td>{{i.sleeve_sada}}</td>
+                </tr>
+                <tr>
+                    <th>Sleeve Cuff :</th>
+                    <td>{{i.sleeve_cuff}}</td>
+                    <th>Center Sleeve :</th>
+                    <td>{{i.center_sleeve}}</td>
+                </tr>
+                <tr>
+                    <th>Sleeve Bottom:</th>
+                    <td>{{i.sleeve_bottom}}</td>
+                    <th>Loose :</th>
+                    <td>{{i.loose}}</td>
+                </tr>
+                <tr>
+                    <th>Seat :</th>
+                    <td>{{i.seat}}</td>
+                    <th>Regal :</th>
+                    <td>{{i.regal}}</td>
+                </tr>
+                <tr>
+                    <th>Button Type :</th>
+                    <td>{{i.button_type}}</td>
+                    <th>Bottom Measure :</th>
+                    <td>{{i.bottom1}}</td>
                 </tr>
                 <tr>
                     <th>Collar Type :</th>
                     <td><img src="{% static i.collar_type_image_url %}" height="100" width="50"/></td>
-                    <th>Cuff Type :</th>
-                    <td><img src="{% static i.cuff_type_image_url %}" height="100" width="50"/></td>
-                </tr>
-                <tr>
-
                     <th>Collor Measurement :</th>
                     <td>{{i.collar_measurements}}</td>
+                </tr>
+                <tr>                    
+                    <th>Cuff Type :</th>
+                    <td><img src="{% static i.cuff_type_image_url %}" height="100" width="50"/></td>
                     <th >Cuff Measurement :</th>
                     <td>{{i.cuff_measurements}}</td>
                 </tr>
                 <tr>
                     <th>Pocket Type :</th>
                     <td><img src="{% static i.pocket_image_url %}" height="100" width="50"/></td>
-                    <th>Pocket :</th>
-                    <td>{{i.pocket}}</td>
-                    
+                    <th>Pocket Measurment :</th>
+                    <td>{{i.pocket}}</td>                    
                 </tr>
                 <tr>
-                    <th>Bottom Measure :</th>
-                    <td>{{i.bottom1}}</td>
                     <th>Order Date :</th>
                     <td>{{i.order_date}}</td>
-                    
-
-                </tr>
-                <tr>
                     <th>Delivery Date :</th>
                     <td>{{i.delivery_date}}</td>
+                </tr>
+                <tr>
                     <th >Description :</th>
                     <td>{{i.description}}</td>
-                    
-                    
-                </tr>
-                <tr>
                     <th >Tailor :</th>
                     <td>{{i.tailor}}</td>
-                    <th >Total Price :</th>
-                    <td>{{i.total_payment}}</td>
-                    
                 </tr>
                 <tr>
+                    <th >Total Price :</th>
+                    <td>{{i.total_payment}}</td>
                     <th >Advance Payment :</th>
                     <td>{{i.advance_payment}}</td>
+                </tr>
+                <tr>
                     <th style="color:red">Balance Payment :</th>
                     <td>{{i.balance_payment}}</td>
                 </tr>
