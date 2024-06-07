@@ -32,6 +32,7 @@ urlpatterns = [
     path('select_dates_recption/', views.select_dates_recption, name='select_dates_recption'),
     path('tailor_work_details_recption/', views.tailor_work_details_recption, name='tailor_work_details_recption'),
     path('customer_bill_reception/<int:customer_id>/', views.customer_bill_reception, name='customer_bill_reception'),
+    path('update_print_status_r/<int:customer_id>/', views.update_print_status_r, name='update_print_status_r'),
     path('generate_pdf/<int:customer_id>/', views.print_measurement_reception, name='generate_pdf'),
 
     path('check_tailor_works_recption/', views.check_tailor_works_recption, name='check_tailor_works_recption'),

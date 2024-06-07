@@ -140,10 +140,13 @@
                                 <td>
                                     <form action="{% url 'customer_bill' customer_id=results.id %}" method="post">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                        <button type="submit" class="btn {% if not results.is_printed %}btn-outline-primary{% else %}btn-danger{% endif %} btn-icon-text btn-sm">
                                             Print
                                         </button>
                                     </form>
+                                    {% if results.is_printed %}
+                                        <small class="text-muted">Already Printed</small>
+                                        {% endif %}
                                 </td>
                                 <td>
                                     <form action="{% url 'deliver_order' order_id=results.id %}" method="post">

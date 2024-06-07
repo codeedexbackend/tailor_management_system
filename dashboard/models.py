@@ -166,6 +166,7 @@ class Add_order(models.Model):
         choices=[('pending', 'Pending'), ('delivered', 'Delivered')],
         default='pending'  # Set default value here
     )
+    is_printed = models.BooleanField(default=False)
 
 
 class Item(models.Model):

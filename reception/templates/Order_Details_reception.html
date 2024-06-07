@@ -26,6 +26,30 @@
         word-wrap: break-word;
         white-space: normal;
     }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        color: black;
+        
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
+
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+        border: 1px solid #4CAF50;
+    }
+
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
 </style>
 <script>
     function validateDateInputs() {
@@ -102,8 +126,8 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for i in page_obj %}
                     <tr>
-                        {% for i in cus %}
                         <td>{{ forloop.counter }}</td>
                         <td>{{i.id}}</td>
                         <td>{{i.customer_id.id}}</td>
@@ -162,10 +186,13 @@
                         <td>
                             <form action="{% url 'customer_bill_reception' customer_id=i.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
+                                <button type="submit" class="btn {% if not i.is_printed %}btn-outline-primary{% else %}btn-danger{% endif %} btn-icon-text btn-sm">
                                     Print
                                 </button>
                             </form>
+                            {% if i.is_printed %}
+                            <small class="text-muted">Already Printed</small>
+                            {% endif %}
                         </td>
                         <td>
                             <form action="{% url 'deliver_order_reception' order_id=i.id %}" method="post">
@@ -186,6 +213,23 @@
                     </tbody>
                 </table>
             </div>
+            <div class="pagination" style="margin-left: 35%;">
+                <span class="step-links">
+                  {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                  {% endif %}
+              
+                  <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                  </span>
+              
+                  {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                  {% endif %}
+                </span>
+              </div>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from xhtml2pdf import pisa
-
+from django.core.paginator import Paginator
 from dashboard.models import AddTailors, Cloth, Customer, Item, Add_order
 from .serializers import TailorLoginSerializer, \
     CompletedOrderSerializer, ItemSerializer, InProgressToCompletedSerializer, InProgressOrderSerializer, \
@@ -59,7 +59,13 @@ def search_mobile_recption(request):
 
 def customer_details_recption(request):
     cus = Customer.objects.all()
-    return render(request, "Customer_details_reception.html", {"cus": cus})
+
+    # Pagination
+    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "Customer_details_reception.html", {'page_obj': page_obj})
 
 
 def createcustomer_reception(request):
@@ -359,13 +365,14 @@ def order_details_reception(request):
         if from_date_str and to_date_str:
             from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
             to_date = datetime.strptime(to_date_str, '%Y-%m-%d').date()
+            cus = Add_order.objects.filter(delivery_date__range=[from_date, to_date]).order_by('-id')
 
-            data = Add_order.objects.filter(delivery_date__range=[from_date, to_date]).order_by('-id')
-        else:
-            data = Add_order.objects.all().order_by('-id')
+    # Pagination
+    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-        return render(request, "Order_Details_reception.html", {'cus': data})
-    return render(request, "Order_Details_reception.html", {"cus": cus})
+    return render(request, "Order_Details_reception.html", {'page_obj': page_obj})
 
 
 def deliver_order_reception(request, order_id):
@@ -431,7 +438,6 @@ def update_add_order_reception(request, dataid):
             messages.error(request, "Invalid value for ordered length.")
             return redirect('order_details_reception')
 
-
         if collar_type == 'collar1':
             collar_image_url = 'images/collarcuff/collor 1.png'
         elif collar_type == 'collar2':
@@ -480,33 +486,27 @@ def update_add_order_reception(request, dataid):
         new_tailor = AddTailors.objects.get(id=tailor_id)
 
         order = get_object_or_404(Add_order, id=dataid)
-        previous_ordered_length = Decimal(str(order.ordered_length))
-        ordered_length_decimal = Decimal(str(ordered_length))
+        previous_ordered_length = order.ordered_length or Decimal('0')
+        ordered_length_decimal = ordered_length or Decimal('0')
 
         if cloth_id:
-            # Check for changes in cloth and length
-            if str(order.clothdetails.id) != cloth_id or previous_ordered_length != ordered_length_decimal:
-                # Calculate length difference
+            # Handling case when cloth_id is provided and valid
+            if not order.clothdetails or str(order.clothdetails.id) != cloth_id or previous_ordered_length != ordered_length_decimal:
                 length_difference = ordered_length_decimal - previous_ordered_length
-
-                # Handle cloth stock updates
-                if str(order.clothdetails.id) == cloth_id:
-                    # Same cloth
+                if order.clothdetails and str(order.clothdetails.id) == cloth_id:
                     if ordered_length_decimal < previous_ordered_length:
-                        # New length is less, add the difference back to the stock
                         order.clothdetails.stock_length += abs(length_difference)
                     else:
-                        # New length is more, subtract the difference from the stock
                         if order.clothdetails.stock_length >= length_difference:
                             order.clothdetails.stock_length -= length_difference
                         else:
                             messages.error(request, "Not enough cloth stock available.")
                             return redirect('order_details_reception')
                 else:
-                    # Different cloth
-                    previous_cloth = get_object_or_404(Cloth, pk=order.clothdetails.id)
-                    previous_cloth.stock_length += previous_ordered_length
-                    previous_cloth.save()
+                    if order.clothdetails:
+                        previous_cloth = get_object_or_404(Cloth, pk=order.clothdetails.id)
+                        previous_cloth.stock_length += previous_ordered_length
+                        previous_cloth.save()
 
                     new_cloth = get_object_or_404(Cloth, pk=cloth_id)
                     if new_cloth.stock_length >= ordered_length_decimal:
@@ -516,8 +516,14 @@ def update_add_order_reception(request, dataid):
                         messages.error(request, "Not enough cloth stock available.")
                         return redirect('order_details_reception')
 
-                order.clothdetails.save()
+                if order.clothdetails:
+                    order.clothdetails.save()
         else:
+            # **Handling case when cloth_id is empty (remove cloth selection)**
+            if order.clothdetails:
+                previous_cloth = get_object_or_404(Cloth, pk=order.clothdetails.id)
+                previous_cloth.stock_length += previous_ordered_length
+                previous_cloth.save()
             order.clothdetails = None
             ordered_length = None
 
@@ -793,10 +799,13 @@ def orderdlt_reception(request, dlt):
     delt = Add_order.objects.filter(id=dlt)
     id = Add_order.objects.get(id=dlt)
     id_dlt = id.tailor.id
+    id_cloth=id.clothdetails
     delt.delete()
     tailor_instance = AddTailors.objects.get(id=id_dlt)
     tailor_instance.assigned_works -= 1
     tailor_instance.save()
+    id_cloth.stock_length += id.ordered_length
+    id_cloth.save()
     return redirect(order_details_reception)
 
 
@@ -852,13 +861,19 @@ def tailor_work_details_recption(request):
 def select_dates_recption(request):
     return render(request, "tailor_work_reception.html")
 
-
 def customer_bill_reception(request, customer_id):
-    order = Add_order.objects.filter(id=customer_id)
-    item = Item.objects.filter(order_id=customer_id)
+    order = get_object_or_404(Add_order, id=customer_id)
+    items = Item.objects.filter(order_id=customer_id)
+    return render(request, 'Print_measurements_r.html', {'order': order, 'items': items})
 
-    return render(request, 'Print_measurements_r.html', {'order': order, 'item': item})
-
+def update_print_status_r(request, customer_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Add_order, id=customer_id)
+        if not order.is_printed:
+            order.is_printed = True
+            order.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)
 
 def print_measurement_reception(request, customer_id):
     customer = Add_order.objects.get(id=customer_id)
