@@ -91,6 +91,7 @@
                         <!-- Dropdown select element for cloth options (hidden initially) -->
                         <select class="form-control mt-2" id="clothSelect" name="cloth_id" size="5">
                             <!-- Other cloth options (rendered dynamically) -->
+                            <option value="">Select Cloth</option>
                             {% for cloth in cloths %}
                                 <option value="{{ cloth.id }}">{{ cloth.name }} - Available: {{ cloth.stock_length }}</option>
                             {% endfor %}
@@ -100,7 +101,7 @@
                 </div>
                 <div class="form-group">
                     <b><label for="loose">Cloth Length :</label></b>
-                    <input type="number" class="form-control" id="ordered_length" value="{{add.ordered_length}}" min="0" placeholder="Length in Meter" required
+                    <input type="number" class="form-control" id="ordered_length" value="{{add.ordered_length}}" min="0" placeholder="Length in Meter" 
                             name="ordered_length" step="any">
                 </div>
                 <div class="form-group">

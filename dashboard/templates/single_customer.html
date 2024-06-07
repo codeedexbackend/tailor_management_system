@@ -77,7 +77,14 @@
                 <div class="text-right mb-4">
                     <div style="float: left;margin-left:10px;">
                         <form action="{% url 'customer_bill' customer_id=i.id %}">
-                            <button type="submit" class="btn btn-primary btn-sm">Print</button>
+                            {% csrf_token %}
+                                <button type="submit" class="btn {% if not i.is_printed %}btn-outline-primary{% else %}btn-danger{% endif %} btn-icon-text btn-sm">
+                                    {% if i.is_printed %}
+                                    Already Printed
+                                    {% else %}
+                                    Print
+                                    {% endif %}
+                                </button>
                         </form>
                     </div>
                     <div style="float: left;margin-left:10px;">

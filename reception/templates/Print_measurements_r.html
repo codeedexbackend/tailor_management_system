@@ -10,13 +10,13 @@
     /* Define your CSS styles here */
     body {
         font-family: Arial, sans-serif;
-        margin:0;
-        padding:0;
+        margin: 0;
+        padding: 0;
     }
-     header {
-            text-align: center;
-            margin-top: 10px;
-        }
+    header {
+        text-align: center;
+        margin-top: 10px;
+    }
     .container {
         max-width: 800px;
         margin: 0 auto;
@@ -26,7 +26,7 @@
     }
     .bill-info {
         margin-bottom: 20px;
-        line-height:10px;
+        line-height: 10px;
     }
     .bill-info b {
         display: inline-block;
@@ -36,14 +36,13 @@
     img {
         width: 150px;
     }
-        h3, h4, h5 {
+    h3, h4, h5 {
         text-align: center;
     }
     .left-column {
         width: calc(50% - 5px); /* Adjust the width as needed */
         padding-right: 5px; /* Add spacing between columns */
     }
-    
     .right-column {
         width: calc(50% - 5px); /* Adjust the width as needed */
         padding-left: 5px; /* Add spacing between columns */
@@ -51,23 +50,27 @@
     @media print {
         .not-for-print { display: none; }
         @page { size: portrait; }
-      }
-      .bill-number-header {
+    }
+    .bill-number-header {
         margin-left: 100px;
         margin-bottom: 5px; /* Adjust spacing as needed */
     }
-    
     .bill-number-header h5 {
         margin: 0;
         padding: 5px 0;
         width: 100px;
         margin: 0 auto; /* Center the header */
     }
-    .down{
-        margin-top:70px;
+    .down {
+        margin-top: 70px;
     }
-
-</style>
+    .already-printed {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+    }   
+    </style>
 </head>
 
 <body>
@@ -75,76 +78,80 @@
     <img src="https://i.postimg.cc/hvSB6N1c/amana-logo.png" alt="">
     <h3>HAYY SOUQ, SHARURAH, SAUDI ARABIA</h3>
     <h4>PHONE NO: 00966507328132, EMAIL ID: <a href="mailto:amanathobe@gmail.com">amanathobe@gmail.com</a></h4>
-    <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com </a> VAT NUMBER/TIM : 310601281900003</h4>
+    <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com</a> VAT NUMBER/TIM : 310601281900003</h4>
     <h5>Bill Customer</h5>
+    {% if order.is_printed %}
+        <div class="already-printed">Already Printed</div>
+    {% endif %}
 </header>
+
+<div class="not-for-print" style="text-align: center; margin-bottom: 10px;margin-top: 10px;">
+    <button id="printButton">Print</button>
+</div>
 <div class="container">
-    {% for i in order %}
     <div class="left-column">
-        
         <div class="bill-info">
-            <b>CUSTOMER NAME:</b>{{ i.customer_id.name }}
+            <b>CUSTOMER NAME:</b>{{ order.customer_id.name }}
             <!-- Insert customer name here -->
         </div>
         <div class="bill-info">
-            <b>MOBILE NUMBER:</b> {{ i.customer_id.mobile }}
+            <b>MOBILE NUMBER:</b> {{ order.customer_id.mobile }}
             <!-- Insert mobile number here -->
         </div>
         <div class="bill-info">
-            <b>CLOTH TYPE:</b>{{i.clothdetails.name}} <!-- Insert sleeve measurement here -->
+            <b>CLOTH TYPE:</b>{{ order.clothdetails.name }} <!-- Insert cloth type here -->
         </div>
         <div class="bill-info">
-            <b>CLOTH LENGTH:</b>{{i.ordered_length}} <!-- Insert sleeve measurement here -->
+            <b>CLOTH LENGTH:</b>{{ order.ordered_length }} <!-- Insert cloth length here -->
         </div>
         <div class="bill-info">
-            <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{ i.model_details }} </span><!-- Insert cloth type here -->
+            <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{ order.model_details }}</span><!-- Insert model details here -->
         </div>
         <div class="bill-info">
-            <b>LENGTH:</b>{{i.length}} <!-- Insert length here -->
+            <b>LENGTH:</b>{{ order.length }} <!-- Insert length here -->
         </div>
         <div class="bill-info">
-            <b>SHOULDER:</b> {{i.shoulder}}<!-- Insert shoulder measurement here -->
+            <b>SHOULDER:</b> {{ order.shoulder }}<!-- Insert shoulder measurement here -->
         </div>
         <div class="bill-info">
-            <b>SLEEVE SADA:</b>{{i.sleeve_sada}} <!-- Insert sleeve measurement here -->
+            <b>SLEEVE SADA:</b>{{ order.sleeve_sada }} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
-            <b>SLEEVE CUFF:</b>{{i.sleeve_cuff}} <!-- Insert sleeve measurement here -->
+            <b>SLEEVE CUFF:</b>{{ order.sleeve_cuff }} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
-            <b>CENTER SLEEVE:</b>{{i.center_sleeve}} <!-- Insert sleeve measurement here -->
+            <b>CENTER SLEEVE:</b>{{ order.center_sleeve }} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
-            <b>SLEEVE BOTTOM:</b>{{i.sleeve_bottom}} <!-- Insert sleeve measurement here -->
+            <b>SLEEVE BOTTOM:</b>{{ order.sleeve_bottom }} <!-- Insert sleeve measurement here -->
         </div>
         <div class="bill-info">
-            <b>LOOSE:</b>{{i.loose}} <!-- Insert sleeve measurement here -->
+            <b>LOOSE:</b>{{ order.loose }} <!-- Insert loose measurement here -->
         </div>
         <div class="bill-info">
-            <b>SEAT:</b>{{i.seat}} <!-- Insert sleeve measurement here -->
+            <b>SEAT:</b>{{ order.seat }} <!-- Insert seat measurement here -->
         </div>
         <div class="bill-info">
-            <b>REGAL:</b>{{i.regal}} <!-- Insert sleeve measurement here -->
+            <b>REGAL:</b>{{ order.regal }} <!-- Insert regal measurement here -->
         </div>
         <div class="bill-info">
-            <b>BOTTOM:</b>{{i.bottom1}} <!-- Insert sleeve measurement here -->
+            <b>BOTTOM:</b>{{ order.bottom1 }} <!-- Insert bottom measurement here -->
         </div>
         <div class="bill-info">
-            <b>BUTTON TYPE:</b>{{i.button_type}} <!-- Insert sleeve measurement here -->
+            <b>BUTTON TYPE:</b>{{ order.button_type }} <!-- Insert button type here -->
         </div>
         <div class="bill-info">
-            <b>DESCCRIPTION:</b><span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{i.description}}</span> <!-- Insert sleeve measurement here -->
+            <b>DESCRIPTION:</b><span style="display: inline-block;line-height: 1.5;width: 240px;margin-left: 200px;margin-top: -18px;">{{ order.description }}</span> <!-- Insert description here -->
         </div>
         <div class="bill-info">
-            <b>ORDER DATE:</b> {{i.order_date}}<!-- Insert date here -->
+            <b>ORDER DATE:</b> {{ order.order_date }}<!-- Insert order date here -->
         </div>
         <div class="bill-info">
-            <b>DELIVERY DATE:</b> {{i.delivery_date}}<!-- Insert delivery date here -->
+            <b>DELIVERY DATE:</b> {{ order.delivery_date }}<!-- Insert delivery date here -->
         </div>
         <div class="bill-info">
-            <b>TAILOR:</b> {{i.tailor}}<!-- Insert tailor name here -->
+            <b>TAILOR:</b> {{ order.tailor }}<!-- Insert tailor name here -->
         </div>
-        
     </div>
 
     <div class="right-column">
@@ -153,24 +160,60 @@
             <h5>Bill Number</h5>
         </div>
         <div class="bill-info" style="text-align: center;">
-            <input type="text" style="border: 1px solid #00FF00;width: 100px;height: 40px;text-align: center;margin-left: 100px;" value="{{ i.bill_number }}">
+            <input type="text" style="border: 1px solid #00FF00;width: 100px;height: 40px;text-align: center;margin-left: 100px;" value="{{ order.bill_number }}">
         </div>
 
         <div class="bill-info down" style="text-align: center;margin-left: -25px;">
-            <p>Pocket Type:<br><br><img src="{% static i.pocket_image_url %}" height="90" width="30"/></p>
-            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{i.pocket}}</span>
+            <p>Pocket Type:<br><br><img src="{% static order.pocket_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{ order.pocket }}</span>
         </div>
         <div class="bill-info" style="text-align: center;margin-left: -25px;">
-            <p>Collar Type:<br><br><img src="{% static i.collar_type_image_url %}" height="90" width="30"/></p>
-            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{i.collar_measurements}}</span>
+            <p>Collar Type:<br><br><img src="{% static order.collar_type_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{ order.collar_measurements }}</span>
         </div>
         <div class="bill-info" style="text-align: center;margin-left: -25px;">
-            <p>Cuff Type:<br><br><img src="{% static i.cuff_type_image_url %}" height="90" width="30"/></p>
-            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{i.cuff_measurements}}</span>
+            <p>Cuff Type:<br><br><img src="{% static order.cuff_type_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.5;width: 140px;margin-left: 245px;margin-top: -18px;">{{ order.cuff_measurements }}</span>
         </div>
     </div>
 </div>
-    {% endfor %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Function to update print status
+            function updatePrintStatus() {
+                $.ajax({
+                    url: '{% url 'update_print_status_r' customer_id=order.id %}',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            console.log('Print status updated successfully.');
+                        } else {
+                            console.error('Failed to update print status.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error occurred while updating print status:', error);
+                    }
+                });
+            }
+
+            // Attach event listener for before printing
+            window.onbeforeprint = function () {
+                updatePrintStatus();
+            };
+
+            // Attach event listener for print button click
+            $('#printButton').on('click', function () {
+                updatePrintStatus();
+                window.print();
+            });
+        });
+    </script>
 </body>
 
 </html>

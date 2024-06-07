@@ -17,8 +17,29 @@
 <!--      display: flex;-->
 <!--      flex-wrap: wrap;-->
     }
+    .pagination {
+        margin-top: 20px;
+    }
 
+    .pagination a {
+        color: black;
+        
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+        margin: 0 4px;
+    }
 
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+        border: 1px solid #4CAF50;
+    }
+
+    .pagination a:hover:not(.active) {
+        background-color: #ddd;
+    }
 </style>
 
 <div class="container form-container" style="margin-top:1px;">
@@ -55,8 +76,8 @@
                     </tr>
                     </thead>
                     <tbody>
+                        {% for i in page_obj %}
                     <tr>
-                        {% for i in cus %}
                         <td>{{ forloop.counter }}</td>
                         <td>{{i.id}}</td>
                         <td>
@@ -115,6 +136,23 @@
                     </tbody>
                 </table>
             </div>
+            <div class="pagination" style="margin-left: 35%;">
+                <span class="step-links">
+                  {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                  {% endif %}
+              
+                  <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                  </span>
+              
+                  {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                  {% endif %}
+                </span>
+              </div>
         </div>
     </div>
 </div>

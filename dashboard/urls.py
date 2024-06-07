@@ -8,6 +8,7 @@ urlpatterns = [
     path("add_cloth/", views.add_cloth, name="add_cloth"),
     path('add_stock/<int:cloth_id>/', views.add_stock, name='add_stock'),
     path('update_stock/<int:cloth_id>/', views.update_stock, name='update_stock'),
+#     path('cloth_delete/<int:cloth_id>/', views.cloth_delete, name='cloth_delete'),
     path("add_order/<int:dataid>/", views.add_order, name="add_order"),
     path("edit_order/<int:dataid>/", views.edit_order, name="edit_order"),
     path("update_add_order/<int:dataid>/", views.update_add_order, name="update_add_order"),
@@ -39,6 +40,7 @@ urlpatterns = [
     path('check_tailor_works/', views.check_tailor_works, name='check_tailor_works'),
     path('fetch_tailor_options/', views.fetch_tailor_options, name='fetch_tailor_options'),
     path('customer_bill/<int:customer_id>/', views.customer_bill, name='customer_bill'),
+    path('update_print_status/<int:customer_id>/', views.update_print_status, name='update_print_status'),
 
     path("upcoming_deliveries/", views.upcoming_deliveries, name="upcoming_deliveries"),
 
