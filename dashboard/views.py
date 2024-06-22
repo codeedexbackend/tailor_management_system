@@ -1,7 +1,9 @@
 # from tailors.models import AddCustomer
+import csv
 from decimal import Decimal, InvalidOperation
 import logging
 import random
+from django.urls import reverse
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import inch
@@ -324,14 +326,6 @@ def update_stock(request, cloth_id):
         return redirect('Cloth_details_admin')  # Ensure this URL name matches your URL configuration
     return render(request, 'update_stock.html', {'cloth_id': cloth_id, 'cloth_details': cloth_details})
 
-# def cloth_delete(request, cloth_id):
-#     cloth_dlt = get_object_or_404(Cloth, id=cloth_id)
-#     try:
-#         cloth_dlt.delete()
-#         messages.success(request, "Cloth deleted successfully.")
-#     except ProtectedError:
-#         messages.error(request, "Cannot delete cloth. It is referenced by one or more orders or customers.")
-#     return redirect('Cloth_details_admin')
 
 def additems(request, dataid):
     order = Add_order.objects.get(id=dataid)
@@ -371,10 +365,10 @@ def save_items(request):
 
 
 def customer_details(request):
-    cus = Customer.objects.all()
+    cus = Customer.objects.all().order_by('-id')
 
     # Pagination
-    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    paginator = Paginator(cus, 300)  # Show 300 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -386,14 +380,37 @@ def order_details(request):
     if request.method == "POST":
         from_date_str = request.POST.get('textfield')
         to_date_str = request.POST.get('textfield2')
+        export = request.POST.get('export')
 
         if from_date_str and to_date_str:
             from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
             to_date = datetime.strptime(to_date_str, '%Y-%m-%d').date()
             cus = Add_order.objects.filter(delivery_date__range=[from_date, to_date]).order_by('-id')
 
+        if export:  # If export button was clicked, generate the CSV
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = f'attachment; filename="order_details_{from_date_str}_to_{to_date_str}.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Order ID', 'Customer ID', 'Name', 'Contact Number', 'Cloth Name', 'Cloth Length', 'Model Details', 'Length', 'Shoulder', 'Sleeve Sada', 'Sleeve Cuff', 'Center Sleeve', 'Sleeve Bottom', 'Loose', 'Seat', 'Regal', 'Collar Type', 'Collar Measurement', 'Cuff Type', 'Cuff Measurements', 'Pocket Type', 'Pocket Measure', 'Button Type', 'Bottom Measure', 'Bill Number', 'Order Date', 'Delivery Date', 'Description', 'Total Price', 'Advance Payment', 'Balance Payment', 'Tailor'])
+
+            for order in cus:
+                writer.writerow([
+                    order.id, order.customer_id.id, order.customer_id.name, order.customer_id.mobile, 
+                    order.clothdetails.name if order.clothdetails else order.cloth_name, 
+                    order.ordered_length, order.model_details, order.length, order.shoulder, 
+                    order.sleeve_sada, order.sleeve_cuff, order.center_sleeve, order.sleeve_bottom, 
+                    order.loose, order.seat, order.regal, order.collar_type, 
+                    order.collar_measurements, order.cuff_type, order.cuff_measurements, 
+                    order.pocket_type, order.pocket, order.button_type, order.bottom1, 
+                    order.bill_number, order.order_date, order.delivery_date, order.description, 
+                    order.total_payment, order.advance_payment, order.balance_payment, order.tailor
+                ])
+
+            return response
+
     # Pagination
-    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    paginator = Paginator(cus, 300)  # Show 300 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -502,8 +519,18 @@ def savecustomer(request):
         model_details = request.POST.get('model_details')
         cloth_id = request.POST.get('cloth_id')
         pocket_type = request.POST.get('pocket-type')
-        ordered_length = Decimal(request.POST.get('ordered_length', 3.5))
-
+        ordered_length_str = request.POST.get('ordered_length', '').strip()
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('createcustomer')
+        cloth_name = None
         
 
         if collar_type == 'collar1':
@@ -551,6 +578,7 @@ def savecustomer(request):
         if cloth_id:
             try:
                 cloth = Cloth.objects.get(pk=cloth_id)
+                cloth_name=cloth.name
                 if cloth.stock_length >= ordered_length:
                     cloth.stock_length -= ordered_length
                     cloth.save()
@@ -589,7 +617,8 @@ def savecustomer(request):
                            order_date=od, delivery_date=dd, tailor=tailor_instance, button_type=bt,collar_type=collar_type,
                            cuff_type=cuff_type,collar_type_image_url=collar_image_url, description=ds, bill_number=bill_number,
                            cuff_measurements=cuff_measurment,sleeve_bottom=sb,center_sleeve=center_sleeve,model_details=model_details,
-                           clothdetails=cloth,pocket_image_url=pocket_image_url,pocket_type=pocket_type,ordered_length=ordered_length)
+                           clothdetails=cloth,pocket_image_url=pocket_image_url,pocket_type=pocket_type,ordered_length=ordered_length,
+                           cloth_name=cloth_name)
             obj.save()
 
             add_order_obj = Add_order(customer_id=obj, length=ln, shoulder=sd, loose=lo,regal=rg,
@@ -597,7 +626,7 @@ def savecustomer(request):
                                       cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
                                       collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,
                                       sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
-                                      order_date=od, delivery_date=dd, tailor=tailor_instance,
+                                      order_date=od, delivery_date=dd, tailor=tailor_instance,cloth_name=cloth_name,
                                       button_type=bt,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                       description=ds, bill_number=bill_number,sleeve_bottom=sb,model_details=model_details,
                                       clothdetails=cloth,pocket_image_url=pocket_image_url,pocket_type=pocket_type,ordered_length=ordered_length)
@@ -653,9 +682,17 @@ def orderdlt(request, dlt):
     tailor_instance = AddTailors.objects.get(id=id_dlt)
     tailor_instance.assigned_works -= 1
     tailor_instance.save()
-    id_cloth.stock_length += id.ordered_length
-    id_cloth.save()
+    if id.ordered_length:
+        id_cloth.stock_length += id.ordered_length
+        id_cloth.save()
     return redirect(order_details)
+
+
+def cloth_delete(request, cloth_id):
+    cloth = get_object_or_404(Cloth, id=cloth_id)
+    cloth.delete()
+    messages.success(request, "Cloth deleted successfully.")
+    return redirect(reverse('Cloth_details_admin'))
 
 from django.shortcuts import redirect
 
@@ -796,7 +833,18 @@ def update_customer(request, dataid):
         model_details = request.POST.get('model_details')
         cloth_id = request.POST.get('cloth_id') or request.POST.get('existing_cloth_id')
         pocket_type = request.POST.get('pocket-type')
-        ordered_length = Decimal(request.POST.get('ordered_length', 3.5))
+        ordered_length_str = request.POST.get('ordered_length', '').strip()
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('customer_details')
+        cloth_name=None
 
 
         if collar_type == 'collar1':
@@ -867,14 +915,15 @@ def update_customer(request, dataid):
         #         return redirect('customer_details')
 
         # customer.clothdetails.save()
-
-
+        cloth=None
+        cloth = Cloth.objects.get(pk=cloth_id)
+        cloth_name=cloth.name
         # Update the customer instance
         Customer.objects.filter(id=dataid).update(
             name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo,
             regal=rg, sleeve_sada=sl,
             sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2, button_type=bt,
-            description=other,sleeve_bottom=sb,model_details=model_details,
+            description=other,sleeve_bottom=sb,model_details=model_details,cloth_name=cloth_name,
             cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
             cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
             collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,ordered_length=ordered_length,
@@ -892,7 +941,7 @@ def search_mobile(request):
     if 'q' in request.GET:
         query = request.GET['q']
 
-        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='')
+        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='').order_by('-id')
 
     return render(request, 'search.html', {'results': results, 'query': query})
 
@@ -959,6 +1008,7 @@ def update_add_order(request, dataid):
         except InvalidOperation:
             messages.error(request, "Invalid value for ordered length.")
             return redirect('order_details')
+        cloth_name=None
 
 
         if collar_type == 'collar1':
@@ -1049,7 +1099,7 @@ def update_add_order(request, dataid):
                 previous_cloth.save()
             order.clothdetails = None
             ordered_length = None
-
+        cloth_name=order.clothdetails.name
         # Update assigned_works for the old tailor and new tailor
         if old_tailor != new_tailor:
             old_tailor.assigned_works -= 1
@@ -1057,7 +1107,7 @@ def update_add_order(request, dataid):
             new_tailor.assigned_works += 1
             new_tailor.save()
         Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, 
-                                                   regal=rg, sleeve_sada=sl,
+                                                   regal=rg, sleeve_sada=sl,cloth_name=cloth_name,
                                                    sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                                    total_payment=tp,advance_payment=ap,balance_payment=bp,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
@@ -1102,19 +1152,11 @@ def save_add_order(request):
         cuff_measurment = request.POST.get('cuff-measurements')
         collar_measurment = request.POST.get('collar-measurements')
         model_details = request.POST.get('model_details')
-        cloth_id = request.POST.get('cloth_id') or request.POST.get('existing_cloth_id')
+        cloth_id = request.POST.get('cloth_id')
+        existing_cloth_id = request.POST.get('existing_cloth_id')
         pocket_type = request.POST.get('pocket-type')
         ordered_length_str = request.POST.get('ordered_length', '').strip()
-        try:
-            if ordered_length_str:
-                ordered_length = Decimal(ordered_length_str)
-            elif cloth_id:
-                ordered_length = Decimal(3.5)
-            else:
-                ordered_length = None
-        except InvalidOperation:
-            messages.error(request, "Invalid value for ordered length.")
-            return redirect('customer_details')
+        cloth_name = None
         
 
         if collar_type == 'collar1':
@@ -1165,15 +1207,33 @@ def save_add_order(request):
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
+        
+        if cloth_id == '':
+            cloth_id = None
 
+        if not cloth_id and not existing_cloth_id:
+            cloth_id = None
+
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('customer_details')
+        
         cloth = None
         if cloth_id:
             try:
                 cloth = Cloth.objects.get(pk=cloth_id)
+                cloth_name = cloth.name
                 if cloth.stock_length >= ordered_length:
                     cloth.stock_length -= ordered_length
                     cloth.save()
-                elif ordered_length:
+                else:
                     messages.error(request, "Not enough cloth stock available.")
                     return redirect('customer_details')
             except Cloth.DoesNotExist:
@@ -1213,7 +1273,7 @@ def save_add_order(request):
                 collar_type=collar_type, cuff_type=cuff_type, center_sleeve=center_sleeve,
                 sleeve_sada=sl, sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                 order_date=od, total_payment=tp, advance_payment=ap, balance_payment=bp,
-                delivery_date=dd, tailor=tailor_instance, button_type=bt,
+                delivery_date=dd, tailor=tailor_instance, button_type=bt,cloth_name=cloth_name,
                 description=other, sleeve_bottom=sb,clothdetails=cloth,ordered_length=ordered_length,
                 pocket_image_url=pocket_image_url,pocket_type=pocket_type)
 
@@ -1230,7 +1290,6 @@ def save_add_order(request):
             return JsonResponse({'error': f"Error saving customer: {str(e)}"}, status=500)
 
     return redirect(order_details)
-
 
 def search_tailor(request):
     results = {'tailors': []}

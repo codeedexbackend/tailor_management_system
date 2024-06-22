@@ -81,7 +81,10 @@
                     <td><input type="date" name="textfield" id="textfield" class="form-control" /></td>
                     <td>To</td>
                     <td><input type="date" name="textfield2" id="textfield2" class="form-control" /></td>
-                    <td><input type="submit" name="textfield3" id="textfield3" value="search" class="btn btn-success"/></td>
+                    <td>
+                        <input type="submit" name="textfield3" id="textfield3" value="search" class="btn btn-success"/>
+                        <button type="submit" name="export" value="1" class="btn btn-primary">Export CSV</button>
+                    </td>
                 </tr>
             </table>
             </form>
@@ -136,7 +139,12 @@
                                href="{% url 'single_customer_reception' customer_id=i.customer_id.id %}">{{i.customer_id.name}}</a>
                         </td>
                         <td>{{i.customer_id.mobile}}</td>
-                        <td>{{i.clothdetails.name}}</td>
+                        <td>{% if i.clothdetails %}
+                                {{ i.clothdetails.name }}
+                            {% else %}
+                                {{ i.cloth_name }}
+                            {% endif %}
+                        </td>
                         <td>{{i.ordered_length}}</td>
                         <td class="custom-model-details">{{i.model_details}}</td>
                         <td>{{i.length}}</td>

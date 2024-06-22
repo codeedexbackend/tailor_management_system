@@ -1,226 +1,233 @@
+
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Combined Measurement</title>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Bill</title>
+    <style>
+    /* Define your CSS styles here */
     body {
-      background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
     }
-
-    .form-container {
-      max-width: 100%;
-      margin: 35px auto;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
-      display: flex;
-      flex-wrap: wrap;
+    header {
+        text-align: center;
+        margin-top: 10px;
     }
-
-    .button-container {
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 10px;
         display: flex;
-        justify-content: center; /* Center items horizontally */
+        justify-content: space-between;
+    }
+    .bill-info {
+        margin-bottom: 20px;
+        line-height: 10px;
+    }
+    .bill-info b {
+        display: inline-block;
+        width: 200px;
+        font-weight: bold;
+    }
+    img {
+        width: 150px;
+    }
+    h3, h4, h5 {
+        text-align: center;
+    }
+    .left-column {
+        width: calc(50% - 5px); /* Adjust the width as needed */
+        padding-right: 5px; /* Add spacing between columns */
+    }
+    .right-column {
+        width: calc(50% - 5px); /* Adjust the width as needed */
+        padding-left: 5px; /* Add spacing between columns */
+    }
+    @media print {
+        .not-for-print { display: none; }
+        @page { size: portrait; }
+    }
+    .bill-number-header {
+        margin-left: 100px;
+        margin-bottom: 5px; /* Adjust spacing as needed */
+    }
+    .bill-number-header h5 {
+        margin: 0;
+        padding: 5px 0;
+        width: 100px;
+        margin: 0 auto; /* Center the header */
+    }
+    .down {
+        margin-top: 70px;
+    }
+    .already-printed {
+        color: red;
+        font-weight: bold;
+        text-align: center;
         margin-top: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.3;
+        font-size: 4em;
+        white-space: nowrap;
+        z-index: 1;
     }
-
-    .button-container button {
-        margin: 0 10px; /* Add spacing between buttons */
-    }
-
-    .input-group {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding-right: 100px; /* Adjust based on the dropdown width */
-    }
-
-    
-
-    .dropdown {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-    }
-
-    .dropdown button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 0 10px;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-      right: 0;
-      top: 100%;
-    }
-
-    .dropdown-content button {
-      background: none;
-      border: none;
-      padding: 5px 10px;
-      display: block;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .dropdown-content button:hover {
-      background-color: #f1f1f1;
-    }
-
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-    .fraction-icons {
-      display: flex;
-      align-items: center;
-      margin-left: 5px; /* Adjust as needed */
-  }
-  
-  .fraction-icon {
-      cursor: pointer;
-      margin-right: 5px; /* Adjust as needed */
-  }
-  
+    c{
+        font-size: 24px;
+    }   
 </style>
 </head>
+
 <body>
-
-{% extends 'dashboard.html' %}
-{% load static %}
-{% block content %}
-
-<div class="container form-container" style="margin-top:1px;">
-
-    <form class="container" method="post" action="{% url 'savecustomer' %}">
-        {% csrf_token %}
-        <h6 class="text-center"><u>Add Customer Details & Measurements</u></h6>
-        <div class="row">
-            <div class="col-md-6">
-                <!-- Left Side -->
-                <div class="form-group">
-                    <b><label for="name">Name:</label></b>
-                    <input type="text" class="form-control" id="name" placeholder="" required name="name">
-                </div>
-                <div class="form-group">
-                    <label for="number"><b>Mobile:</b></label>
-                    <input type="number" class="form-control" id="number" placeholder="" min="0" required name="mobile">
-                </div>
-                <div class="form-group">
-                    <b><label for="cloth">Choose a Cloth:</label></b>
-                    <select class="form-control" style="border: 1px solid #ccc;" name="cloth_id">
-                        <option value="" selected disabled>Select Cloth</option>
-                        {% for cloth in cloths %}
-                            <option value="{{ cloth.id }}">{{ cloth.name }} - Available: {{ cloth.stock_length }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <input type="hidden" id="ordered_length" name="ordered_length" value="3.5">
-                <div class="form-group">
-                    <b><label for="other">Model Details:</label></b>
-                    <textarea id="model_details" class="form-control" style="border: 1px solid #ccc; height: 124px;" maxlength="10000" name="model_details"></textarea>
-                </div>
-                <div class="form-group input-group">
-                  <b><label for="length">Length:</label></b>
-                  <input type="text" class="form-control" id="length" placeholder="" required min="0" name="length" step="any">
-                  <div class="fraction-icons">
-                      <span class="fraction-icon" onclick="addFraction('length', '½')">½</span>
-                      <span class="fraction-icon" onclick="addFraction('length', '⅓')">⅓</span>
-                      <span class="fraction-icon" onclick="addFraction('length', '¼')">¼</span>
-                      <!-- Add more fraction icons as needed -->
-                  </div>
-              </div>
-              
-              
-                <div class="form-group input-group">
-                    <b><label for="shoulder">Shoulder:</label></b>
-                    <input type="text" class="form-control" id="shoulder" placeholder="" required min="0" name="shoulder" step="any">
-                    <div class="dropdown">
-                        <button>&#9662;</button>
-                        <div class="dropdown-content">
-                            <button onclick="addFraction('shoulder', '½')">½</button>
-                            <button onclick="addFraction('shoulder', '⅓')">⅓</button>
-                            <button onclick="addFraction('shoulder', '¼')">¼</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group input-group">
-                    <b><label for="sleeve_sada">Sleeve Sada:</label></b>
-                    <input type="text" class="form-control" id="sleeve_sada" placeholder="" required min="0" name="sleeve_sada" step="any">
-                    <div class="dropdown">
-                        <button>&#9662;</button>
-                        <div class="dropdown-content">
-                            <button onclick="addFraction('sleeve_sada', '½')">½</button>
-                            <button onclick="addFraction('sleeve_sada', '⅓')">⅓</button>
-                            <button onclick="addFraction('sleeve_sada', '¼')">¼</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group input-group">
-                    <b><label for="sleeve_cuff">Sleeve Cuff:</label></b>
-                    <input type="text" class="form-control" id="sleeve_cuff" placeholder="" required min="0" name="sleeve_cuff" step="any">
-                    <div class="dropdown">
-                        <button>&#9662;</button>
-                        <div class="dropdown-content">
-                            <button onclick="addFraction('sleeve_cuff', '½')">½</button>
-                            <button onclick="addFraction('sleeve_cuff', '⅓')">⅓</button>
-                            <button onclick="addFraction('sleeve_cuff', '¼')">¼</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group input-group">
-                    <b><label for="center_sleeve">Center Sleeve:</label></b>
-                    <input type="text" class="form-control" id="center_sleeve" placeholder="" required min="0" name="center_sleeve" step="any">
-                    <div class="dropdown">
-                        <button>&#9662;</button>
-                        <div class="dropdown-content">
-                            <button onclick="addFraction('center_sleeve', '½')">½</button>
-                            <button onclick="addFraction('center_sleeve', '⅓')">⅓</button>
-                            <button onclick="addFraction('center_sleeve', '¼')">¼</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Add other form fields as needed -->
-            </div>
-            <div class="col-md-6">
-                <!-- Right Side -->
-                <!-- Add right side form fields as needed -->
-            </div>
+<header>
+    <img src="https://i.postimg.cc/hvSB6N1c/amana-logo.png" alt="AMANA">
+    {% comment %} <h3>HAYY SOUQ, SHARURAH, SAUDI ARABIA</h3>
+    <h4>PHONE NO: 00966507328132, EMAIL ID: <a href="mailto:amanathobe@gmail.com">amanathobe@gmail.com</a></h4>
+    <h4>WEB SITE: <a href="http://www.amanathobe.com">www.amanathobe.com </a> VAT NUMBER/TIM : 310601281900003</h4> {% endcomment %}
+    <h5>Bill Customer</h5>
+    {% if order.is_printed %}
+        <div class="already-printed">Already Printed</div>
+    {% endif %}
+</header>
+<div class="not-for-print" style="text-align: center; margin-bottom: 10px;margin-top: 10px;">
+    <button id="printButton">Print</button>
+</div>
+<div class="container">
+    <div class="left-column">
+        
+        <div class="bill-info">
+            <b>CUSTOMER NAME:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c>{{ order.customer_id.name }}</c></span>
+            <!-- Insert customer name here -->
         </div>
-        <div class="button-container">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" class="btn btn-secondary btn-cancel">Cancel</button>
+        <div class="bill-info">
+            <b>MOBILE NUMBER:</b> <c>{{ order.customer_id.mobile }}</c>
+            <!-- Insert mobile number here -->
         </div>
-    </form>
+        <div class="bill-info">
+            <b>CLOTH TYPE:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c>{{order.clothdetails.name}}</c></span><!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>CLOTH LENGTH:</b><c>{{order.ordered_length}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>MODEL DETAILS:</b> <span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c>{{ order.model_details }}</c> </span><!-- Insert cloth type here -->
+        </div>
+        <div class="bill-info">
+            <b>LENGTH:</b><c>{{order.length}}</c><!-- Insert length here -->
+        </div>
+        <div class="bill-info">
+            <b>SHOULDER:</b> <c>{{order.shoulder}}</c><!-- Insert shoulder measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE SADA:</b><c>{{order.sleeve_sada}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE CUFF:</b><c>{{order.sleeve_cuff}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>CENTER SLEEVE:</b><c>{{order.center_sleeve}} </c><!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SLEEVE BOTTOM:</b><c>{{order.sleeve_bottom}} </c><!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>LOOSE:</b><c>{{order.loose}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>SEAT:</b><c>{{order.seat}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>REGAL:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c>{{order.regal}}</c></span> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>BOTTOM:</b><c>{{order.bottom1}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>BUTTON TYPE:</b><c>{{order.button_type}}</c> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>DESCCRIPTION:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c>{{order.description}}</c></span> <!-- Insert sleeve measurement here -->
+        </div>
+        <div class="bill-info">
+            <b>ORDER DATE:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c> {{order.order_date}}</c></span><!-- Insert date here -->
+        </div>
+        <div class="bill-info">
+            <b>DELIVERY DATE:</b><span style="display: inline-block;line-height: 1.0;width: 240px;margin-left: 200px;margin-top: -18px;"><c> {{order.delivery_date}}</c></span><!-- Insert delivery date here -->
+        </div>
+        <div class="bill-info">
+            <b>TAILOR:</b><c> {{order.tailor}}</c><!-- Insert tailor name here -->
+        </div>
+        
+    </div>
+
+    <div class="right-column">
+        <!-- Content for the right column -->
+        <div class="bill-number-header">
+            <h5>Bill Number</h5>
+        </div>
+        <div class="bill-info" style="text-align: center;">
+            <input type="text" style="border: 1px solid #00FF00;width: 100px;height: 40px;text-align: center;margin-left: 100px;" value="{{ order.bill_number }}">
+        </div>
+        <div class="bill-info down" style="text-align: center;margin-left: -25px;">
+            <p><b>Pocket Type:</b><br><br><img src="{% static order.pocket_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.0;width: 140px;margin-left: 245px;margin-top: -18px;"><c>{{order.pocket}}</c></span>
+        </div>
+        <div class="bill-info" style="text-align: center;margin-left: -25px;">
+            <p><b>Collar Type:</b><br><br><img src="{% static order.collar_type_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.0;width: 140px;margin-left: 245px;margin-top: -18px;"><c>{{order.collar_measurements}}</c></span>
+        </div>
+        <div class="bill-info" style="text-align: center;margin-left: -25px;">
+            <p><b>Cuff Type:</b><br><br><img src="{% static order.cuff_type_image_url %}" height="90" width="30"/></p>
+            <b>Measurement:</b><span style="display: inline-block;line-height: 1.0;width: 140px;margin-left: 245px;margin-top: -18px;"><c>{{order.cuff_measurements}}</c></span>
+        </div>
+    </div>
 </div>
 
-<script>
-    // Function to add fraction to the integer part
-    function addFraction(inputId, fraction) {
-        var inputField = document.getElementById(inputId);
-        var integerPart = inputField.value.trim();
-        var combinedMeasurement = integerPart + " " + fraction;
-        // Set the combined measurement as the value of the input field
-        inputField.value = combinedMeasurement;
-    }
-</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-{% endblock %}
+    <script>
+        $(document).ready(function () {
+            // Function to update print status
+            function updatePrintStatus() {
+                $.ajax({
+                    url: '{% url 'update_print_status' customer_id=order.id %}',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            console.log('Print status updated successfully.');
+                        } else {
+                            console.error('Failed to update print status.');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error occurred while updating print status:', error);
+                    }
+                });
+            }
+
+            // Attach event listener for before printing
+            window.onbeforeprint = function () {
+                updatePrintStatus();
+            };
+
+            // Attach event listener for print button click
+            $('#printButton').on('click', function () {
+                updatePrintStatus();
+                window.print();
+            });
+        });
+    </script>
+    
 </body>
+
 </html>

@@ -21,6 +21,7 @@ urlpatterns = [
     path('search_tailor/', views.search_tailor, name='search_tailor'),
     path("view_tailors/", views.tailor_details, name="view_tailors"),
     path("Cloth_details_admin/", views.Cloth_details_admin, name="Cloth_details_admin"),
+    path('cloth/delete/<int:cloth_id>/', views.cloth_delete, name='cloth_delete'),
     path("generate_pdf_cloth_details/", views.generate_pdf_cloth_details, name="generate_pdf_cloth_details"),
     path("additems/", views.additems, name="additems"),
     path("additem/<int:dataid>/", views.additem, name="additem"),

@@ -64,7 +64,7 @@
             <th>Available Cloth Length (Meter)</th>
             <th>Add Stock</th>
             <th>Edit </th>
-            {% comment %} <th>Delete</th> {% endcomment %}
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -86,13 +86,13 @@
                         </button>
                     </form>
                 </td>
-                {% comment %} <td style="text-align: center;">
-                    <form action="{% url 'cloth_delete' cloth_id=i.id %}" onsubmit="return confirm('Are you sure you want to delete this order?');">
-                        <button type="submit" class="btn btn-outline-info btn-icon-text btn-sm">
+                <td style="text-align: center;">
+                    <form action="{% url 'cloth_delete' cloth_id=i.id %}" onsubmit="return confirm('Are you sure you want to delete this cloth?');">
+                        <button type="submit" class="btn btn-outline-danger btn-icon-text btn-sm">
                             Delete
                         </button>
                     </form>
-                </td> {% endcomment %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

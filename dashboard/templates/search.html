@@ -85,7 +85,12 @@
                                        style="color:black;">{{results.customer_id.name}}</a>
                                 </td>
                                <td>{{ results.customer_id.mobile }}</td>
-                               <td>{{results.clothdetails.name}}</td>
+                               <td>{% if results.clothdetails %}
+                                        {{ iresults.clothdetails.name }}
+                                    {% else %}
+                                        {{ results.cloth_name }}
+                                    {% endif %}
+                                </td>
                                <td>{{results.ordered_length}}</td>
                                 <td class="custom-model-details">{{results.model_details}}</td>
                                 <td>{{ results.length }}</td>

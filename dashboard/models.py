@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models,transaction
 from django.contrib.auth.models import AbstractUser
 
 
@@ -25,9 +25,17 @@ class Cloth(models.Model):
     length = models.DecimalField(max_digits=10, decimal_places=2)
     stock_length = models.DecimalField(max_digits=10, decimal_places=2)
 
+    @transaction.atomic
+    def delete(self, *args, **kwargs):
+        # Set clothdetails to null in all Add_order instances related to this cloth
+        Add_order.objects.filter(clothdetails=self).update(clothdetails=None)
+        # Proceed with the actual deletion
+        super().delete(*args, **kwargs)
+
 class Customer(models.Model):
     objects = None
-    clothdetails = models.ForeignKey(Cloth, on_delete=models.CASCADE,null=True)
+    clothdetails = models.ForeignKey(Cloth, on_delete=models.SET_NULL, null=True)
+    cloth_name = models.CharField(max_length=100, null=True, blank=True)
     ordered_length = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=15, unique=False)
@@ -105,7 +113,8 @@ class admin_login(models.Model):
 
 class Add_order(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE,null=True)
-    clothdetails = models.ForeignKey(Cloth,on_delete=models.CASCADE,null=True)
+    clothdetails = models.ForeignKey(Cloth,on_delete=models.SET_NULL, null=True)
+    cloth_name = models.CharField(max_length=100, null=True, blank=True)
     ordered_length = models.DecimalField(max_digits=10, decimal_places=2,null=True)
     length = models.CharField(max_length=15)
     shoulder = models.CharField(max_length=15)

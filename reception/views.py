@@ -1,5 +1,7 @@
 from decimal import Decimal, InvalidOperation
 import random
+import csv
+from django.urls import reverse
 from datetime import date
 from datetime import datetime
 from django.contrib import messages
@@ -52,16 +54,16 @@ def search_mobile_recption(request):
     if 'q' in request.GET:
         query = request.GET['q']
 
-        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='')
+        results['customer'] = Add_order.objects.filter(customer_id__mobile__icontains=query).exclude(customer_id__mobile__isnull=True).exclude(customer_id__mobile__exact='').order_by('-id')
 
     return render(request, 'search_reception.html', {'results': results, 'query': query})
 
 
 def customer_details_recption(request):
-    cus = Customer.objects.all()
+    cus = Customer.objects.all().order_by('-id')
 
     # Pagination
-    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    paginator = Paginator(cus, 300)  # Show 300 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -175,8 +177,20 @@ def savecustomer_recption(request):
         collar_measurment = request.POST.get('collar-measurements')
         model_details = request.POST.get('model_details')
         cloth_id = request.POST.get('cloth_id')
-        ordered_length = Decimal(request.POST.get('ordered_length', 3.5))
         pocket_type = request.POST.get('pocket-type')
+        ordered_length_str = request.POST.get('ordered_length', '').strip()
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('createcustomer_reception')
+        cloth_name = None
+        
 
         if collar_type == 'collar1':
             collar_image_url = 'images/collarcuff/collor 1.png'
@@ -220,6 +234,7 @@ def savecustomer_recption(request):
         if cloth_id:
             try:
                 cloth = Cloth.objects.get(pk=cloth_id)
+                cloth_name=cloth.name
                 if cloth.stock_length >= ordered_length:
                     cloth.stock_length -= ordered_length
                     cloth.save()
@@ -262,7 +277,7 @@ def savecustomer_recption(request):
                            description=ds,sleeve_bottom=sb,model_details=model_details,
                            cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
                             cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
-                            collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,
+                            collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,cloth_name=cloth_name,
                             clothdetails=cloth,ordered_length=ordered_length,pocket_image_url=pocket_image_url,pocket_type=pocket_type
                                       )
             obj.save()
@@ -272,7 +287,7 @@ def savecustomer_recption(request):
                                       cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
                                       cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
                                       collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve,
-                                       pocket=po, bottom1=b1, seat=b2, button_type=bt,
+                                       pocket=po, bottom1=b1, seat=b2, button_type=bt,cloth_name=cloth_name,
                                       bill_number=bill_number,total_payment=tp,advance_payment=ap,balance_payment=bp,
                                       order_date=od, delivery_date=dd, tailor=tailor_instance, description=ds,sleeve_bottom=sb,
                                       clothdetails=cloth,ordered_length=ordered_length,pocket_image_url=pocket_image_url,pocket_type=pocket_type)
@@ -361,14 +376,37 @@ def order_details_reception(request):
     if request.method == "POST":
         from_date_str = request.POST.get('textfield')
         to_date_str = request.POST.get('textfield2')
+        export = request.POST.get('export')
 
         if from_date_str and to_date_str:
             from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
             to_date = datetime.strptime(to_date_str, '%Y-%m-%d').date()
             cus = Add_order.objects.filter(delivery_date__range=[from_date, to_date]).order_by('-id')
 
+        if export:  # If export button was clicked, generate the CSV
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = f'attachment; filename="order_details_{from_date_str}_to_{to_date_str}.csv"'
+
+            writer = csv.writer(response)
+            writer.writerow(['Order ID', 'Customer ID', 'Name', 'Contact Number', 'Cloth Name', 'Cloth Length', 'Model Details', 'Length', 'Shoulder', 'Sleeve Sada', 'Sleeve Cuff', 'Center Sleeve', 'Sleeve Bottom', 'Loose', 'Seat', 'Regal', 'Collar Type', 'Collar Measurement', 'Cuff Type', 'Cuff Measurements', 'Pocket Type', 'Pocket Measure', 'Button Type', 'Bottom Measure', 'Bill Number', 'Order Date', 'Delivery Date', 'Description', 'Total Price', 'Advance Payment', 'Balance Payment', 'Tailor'])
+
+            for order in cus:
+                writer.writerow([
+                    order.id, order.customer_id.id, order.customer_id.name, order.customer_id.mobile, 
+                    order.clothdetails.name if order.clothdetails else order.cloth_name, 
+                    order.ordered_length, order.model_details, order.length, order.shoulder, 
+                    order.sleeve_sada, order.sleeve_cuff, order.center_sleeve, order.sleeve_bottom, 
+                    order.loose, order.seat, order.regal, order.collar_type, 
+                    order.collar_measurements, order.cuff_type, order.cuff_measurements, 
+                    order.pocket_type, order.pocket, order.button_type, order.bottom1, 
+                    order.bill_number, order.order_date, order.delivery_date, order.description, 
+                    order.total_payment, order.advance_payment, order.balance_payment, order.tailor
+                ])
+
+            return response
+        
     # Pagination
-    paginator = Paginator(cus, 50)  # Show 25 orders per page
+    paginator = Paginator(cus, 300)  # Show 25 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -437,6 +475,7 @@ def update_add_order_reception(request, dataid):
         except InvalidOperation:
             messages.error(request, "Invalid value for ordered length.")
             return redirect('order_details_reception')
+        cloth_name=None
 
         if collar_type == 'collar1':
             collar_image_url = 'images/collarcuff/collor 1.png'
@@ -527,7 +566,7 @@ def update_add_order_reception(request, dataid):
             order.clothdetails = None
             ordered_length = None
 
-
+        cloth_name=order.clothdetails.name
         # Update assigned_works for the old tailor and new tailor
         if old_tailor != new_tailor:
             old_tailor.assigned_works -= 1
@@ -535,7 +574,7 @@ def update_add_order_reception(request, dataid):
             new_tailor.assigned_works += 1
             new_tailor.save()
         Add_order.objects.filter(id=dataid).update(length=ln, shoulder=sd, loose=lo, 
-                                                   regal=rg, sleeve_sada=sl,
+                                                   regal=rg, sleeve_sada=sl,cloth_name=cloth_name,
                                                    sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2,
                                                    total_payment=tp,advance_payment=ap,balance_payment=bp,
                                                    order_date=od, delivery_date=dd, tailor=new_tailor,
@@ -578,20 +617,12 @@ def save_add_order_recption(request):
         cuff_measurment = request.POST.get('cuff-measurements')
         collar_measurment = request.POST.get('collar-measurements')
         model_details = request.POST.get('model_details')
-        cloth_id = request.POST.get('cloth_id') or request.POST.get('existing_cloth_id')
+        cloth_id = request.POST.get('cloth_id')
+        existing_cloth_id = request.POST.get('existing_cloth_id')
         pocket_type = request.POST.get('pocket-type')
 
         ordered_length_str = request.POST.get('ordered_length', '').strip()
-        try:
-            if ordered_length_str:
-                ordered_length = Decimal(ordered_length_str)
-            elif cloth_id:
-                ordered_length = Decimal(3.5)
-            else:
-                ordered_length = None
-        except InvalidOperation:
-            messages.error(request, "Invalid value for ordered length.")
-            return redirect('customer_details_recption')
+        cloth_name = None
 
         if collar_type == 'collar1':
             collar_image_url = 'images/collarcuff/collor 1.png'
@@ -633,15 +664,33 @@ def save_add_order_recption(request):
 
         tailor_instance.assigned_works += 1
         tailor_instance.save()
+         
+        if cloth_id == '':
+            cloth_id = None
+
+        if not cloth_id and not existing_cloth_id:
+            cloth_id = None
+
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('customer_details')
 
         cloth = None
         if cloth_id:
             try:
                 cloth = Cloth.objects.get(pk=cloth_id)
+                cloth_name = cloth.name
                 if ordered_length and cloth.stock_length >= ordered_length:
                     cloth.stock_length -= ordered_length
                     cloth.save()
-                elif ordered_length:
+                else:
                     messages.error(request, "Not enough cloth stock available.")
                     return redirect('customer_details_recption')
             except Cloth.DoesNotExist:
@@ -682,7 +731,7 @@ def save_add_order_recption(request):
                             cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
                             cuff_type_image_url=cuff_image_url, collar_measurements=collar_measurment,
                             collar_type=collar_type,cuff_type=cuff_type,center_sleeve=center_sleeve
-                            ,clothdetails=cloth,ordered_length=ordered_length,
+                            ,clothdetails=cloth,ordered_length=ordered_length,cloth_name=cloth_name,
                             pocket_image_url=pocket_image_url,pocket_type=pocket_type)
 
             obj.save()
@@ -733,8 +782,19 @@ def update_customer_recption(request, dataid):
         collar_measurment = request.POST.get('collar-measurements')
         model_details = request.POST.get('model_details')
         cloth_id = request.POST.get('cloth_id') or request.POST.get('existing_cloth_id')
-        ordered_length = Decimal(request.POST.get('ordered_length', 3.5))
         pocket_type = request.POST.get('pocket-type')
+        ordered_length_str = request.POST.get('ordered_length', '').strip()
+        try:
+            if ordered_length_str:
+                ordered_length = Decimal(ordered_length_str)
+            elif cloth_id:
+                ordered_length = Decimal(3.5)
+            else:
+                ordered_length = None
+        except InvalidOperation:
+            messages.error(request, "Invalid value for ordered length.")
+            return redirect('customer_details_recption')
+        cloth_name=None
 
         if collar_type == 'collar1':
             collar_image_url = 'images/collarcuff/collor 1.png'
@@ -772,11 +832,13 @@ def update_customer_recption(request, dataid):
 
          # Get the existing customer
         customer = Customer.objects.get(id=dataid)
-
+        cloth=None
+        cloth = Cloth.objects.get(pk=cloth_id)
+        cloth_name=cloth.name
         # Update the customer instance
         Customer.objects.filter(id=dataid).update(
             name=nm, mobile=mn, length=ln, shoulder=sd, loose=lo,
-            regal=rg,sleeve_sada=sl,
+            regal=rg,sleeve_sada=sl,cloth_name=cloth_name,
             sleeve_cuff=sll, pocket=po, bottom1=b1, seat=b2, button_type=bt,
              description=other,sleeve_bottom=sb,model_details=model_details,
             cuff_measurements=cuff_measurment,collar_type_image_url=collar_image_url,
@@ -804,8 +866,9 @@ def orderdlt_reception(request, dlt):
     tailor_instance = AddTailors.objects.get(id=id_dlt)
     tailor_instance.assigned_works -= 1
     tailor_instance.save()
-    id_cloth.stock_length += id.ordered_length
-    id_cloth.save()
+    if id.ordered_length:
+        id_cloth.stock_length += id.ordered_length
+        id_cloth.save()
     return redirect(order_details_reception)
 
 
