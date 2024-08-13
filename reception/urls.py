@@ -8,6 +8,7 @@ urlpatterns = [
     path("createcustomer_reception/", views.createcustomer_reception, name="createcustomer_reception"),
     path('search_mobile_recption/', views.search_mobile_recption, name='search_mobile_recption'),
     path("add_order_recption/<int:dataid>/", views.add_order_recption, name="add_order_recption"),
+    path("add_order_search_recption/<int:dataid>/", views.add_order_search_recption, name="add_order_search_recption"),
     path("edit_order_reception/<int:dataid>/", views.edit_order_reception, name="edit_order_reception"),
     path("update_add_order_reception/<int:dataid>/", views.update_add_order_reception,
          name="update_add_order_reception"),

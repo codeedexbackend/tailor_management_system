@@ -959,6 +959,11 @@ def add_order(request, dataid):
     return render(request, "Add_order.html", {'add': add,'cloths':cloths})
 
 
+def add_order_search(request, dataid):
+    add = Add_order.objects.get(id=dataid)
+    cloths=Cloth.objects.all()
+    return render(request, "Add_order.html", {'add': add,'cloths':cloths})
+
 def edit_order(request, dataid):
     add = Add_order.objects.get(id=dataid)
     cloths=Cloth.objects.all()

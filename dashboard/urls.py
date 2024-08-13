@@ -10,6 +10,7 @@ urlpatterns = [
     path('update_stock/<int:cloth_id>/', views.update_stock, name='update_stock'),
 #     path('cloth_delete/<int:cloth_id>/', views.cloth_delete, name='cloth_delete'),
     path("add_order/<int:dataid>/", views.add_order, name="add_order"),
+    path("add_order_search/<int:dataid>/", views.add_order_search, name="add_order_search"),
     path("edit_order/<int:dataid>/", views.edit_order, name="edit_order"),
     path("update_add_order/<int:dataid>/", views.update_add_order, name="update_add_order"),
     path("save_add_order/", views.save_add_order, name="save_add_order"),
