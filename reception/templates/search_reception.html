@@ -13,10 +13,10 @@
       background-color: #fff;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin-bottom: 100px;
-<!--      height: 619px;-->
+/* <!--      height: 619px;-->
       overflow-y: auto;
 <!--      display: flex;-->
-<!--      flex-wrap: wrap;-->
+<!--      flex-wrap: wrap;--> */
     }
     .table td img {
         width: 50px;
@@ -87,7 +87,7 @@
                                 </td>
                                 <td>{{ results.customer_id.mobile }}</td>
                                 <td>{% if results.clothdetails %}
-                                        {{ iresults.clothdetails.name }}
+                                        {{ results.clothdetails.name }}
                                     {% else %}
                                         {{ results.cloth_name }}
                                     {% endif %}
@@ -120,7 +120,7 @@
                                 <td>{{results.balance_payment}}</td>
                                 <td>{{results.tailor}}</td>
                                 <td>
-                                    <a href="{% url 'add_order_search_recption' dataid=results.customer_id.id %}">
+                                    <a href="{% url 'add_order_search_recption' dataid=results.id %}">
                                         <button type="submit" class="btn btn-secondary btn-sm">
                                             Add
                                         </button>

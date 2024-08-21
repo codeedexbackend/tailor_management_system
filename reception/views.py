@@ -431,6 +431,7 @@ def add_order_search_recption(request, dataid):
     cloths=Cloth.objects.all()
     return render(request, "Add_order_reception.html", {"add": add,'cloths':cloths})
 
+
 def edit_order_reception(request, dataid):
     add = Add_order.objects.get(id=dataid)
     cloths=Cloth.objects.all()
