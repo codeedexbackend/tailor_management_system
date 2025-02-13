@@ -58,9 +58,43 @@
     .th2{
         text-align: center;
     }
+    /* Cutting Section Styles */
+    .cutting-section {
+        border: 2px dashed #000;
+        padding: 15px;
+        margin-top: 20px;
+        page-break-inside: avoid;
+    }
+    .cutting-section h3 {
+        text-align: center;
+        margin: 0 0 15px 0;
+        text-transform: uppercase;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+    }
+    .cutting-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .cutting-item {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+    }
+    .cutting-label {
+        font-weight: bold;
+        min-width: 120px;
+    }
+    .cutting-value {
+        flex: 1;
+    }
     @media print {
         .not-for-print { display: none; }
         @page { size: portrait; }
+        .cutting-section {
+            break-inside: avoid;
+        }
     }
 </style>
 </head>
@@ -173,9 +207,43 @@
                     <th>TAILOR</th>
                     <td>{{order.tailor}}</td>
                 </tr>
-                <!-- Add more rows as needed -->
             </tbody>
         </table>
+
+        <!-- Cutting Section -->
+        <div class="cutting-section">
+            <h3>Cutting Details</h3>
+            <div class="cutting-details">
+                <div class="cutting-item">
+                    <span class="cutting-label">Bill Number:</span>
+                    <span class="cutting-value">{{ order.bill_number }}</span>
+                </div>
+                <div class="cutting-item">
+                    <span class="cutting-label">Customer:</span>
+                    <span class="cutting-value">{{ order.customer_id.name }}</span>
+                </div>
+                <div class="cutting-item">
+                    <span class="cutting-label">Mobile:</span>
+                    <span class="cutting-value">{{ order.customer_id.mobile }}</span>
+                </div>
+                <div class="cutting-item">
+                    <span class="cutting-label">Cloth Length:</span>
+                    <span class="cutting-value">{{ order.ordered_length }}</span>
+                </div>
+                <div class="cutting-item">
+                    <span class="cutting-label">Order Date:</span>
+                    <span class="cutting-value">{{ order.order_date }}</span>
+                </div>
+                <div class="cutting-item">
+                    <span class="cutting-label">Delivery Date:</span>
+                    <span class="cutting-value">{{ order.delivery_date }}</span>
+                </div>
+                <div class="cutting-item" style="grid-column: 1 / -1;">
+                    <span class="cutting-label">Description:</span>
+                    <span class="cutting-value">{{ order.description }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
