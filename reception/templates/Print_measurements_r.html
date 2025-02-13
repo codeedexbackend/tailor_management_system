@@ -6,80 +6,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer Bill</title>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
     body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
         background-color: #ffffff;
     }
     
     .page {
         width: 210mm;
-        height: 297mm;
-        padding: 8mm;
+        min-height: 297mm;
+        padding: 10mm;
         margin: 0 auto;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 3mm;
+        background: white;
     }
     
     header {
         text-align: center;
-        height: 25mm;
+        margin-bottom: 10px;
     }
     
     header img {
-        width: 90px;
+        width: 120px;
         height: auto;
     }
     
     header h5 {
-        margin: 1mm 0;
-        font-size: 14px;
-    }
-    
-    .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 3mm;
+        margin: 5px 0;
     }
     
     table {
         width: 100%;
         border-collapse: collapse;
+        font-size: 11px;
     }
     
     th, td {
         border: 1px solid #dddddd;
-        padding: 2.5mm 2mm;
+        padding: 4px 6px;
         text-align: left;
-        font-size: 12px;
-        line-height: 1.1;
-        height: 8mm;
     }
     
     th {
         background-color: #f2f2f2;
         font-weight: bold;
-        width: 30%;
+    }
+    
+    td {
+        font-size: 11px;
     }
     
     .th2 {
         text-align: center;
-        width: 25%;
     }
     
     td img {
-        max-width: 50px;
+        max-width: 60px;
         height: auto;
-        display: block;
-        margin: 2mm auto;
     }
     
     .already-printed {
@@ -91,40 +74,38 @@
         left: 50%;
         transform: translate(-50%, -50%) rotate(-45deg);
         opacity: 0.3;
-        font-size: 4em;
+        font-size: 3em;
         white-space: nowrap;
         z-index: 1;
     }
     
     .cutting-section {
         border: 1px dashed #000;
-        padding: 3mm;
-        height: 45mm;
-        margin-top: auto;
+        padding: 8px;
+        margin-top: 10px;
+        page-break-inside: avoid;
     }
     
     .cutting-section h3 {
         text-align: center;
-        margin: 0 0 2mm 0;
+        margin: 0 0 8px 0;
         text-transform: uppercase;
         border-bottom: 1px solid #000;
-        padding-bottom: 1mm;
+        padding-bottom: 3px;
         font-size: 12px;
-        font-weight: bold;
     }
     
     .cutting-details {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 2mm 4mm;
-        padding: 2mm;
+        gap: 5px;
+        font-size: 11px;
     }
     
     .cutting-item {
         display: flex;
-        gap: 3mm;
-        align-items: center;
-        font-size: 11px;
+        gap: 5px;
+        align-items: baseline;
     }
     
     .cutting-label {
@@ -137,42 +118,27 @@
     }
     
     @media print {
-        @page {
-            size: A4 portrait;
-            margin: 0;
+        .not-for-print { 
+            display: none; 
         }
         
-        .not-for-print {
-            display: none;
+        @page { 
+            size: A4 portrait;
+            margin: 0;
         }
         
         .page {
             width: 210mm;
             height: 297mm;
             margin: 0;
-        }
-        
-        html, body {
-            width: 210mm;
-            height: 297mm;
-        }
-        
-        table {
-            page-break-inside: avoid;
+            padding: 10mm;
         }
         
         .cutting-section {
-            page-break-inside: avoid;
+            break-inside: avoid;
         }
     }
-
-    /* Ensure proper row heights for image cells */
-    td[rowspan="5"] {
-        height: 40mm;
-        vertical-align: middle;
-    }
 </style>
-
 </head>
 <body>
     <div class="page">
@@ -183,14 +149,11 @@
                 <div class="already-printed">Already Printed</div>
             {% endif %}
         </header>
-        
-        <div class="not-for-print" style="text-align: center; margin-bottom: 5mm;">
+        <div class="not-for-print" style="text-align: center; margin-bottom: 10px;margin-top: 10px;">
             <button id="printButton">Print</button>
         </div>
-        
-        <div class="main-content">
-            <table>
-                <tbody>
+        <table>
+            <tbody>
                 <tr>
                     <th>CUSTOMER NAME</th>
                     <td>{{ order.customer_id.name }}</td>
@@ -324,11 +287,12 @@
             </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function () {
+        // Function to update print status
         function updatePrintStatus() {
             $.ajax({
                 url: '{% url 'update_print_status_r' customer_id=order.id %}',
@@ -349,15 +313,18 @@
             });
         }
 
+        // Attach event listener for before printing
         window.onbeforeprint = function () {
             updatePrintStatus();
         };
 
+        // Attach event listener for print button click
         $('#printButton').on('click', function () {
             updatePrintStatus();
             window.print();
         });
     });
 </script>
+
 </body>
 </html>
