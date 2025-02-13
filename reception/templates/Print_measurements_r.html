@@ -20,53 +20,54 @@
     .page {
         width: 210mm;
         height: 297mm;
-        padding: 5mm;
+        padding: 8mm;
         margin: 0 auto;
         position: relative;
         display: flex;
         flex-direction: column;
+        gap: 3mm;
     }
     
     header {
         text-align: center;
-        margin-bottom: 5mm;
-        flex-shrink: 0;
+        height: 25mm;
     }
     
     header img {
-        width: 100px;
+        width: 90px;
         height: auto;
     }
     
     header h5 {
-        margin: 2mm 0;
-        font-size: 16px;
+        margin: 1mm 0;
+        font-size: 14px;
     }
     
     .main-content {
         flex: 1;
         display: flex;
         flex-direction: column;
+        gap: 3mm;
     }
     
     table {
         width: 100%;
         border-collapse: collapse;
-        flex: 1;
     }
     
     th, td {
         border: 1px solid #dddddd;
-        padding: 6px;
+        padding: 2.5mm 2mm;
         text-align: left;
-        font-size: 14px;
-        line-height: 1.2;
+        font-size: 12px;
+        line-height: 1.1;
+        height: 8mm;
     }
     
     th {
         background-color: #f2f2f2;
         font-weight: bold;
-        width: 25%;
+        width: 30%;
     }
     
     .th2 {
@@ -75,10 +76,10 @@
     }
     
     td img {
-        max-width: 80px;
+        max-width: 50px;
         height: auto;
         display: block;
-        margin: 0 auto;
+        margin: 2mm auto;
     }
     
     .already-printed {
@@ -96,38 +97,39 @@
     }
     
     .cutting-section {
-        border: 2px dashed #000;
-        padding: 10px;
-        margin-top: 5mm;
-        flex-shrink: 0;
+        border: 1px dashed #000;
+        padding: 3mm;
+        height: 45mm;
+        margin-top: auto;
     }
     
     .cutting-section h3 {
         text-align: center;
-        margin: 0 0 8px 0;
+        margin: 0 0 2mm 0;
         text-transform: uppercase;
-        border-bottom: 2px solid #000;
-        padding-bottom: 3px;
-        font-size: 14px;
+        border-bottom: 1px solid #000;
+        padding-bottom: 1mm;
+        font-size: 12px;
         font-weight: bold;
     }
     
     .cutting-details {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        gap: 2mm 4mm;
+        padding: 2mm;
     }
     
     .cutting-item {
         display: flex;
-        gap: 8px;
-        align-items: baseline;
-        font-size: 14px;
+        gap: 3mm;
+        align-items: center;
+        font-size: 11px;
     }
     
     .cutting-label {
         font-weight: bold;
-        min-width: 100px;
+        min-width: 80px;
     }
     
     .cutting-value {
@@ -148,20 +150,29 @@
             width: 210mm;
             height: 297mm;
             margin: 0;
-            padding: 5mm;
         }
         
         html, body {
             width: 210mm;
-            height: 400mm;
+            height: 297mm;
+        }
+        
+        table {
+            page-break-inside: avoid;
         }
         
         .cutting-section {
-            break-inside: avoid;
-            margin-bottom: 0;
+            page-break-inside: avoid;
         }
     }
+
+    /* Ensure proper row heights for image cells */
+    td[rowspan="5"] {
+        height: 40mm;
+        vertical-align: middle;
+    }
 </style>
+
 </head>
 <body>
     <div class="page">
