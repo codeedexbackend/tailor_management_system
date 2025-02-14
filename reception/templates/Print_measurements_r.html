@@ -5,6 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer Bill</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Bill</title>
 <style>
     * {
         margin: 0;
@@ -20,14 +26,17 @@
     .page {
         width: 210mm;
         height: 297mm;
-        padding: 8mm;
+        padding: 3mm;
         margin: 0 auto;
         position: relative;
+        display: flex;
+        flex-direction: column;
     }
     
     header {
         text-align: center;
-        margin-bottom: 4mm;
+        margin-bottom: 3mm;
+        flex-shrink: 0;
     }
     
     header img {
@@ -41,10 +50,16 @@
         font-weight: bold;
     }
     
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 4mm;
+        flex: 1;
     }
     
     th, td {
@@ -90,13 +105,14 @@
     
     .cutting-section {
         border: 2.5px dashed #000;
-        padding: 10px;
-        margin-top: 4mm;
+        padding: 8px;
+        margin-top: 3mm;
+        flex-shrink: 0;
     }
     
     .cutting-section h3 {
         text-align: center;
-        margin: 0 0 8px 0;
+        margin: 0 0 6px 0;
         text-transform: uppercase;
         border-bottom: 2.5px solid #000;
         padding-bottom: 3px;
@@ -107,12 +123,12 @@
     .cutting-details {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        gap: 6px;
     }
     
     .cutting-item {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         align-items: baseline;
         font-size: 16px;
     }
@@ -126,7 +142,6 @@
         flex: 1;
     }
     
-    /* High contrast improvements */
     td[style*="color: red"] {
         color: #DD0000;
         font-size: 18px;
@@ -146,7 +161,7 @@
             width: 210mm;
             height: 297mm;
             margin: 0;
-            padding: 8mm;
+            padding: 3mm;
         }
         
         html, body {
@@ -159,7 +174,6 @@
             margin-bottom: 0;
         }
         
-        /* Ensure dark blacks for printing */
         th, td {
             border-color: #000000;
         }
@@ -181,7 +195,7 @@
             {% endif %}
         </header>
         
-        <div class="not-for-print" style="text-align: center; margin-bottom: 5mm;">
+        <div class="not-for-print" style="text-align: center; margin-bottom: 2mm;">
             <button id="printButton">Print</button>
         </div>
         
